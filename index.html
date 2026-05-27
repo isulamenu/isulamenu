@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <style>
 :root {
   --marine: #0A1628;
@@ -1243,7 +1243,7 @@ window.addEventListener('load', function() {
   <div class="modal-box" style="text-align:center">
     <div class="modal-title" id="qr-resto-name">QR Code</div>
     <div class="modal-sub" id="qr-resto-url" style="color:var(--or);margin-bottom:24px"></div>
-    <canvas id="qr-canvas" style="border-radius:8px;margin:0 auto 20px;display:block"></canvas>
+    <div id="qr-container" style="margin:0 auto 20px;display:flex;justify-content:center;border-radius:8px;overflow:hidden"></div>
     <div style="font-size:12px;color:var(--gris);margin-bottom:20px">Scannez pour accéder au menu</div>
     <div class="modal-actions">
       <button class="btn-cancel" onclick="closeQrModal()">Fermer</button>
@@ -1938,18 +1938,15 @@ function openQrModal(slug, nom) {
   document.getElementById('qr-resto-url').textContent = url;
   document.getElementById('modal-qr').classList.add('open');
   
-  const canvas = document.getElementById('qr-canvas');
-  QRCode.toCanvas(canvas, url, {
+  const container = document.getElementById('qr-container');
+  container.innerHTML = '';
+  new QRCode(container, {
+    text: url,
     width: 220,
-    margin: 2,
-    color: {
-      dark: '#0A1628',
-      light: '#F8F2E4'
-    }
-  }, function(error) {
-    if (error) {
-      QRCode.toCanvas(canvas, url, { width: 220 });
-    }
+    height: 220,
+    colorDark: '#0A1628',
+    colorLight: '#F8F2E4',
+    correctLevel: QRCode.CorrectLevel.H
   });
 }
 
@@ -1959,7 +1956,9 @@ function closeQrModal() {
 }
 
 function downloadQr() {
-  const canvas = document.getElementById('qr-canvas');
+  const container = document.getElementById('qr-container');
+  const canvas = container.querySelector('canvas');
+  if (!canvas) { alert('QR code non généré'); return; }
   const link = document.createElement('a');
   link.download = 'qrcode-' + (currentQrSlug || 'menu') + '.png';
   link.href = canvas.toDataURL('image/png');
