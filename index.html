@@ -1,0 +1,1341 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>IsulaMenu</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root {
+  --marine: #0A1628;
+  --marine-2: #111f35;
+  --marine-3: #1a2e48;
+  --or: #C9993A;
+  --or-2: #E2B55A;
+  --or-3: #F0D070;
+  --creme: #F8F2E4;
+  --creme-2: #EDE4CE;
+  --blanc: #FDFAF3;
+  --gris: #6A7A8A;
+  --gris-2: #9AAABB;
+  --vert: #4CAF6A;
+  --rouge: #E05A5A;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+
+body {
+  font-family: 'Jost', sans-serif;
+  font-weight: 300;
+  background: var(--marine);
+  color: var(--creme);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.view { display: none; min-height: 100vh; }
+.view.active { display: block; }
+
+/* ══ LOADING ══ */
+#view-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: var(--marine);
+}
+#view-loading.active { display: flex; }
+
+.loading-content { text-align: center; }
+
+.loading-logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 48px;
+  font-weight: 600;
+  color: var(--creme);
+  margin-bottom: 24px;
+}
+
+.loading-logo span { color: var(--or); }
+
+.loading-dots {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.loading-dot {
+  width: 8px; height: 8px;
+  background: var(--or);
+  border-radius: 50%;
+  animation: loadPulse 1.2s infinite;
+}
+
+.loading-dot:nth-child(2) { animation-delay: 0.2s; }
+.loading-dot:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes loadPulse {
+  0%, 100% { opacity: 0.2; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1); }
+}
+
+/* ══ ACCUEIL ══ */
+#view-home {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: var(--marine);
+  padding: 40px 24px;
+  position: relative;
+  overflow: hidden;
+}
+#view-home.active { display: flex; }
+
+#view-home::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 20% 80%, rgba(201,153,58,0.12) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(201,153,58,0.07) 0%, transparent 45%);
+  pointer-events: none;
+}
+
+.home-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(201,153,58,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(201,153,58,0.04) 1px, transparent 1px);
+  background-size: 50px 50px;
+}
+
+.home-content {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  width: 100%;
+  max-width: 420px;
+}
+
+.home-logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 52px;
+  font-weight: 600;
+  color: var(--creme);
+  letter-spacing: -1px;
+  margin-bottom: 4px;
+  animation: fadeDown 0.8s ease both;
+}
+
+.home-logo span { color: var(--or); }
+
+.home-sub {
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--gris-2);
+  margin-bottom: 60px;
+  animation: fadeDown 0.8s 0.1s ease both;
+}
+
+@keyframes fadeDown {
+  from { opacity: 0; transform: translateY(-16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.home-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  animation: fadeUp 0.8s 0.2s ease both;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.home-card {
+  background: var(--marine-2);
+  border: 1px solid rgba(201,153,58,0.15);
+  padding: 24px 28px;
+  cursor: pointer;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: all 0.25s;
+  position: relative;
+  overflow: hidden;
+}
+
+.home-card::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: var(--or);
+  transform: scaleY(0);
+  transition: transform 0.25s;
+}
+
+.home-card:hover::before { transform: scaleY(1); }
+.home-card:hover { border-color: rgba(201,153,58,0.35); background: var(--marine-3); }
+
+.home-card-left h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--creme);
+  margin-bottom: 4px;
+}
+
+.home-card-left p { font-size: 12px; color: var(--gris); }
+.home-card-arrow { color: var(--or); font-size: 18px; opacity: 0.6; }
+
+/* ══ MENU CLIENT ══ */
+#view-menu { background: var(--marine); min-height: 100vh; }
+#view-menu.active { display: block; }
+
+.menu-header {
+  background: var(--marine-2);
+  padding: 20px 20px 16px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  border-bottom: 1px solid rgba(201,153,58,0.12);
+}
+
+.menu-header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 14px;
+}
+
+.menu-resto-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 26px;
+  font-weight: 600;
+  color: var(--creme);
+  line-height: 1;
+}
+
+.menu-resto-city { font-size: 11px; color: var(--gris); letter-spacing: 1px; text-transform: uppercase; margin-top: 3px; }
+
+.lang-switcher { display: flex; gap: 6px; }
+
+.lang-btn {
+  width: 34px; height: 26px;
+  border: 1px solid rgba(201,153,58,0.2);
+  background: transparent;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  opacity: 0.45;
+}
+
+.lang-btn.active { opacity: 1; border-color: var(--or); background: rgba(201,153,58,0.1); }
+
+.menu-cats {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding-bottom: 2px;
+}
+
+.menu-cats::-webkit-scrollbar { display: none; }
+
+.cat-btn {
+  background: transparent;
+  border: 1px solid rgba(201,153,58,0.15);
+  color: var(--gris-2);
+  font-family: 'Jost', sans-serif;
+  font-size: 11px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 6px 14px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s;
+  border-radius: 2px;
+}
+
+.cat-btn.active { background: rgba(201,153,58,0.12); border-color: var(--or); color: var(--or-2); }
+
+.menu-body { padding: 16px 20px 40px; }
+
+.plat-du-jour {
+  background: linear-gradient(135deg, rgba(201,153,58,0.12), rgba(201,153,58,0.04));
+  border: 1px solid rgba(201,153,58,0.3);
+  border-radius: 4px;
+  padding: 16px 18px;
+  margin-bottom: 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+.plat-du-jour::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(to right, var(--or), var(--or-2), transparent);
+}
+
+.pdj-label {
+  font-size: 9px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--or);
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pdj-dot {
+  width: 6px; height: 6px;
+  background: var(--vert);
+  border-radius: 50%;
+  animation: blink 2s infinite;
+}
+
+@keyframes blink { 0%,100% { opacity:1; } 50% { opacity:0.2; } }
+
+.pdj-name { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 600; color: var(--creme); margin-bottom: 4px; }
+.pdj-desc { font-size: 12px; color: var(--gris-2); line-height: 1.5; margin-bottom: 10px; }
+.pdj-price { font-family: 'Cormorant Garamond', serif; font-size: 20px; color: var(--or-2); font-weight: 600; }
+
+.menu-section { margin-bottom: 28px; }
+
+.section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+.section-icon { font-size: 18px; }
+.section-title-text { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--or); }
+.section-line { flex: 1; height: 1px; background: rgba(201,153,58,0.15); }
+
+.dish-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  gap: 12px;
+}
+
+.dish-info { flex: 1; }
+.dish-name { font-family: 'Cormorant Garamond', serif; font-size: 17px; color: var(--creme); margin-bottom: 3px; }
+.dish-desc { font-size: 11.5px; color: var(--gris); line-height: 1.5; }
+.dish-price { font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 600; color: var(--or-2); white-space: nowrap; }
+
+/* ══ LOGIN ══ */
+.login-screen {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 24px;
+  background: var(--marine);
+  position: relative;
+}
+
+.login-screen::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 60%, rgba(201,153,58,0.08) 0%, transparent 60%);
+}
+
+.login-box { width: 100%; max-width: 360px; position: relative; z-index: 1; }
+
+.login-logo { font-family: 'Cormorant Garamond', serif; font-size: 36px; font-weight: 600; color: var(--creme); text-align: center; margin-bottom: 4px; }
+.login-logo span { color: var(--or); }
+.login-role { text-align: center; font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--gris); margin-bottom: 40px; }
+
+.form-group { margin-bottom: 16px; }
+.form-label { display: block; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--or); margin-bottom: 8px; }
+
+.form-input {
+  width: 100%;
+  background: var(--marine-2);
+  border: 1px solid rgba(201,153,58,0.2);
+  color: var(--creme);
+  font-family: 'Jost', sans-serif;
+  font-size: 14px;
+  font-weight: 300;
+  padding: 12px 16px;
+  outline: none;
+  transition: border-color 0.2s;
+  border-radius: 2px;
+}
+
+.form-input:focus { border-color: var(--or); }
+.form-input::placeholder { color: var(--gris); }
+
+.btn-primary {
+  width: 100%;
+  background: var(--or);
+  color: var(--marine);
+  border: none;
+  font-family: 'Jost', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 14px;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-top: 8px;
+  border-radius: 2px;
+}
+
+.btn-primary:hover { background: var(--or-2); }
+.login-hint { text-align: center; font-size: 11px; color: var(--gris); margin-top: 16px; }
+.login-error { color: var(--rouge); font-size: 12px; text-align: center; margin-top: 10px; display: none; }
+
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: none;
+  color: var(--gris);
+  font-family: 'Jost', sans-serif;
+  font-size: 11px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  cursor: pointer;
+  padding: 16px 20px 0;
+  transition: color 0.2s;
+}
+
+.back-btn:hover { color: var(--or); }
+
+/* ══ ESPACE RESTAURATEUR ══ */
+#view-resto { background: var(--marine); min-height: 100vh; }
+#view-resto.active { display: block; }
+
+.resto-topbar {
+  background: var(--marine-2);
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(201,153,58,0.12);
+}
+
+.resto-topbar-logo { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 600; color: var(--creme); }
+.resto-topbar-logo span { color: var(--or); }
+
+.btn-logout {
+  background: transparent;
+  border: 1px solid rgba(201,153,58,0.2);
+  color: var(--gris);
+  font-family: 'Jost', sans-serif;
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 6px 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  border-radius: 2px;
+}
+
+.btn-logout:hover { border-color: var(--or); color: var(--or); }
+
+.resto-content { padding: 24px 20px; max-width: 500px; margin: 0 auto; }
+
+.resto-welcome { margin-bottom: 28px; }
+.resto-welcome h2 { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 600; color: var(--creme); margin-bottom: 4px; }
+.resto-welcome p { font-size: 13px; color: var(--gris); line-height: 1.6; }
+
+.pdj-editor {
+  background: var(--marine-2);
+  border: 1px solid rgba(201,153,58,0.2);
+  padding: 24px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+}
+
+.pdj-editor-title {
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--or);
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pdj-editor-title::after { content: ''; flex: 1; height: 1px; background: rgba(201,153,58,0.15); }
+
+.pdj-current {
+  background: rgba(201,153,58,0.06);
+  border: 1px solid rgba(201,153,58,0.15);
+  padding: 14px 16px;
+  border-radius: 3px;
+  margin-bottom: 20px;
+}
+
+.pdj-current-label { font-size: 9px; letter-spacing: 2px; color: var(--gris); text-transform: uppercase; margin-bottom: 6px; }
+.pdj-current-name { font-family: 'Cormorant Garamond', serif; font-size: 20px; color: var(--creme); font-weight: 600; }
+.pdj-current-price { font-size: 14px; color: var(--or-2); margin-top: 2px; }
+
+.btn-secondary {
+  background: transparent;
+  border: 1px solid rgba(201,153,58,0.3);
+  color: var(--or-2);
+  font-family: 'Jost', sans-serif;
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 11px 20px;
+  cursor: pointer;
+  transition: all 0.2s;
+  width: 100%;
+  border-radius: 2px;
+}
+
+.btn-secondary:hover { background: rgba(201,153,58,0.08); border-color: var(--or); }
+
+.pdj-form { display: none; }
+.pdj-form.open { display: block; margin-top: 16px; }
+
+.btn-save {
+  background: var(--vert);
+  color: white;
+  border: none;
+  font-family: 'Jost', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 13px 20px;
+  cursor: pointer;
+  transition: background 0.2s;
+  width: 100%;
+  border-radius: 2px;
+  margin-top: 8px;
+}
+
+.btn-save:hover { background: #3d9e58; }
+
+.success-toast {
+  display: none;
+  background: rgba(76,175,106,0.15);
+  border: 1px solid rgba(76,175,106,0.3);
+  color: var(--vert);
+  padding: 12px 16px;
+  font-size: 12px;
+  border-radius: 3px;
+  text-align: center;
+  margin-top: 12px;
+}
+
+.success-toast.show { display: block; animation: fadeUp 0.3s ease; }
+
+.menu-link-box { background: var(--marine-2); border: 1px solid rgba(201,153,58,0.15); padding: 20px; border-radius: 4px; }
+.menu-link-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--gris); margin-bottom: 10px; }
+.menu-link-url { font-family: 'Cormorant Garamond', serif; font-size: 16px; color: var(--or-2); word-break: break-all; margin-bottom: 12px; }
+
+.btn-view-menu {
+  background: rgba(201,153,58,0.1);
+  border: 1px solid rgba(201,153,58,0.25);
+  color: var(--or-2);
+  font-family: 'Jost', sans-serif;
+  font-size: 11px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 10px 16px;
+  cursor: pointer;
+  transition: all 0.2s;
+  width: 100%;
+  border-radius: 2px;
+}
+
+.btn-view-menu:hover { background: rgba(201,153,58,0.15); }
+
+/* ══ BACK-OFFICE ══ */
+#view-admin { background: #080F1A; min-height: 100vh; }
+#view-admin.active { display: block; }
+
+.admin-layout { display: flex; min-height: 100vh; }
+
+.admin-sidebar {
+  width: 220px;
+  background: #060C15;
+  border-right: 1px solid rgba(201,153,58,0.08);
+  padding: 24px 0;
+  flex-shrink: 0;
+  position: fixed;
+  top: 0; left: 0; bottom: 0;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-logo { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 600; color: var(--creme); padding: 0 20px 24px; border-bottom: 1px solid rgba(201,153,58,0.08); margin-bottom: 20px; }
+.admin-logo span { color: var(--or); }
+
+.admin-nav-item {
+  padding: 10px 20px;
+  font-size: 12px;
+  letter-spacing: 1px;
+  color: var(--gris);
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-left: 2px solid transparent;
+}
+
+.admin-nav-item:hover { color: var(--creme); background: rgba(201,153,58,0.04); }
+.admin-nav-item.active { color: var(--or-2); border-left-color: var(--or); background: rgba(201,153,58,0.06); }
+.admin-nav-icon { font-size: 14px; width: 18px; text-align: center; }
+
+.admin-sidebar-footer { margin-top: auto; padding: 16px 20px; border-top: 1px solid rgba(201,153,58,0.08); }
+.admin-sidebar-footer button { background: transparent; border: none; color: var(--gris); font-family: 'Jost', sans-serif; font-size: 11px; cursor: pointer; letter-spacing: 1px; transition: color 0.2s; }
+.admin-sidebar-footer button:hover { color: var(--rouge); }
+
+.admin-main { margin-left: 220px; flex: 1; padding: 32px; max-width: calc(100vw - 220px); }
+
+.admin-topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; }
+.admin-page-title { font-family: 'Cormorant Garamond', serif; font-size: 32px; font-weight: 600; color: var(--creme); }
+.admin-page-sub { font-size: 12px; color: var(--gris); margin-top: 4px; }
+
+.btn-new {
+  background: var(--or);
+  color: var(--marine);
+  border: none;
+  font-family: 'Jost', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 11px 20px;
+  cursor: pointer;
+  transition: background 0.2s;
+  border-radius: 2px;
+}
+
+.btn-new:hover { background: var(--or-2); }
+
+.admin-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 32px; }
+
+.stat-card { background: var(--marine-2); border: 1px solid rgba(201,153,58,0.1); padding: 20px; border-radius: 4px; }
+.stat-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--gris); margin-bottom: 8px; }
+.stat-value { font-family: 'Cormorant Garamond', serif; font-size: 36px; font-weight: 600; color: var(--or-2); line-height: 1; }
+.stat-sub { font-size: 11px; color: var(--gris); margin-top: 4px; }
+
+.admin-table-wrap { background: var(--marine-2); border: 1px solid rgba(201,153,58,0.1); border-radius: 4px; overflow: hidden; margin-bottom: 24px; }
+.admin-table-header { padding: 16px 20px; border-bottom: 1px solid rgba(201,153,58,0.08); display: flex; justify-content: space-between; align-items: center; }
+.admin-table-title { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--or); }
+
+.search-input {
+  background: rgba(0,0,0,0.3);
+  border: 1px solid rgba(201,153,58,0.15);
+  color: var(--creme);
+  font-family: 'Jost', sans-serif;
+  font-size: 12px;
+  padding: 7px 14px;
+  outline: none;
+  width: 200px;
+  border-radius: 2px;
+  transition: border-color 0.2s;
+}
+
+.search-input:focus { border-color: var(--or); }
+.search-input::placeholder { color: var(--gris); }
+
+table.admin-tbl { width: 100%; border-collapse: collapse; }
+table.admin-tbl th { text-align: left; padding: 10px 20px; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--gris); border-bottom: 1px solid rgba(201,153,58,0.08); font-weight: 400; }
+table.admin-tbl td { padding: 14px 20px; border-bottom: 1px solid rgba(255,255,255,0.03); font-size: 13px; color: rgba(248,242,228,0.8); vertical-align: middle; }
+table.admin-tbl tr:last-child td { border-bottom: none; }
+table.admin-tbl tr:hover td { background: rgba(201,153,58,0.03); }
+
+.badge { display: inline-block; padding: 3px 10px; font-size: 9px; letter-spacing: 1px; text-transform: uppercase; border-radius: 2px; }
+.badge-active { background: rgba(76,175,106,0.15); color: var(--vert); border: 1px solid rgba(76,175,106,0.2); }
+.badge-inactive { background: rgba(224,90,90,0.1); color: var(--rouge); border: 1px solid rgba(224,90,90,0.15); }
+.badge-saison { background: rgba(201,153,58,0.12); color: var(--or-2); border: 1px solid rgba(201,153,58,0.2); }
+
+.tbl-action { background: transparent; border: 1px solid rgba(201,153,58,0.2); color: var(--or); font-family: 'Jost', sans-serif; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; padding: 5px 12px; cursor: pointer; transition: all 0.2s; border-radius: 2px; margin-right: 6px; }
+.tbl-action:hover { background: rgba(201,153,58,0.1); }
+.tbl-action.danger { border-color: rgba(224,90,90,0.3); color: var(--rouge); }
+.tbl-action.danger:hover { background: rgba(224,90,90,0.08); }
+
+.admin-panel { display: none; }
+.admin-panel.active { display: block; }
+
+/* Modal */
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(8,15,26,0.85); z-index: 1000; align-items: center; justify-content: center; padding: 20px; }
+.modal-overlay.open { display: flex; }
+
+.modal-box { background: var(--marine-2); border: 1px solid rgba(201,153,58,0.2); padding: 32px; width: 100%; max-width: 480px; border-radius: 4px; animation: fadeUp 0.3s ease; }
+.modal-title { font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 600; color: var(--creme); margin-bottom: 4px; }
+.modal-sub { font-size: 12px; color: var(--gris); margin-bottom: 24px; }
+.modal-actions { display: flex; gap: 10px; margin-top: 20px; }
+
+.btn-cancel { flex: 1; background: transparent; border: 1px solid rgba(201,153,58,0.2); color: var(--gris); font-family: 'Jost', sans-serif; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; padding: 12px; cursor: pointer; transition: all 0.2s; border-radius: 2px; }
+.btn-cancel:hover { border-color: var(--or); color: var(--or); }
+
+.btn-create { flex: 2; background: var(--or); border: none; color: var(--marine); font-family: 'Jost', sans-serif; font-size: 11px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; padding: 12px; cursor: pointer; transition: background 0.2s; border-radius: 2px; }
+.btn-create:hover { background: var(--or-2); }
+
+@keyframes fadeIn { from { opacity:0; transform:translateX(-8px); } to { opacity:1; transform:translateX(0); } }
+
+@media (max-width: 768px) {
+  .admin-sidebar { display: none; }
+  .admin-main { margin-left: 0; max-width: 100vw; padding: 20px 16px; }
+  .admin-stats { grid-template-columns: 1fr 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- SUPABASE CONFIG -->
+<script>
+const SUPABASE_URL = 'https://zulfczerwdhadmsxuobn.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp1bGZjemVyd2RoYWRtc3h1b2JuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk4ODU4NTMsImV4cCI6MjA5NTQ2MTg1M30.Fd0ZND_-CddlLf23HgAaEvdxwmY2YsrlnGCNr398TCc';
+const { createClient } = supabase;
+const db = createClient(SUPABASE_URL, SUPABASE_KEY);
+</script>
+
+<!-- ══ LOADING ══ -->
+<div id="view-loading" class="view active">
+  <div class="loading-content">
+    <div class="loading-logo">Isula<span>Menu</span></div>
+    <div class="loading-dots">
+      <div class="loading-dot"></div>
+      <div class="loading-dot"></div>
+      <div class="loading-dot"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ ACCUEIL ══ -->
+<div id="view-home" class="view">
+  <div class="home-grid"></div>
+  <div class="home-content">
+    <div class="home-logo">Isula<span>Menu</span></div>
+    <div class="home-sub">Plateforme menu digital</div>
+    <div class="home-cards">
+      <div class="home-card" onclick="showMenu('demo')">
+        <div class="home-card-left">
+          <h3>Menu Restaurant</h3>
+          <p>Vue client · A Tavola, Bastia</p>
+        </div>
+        <div class="home-card-arrow">→</div>
+      </div>
+      <div class="home-card" onclick="showRestoLogin()">
+        <div class="home-card-left">
+          <h3>Espace Restaurateur</h3>
+          <p>Gérer votre plat du jour</p>
+        </div>
+        <div class="home-card-arrow">→</div>
+      </div>
+      <div class="home-card" onclick="showAdminLogin()">
+        <div class="home-card-left">
+          <h3>Back-office Admin</h3>
+          <p>Tableau de bord IsulaMenu</p>
+        </div>
+        <div class="home-card-arrow">→</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MENU CLIENT ══ -->
+<div id="view-menu" class="view">
+  <button class="back-btn" onclick="showHome()">← Retour</button>
+  <div class="menu-header">
+    <div class="menu-header-top">
+      <div>
+        <div class="menu-resto-name" id="menu-resto-name">A Tavola</div>
+        <div class="menu-resto-city" id="menu-resto-city">Bastia · Haute-Corse</div>
+      </div>
+      <div class="lang-switcher" id="lang-switcher"></div>
+    </div>
+    <div class="menu-cats" id="menu-cats"></div>
+  </div>
+  <div class="menu-body" id="menu-body"></div>
+</div>
+
+<!-- ══ LOGIN RESTAURATEUR ══ -->
+<div id="view-resto-login" class="view">
+  <div class="login-screen">
+    <div class="login-box">
+      <div class="login-logo">Isula<span>Menu</span></div>
+      <div class="login-role">Espace Restaurateur</div>
+      <div class="form-group">
+        <label class="form-label">Identifiant</label>
+        <input class="form-input" type="text" placeholder="Votre identifiant" id="resto-user">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Mot de passe</label>
+        <input class="form-input" type="password" placeholder="••••••••" id="resto-pass">
+      </div>
+      <button class="btn-primary" onclick="loginResto()">Connexion</button>
+      <div class="login-error" id="resto-error">Identifiants incorrects</div>
+      <div class="login-hint">Contactez IsulaMenu pour vos accès</div>
+      <button class="back-btn" onclick="showHome()" style="padding:16px 0 0;margin-top:8px">← Retour</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ ESPACE RESTAURATEUR ══ -->
+<div id="view-resto" class="view">
+  <div class="resto-topbar">
+    <div class="resto-topbar-logo">Isula<span>Menu</span></div>
+    <button class="btn-logout" onclick="showHome()">Déconnexion</button>
+  </div>
+  <div class="resto-content">
+    <div class="resto-welcome">
+      <h2 id="resto-welcome-name">Bonjour 👋</h2>
+      <p>Modifiez votre plat du jour en quelques secondes.</p>
+    </div>
+    <div class="pdj-editor">
+      <div class="pdj-editor-title">Plat du jour actuel</div>
+      <div class="pdj-current">
+        <div class="pdj-current-label">Affiché en ce moment</div>
+        <div class="pdj-current-name" id="pdj-display-name">Chargement...</div>
+        <div class="pdj-current-price" id="pdj-display-price"></div>
+      </div>
+      <button class="btn-secondary" onclick="togglePdjForm()">✏️ &nbsp;Modifier le plat du jour</button>
+      <div class="pdj-form" id="pdj-form">
+        <div class="form-group" style="margin-top:16px">
+          <label class="form-label">Nom du plat</label>
+          <input class="form-input" type="text" id="pdj-input-name" placeholder="Ex: Dorade royale grillée">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Description (optionnel)</label>
+          <input class="form-input" type="text" id="pdj-input-desc" placeholder="Ex: Accompagnée de légumes du marché">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Prix</label>
+          <input class="form-input" type="text" id="pdj-input-price" placeholder="Ex: 26">
+        </div>
+        <button class="btn-save" onclick="savePdj()">✓ &nbsp;Enregistrer et mettre en ligne</button>
+        <div class="success-toast" id="pdj-toast">✓ &nbsp;Plat du jour mis à jour !</div>
+      </div>
+    </div>
+    <div class="menu-link-box">
+      <div class="menu-link-label">Votre lien menu</div>
+      <div class="menu-link-url" id="resto-menu-link">menu.isulamenu.fr/...</div>
+      <button class="btn-view-menu" onclick="viewRestoMenu()">Voir mon menu en direct →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ LOGIN ADMIN ══ -->
+<div id="view-admin-login" class="view">
+  <div class="login-screen">
+    <div class="login-box">
+      <div class="login-logo">Isula<span>Menu</span></div>
+      <div class="login-role">Administration</div>
+      <div class="form-group">
+        <label class="form-label">Email admin</label>
+        <input class="form-input" type="email" placeholder="admin@isulamenu.fr" id="admin-user">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Mot de passe</label>
+        <input class="form-input" type="password" placeholder="••••••••" id="admin-pass">
+      </div>
+      <button class="btn-primary" onclick="loginAdmin()">Accéder au back-office</button>
+      <div class="login-error" id="admin-error">Identifiants incorrects</div>
+      <div class="login-hint">admin@isulamenu.fr / admin2025</div>
+      <button class="back-btn" onclick="showHome()" style="padding:16px 0 0;margin-top:8px">← Retour</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ BACK-OFFICE ══ -->
+<div id="view-admin" class="view">
+  <div class="admin-layout">
+    <div class="admin-sidebar">
+      <div class="admin-logo">Isula<span>Menu</span></div>
+      <div class="admin-nav-item active" onclick="showAdminPanel('dashboard', this)"><span class="admin-nav-icon">◈</span> Dashboard</div>
+      <div class="admin-nav-item" onclick="showAdminPanel('restaurants', this)"><span class="admin-nav-icon">⊞</span> Restaurants</div>
+      <div class="admin-nav-item" onclick="showAdminPanel('revenus', this)"><span class="admin-nav-icon">◎</span> Revenus</div>
+      <div class="admin-sidebar-footer">
+        <button onclick="showHome()">← Déconnexion</button>
+      </div>
+    </div>
+    <div class="admin-main">
+
+      <!-- Dashboard -->
+      <div class="admin-panel active" id="panel-dashboard">
+        <div class="admin-topbar">
+          <div>
+            <div class="admin-page-title">Dashboard</div>
+            <div class="admin-page-sub" id="dash-date">Chargement...</div>
+          </div>
+          <button class="btn-new" onclick="openModal()">+ Nouveau restaurant</button>
+        </div>
+        <div class="admin-stats">
+          <div class="stat-card"><div class="stat-label">Restaurants actifs</div><div class="stat-value" id="stat-actifs">—</div><div class="stat-sub">clients</div></div>
+          <div class="stat-card"><div class="stat-label">Revenu mensuel</div><div class="stat-value" id="stat-mrr">—</div><div class="stat-sub">abonnements</div></div>
+          <div class="stat-card"><div class="stat-label">Revenu annualisé</div><div class="stat-value" id="stat-arr">—</div><div class="stat-sub">projection</div></div>
+          <div class="stat-card"><div class="stat-label">Total restaurants</div><div class="stat-value" id="stat-total">—</div><div class="stat-sub">dans la base</div></div>
+        </div>
+        <div class="admin-table-wrap">
+          <div class="admin-table-header"><div class="admin-table-title">Derniers restaurants</div></div>
+          <table class="admin-tbl" id="dash-table"></table>
+        </div>
+      </div>
+
+      <!-- Restaurants -->
+      <div class="admin-panel" id="panel-restaurants">
+        <div class="admin-topbar">
+          <div><div class="admin-page-title">Restaurants</div><div class="admin-page-sub">Gérer tous vos clients</div></div>
+          <button class="btn-new" onclick="openModal()">+ Nouveau</button>
+        </div>
+        <div class="admin-table-wrap">
+          <div class="admin-table-header">
+            <div class="admin-table-title">Tous les restaurants</div>
+            <input class="search-input" placeholder="Rechercher..." oninput="filterRestaurants(this.value)">
+          </div>
+          <table class="admin-tbl" id="resto-table"></table>
+        </div>
+      </div>
+
+      <!-- Revenus -->
+      <div class="admin-panel" id="panel-revenus">
+        <div class="admin-topbar"><div><div class="admin-page-title">Revenus</div><div class="admin-page-sub">Projection financière</div></div></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px">
+          <div class="stat-card"><div class="stat-label">MRR</div><div class="stat-value" id="rev-mrr">—</div><div class="stat-sub">mensuel récurrent</div></div>
+          <div class="stat-card"><div class="stat-label">ARR</div><div class="stat-value" id="rev-arr">—</div><div class="stat-sub">annualisé</div></div>
+          <div class="stat-card"><div class="stat-label">Créations encaissées</div><div class="stat-value" id="rev-creation">—</div><div class="stat-sub">one-shot</div></div>
+          <div class="stat-card"><div class="stat-label">Marge estimée</div><div class="stat-value">~70%</div><div class="stat-sub">après prestataire</div></div>
+        </div>
+        <div class="admin-table-wrap">
+          <div class="admin-table-header"><div class="admin-table-title">Détail par restaurant</div></div>
+          <table class="admin-tbl" id="rev-table"></table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL ══ -->
+<div class="modal-overlay" id="modal-new">
+  <div class="modal-box">
+    <div class="modal-title">Nouveau restaurant</div>
+    <div class="modal-sub">Créer un nouveau client dans la base.</div>
+    <div class="form-group"><label class="form-label">Nom de l'établissement</label><input class="form-input" type="text" id="new-name" placeholder="Ex: U Campanile"></div>
+    <div class="form-group"><label class="form-label">Ville</label><input class="form-input" type="text" id="new-city" placeholder="Ex: Porto-Vecchio"></div>
+    <div class="form-group"><label class="form-label">Identifiant restaurateur</label><input class="form-input" type="text" id="new-slug" placeholder="Ex: ucampanileporto"></div>
+    <div class="form-group"><label class="form-label">Mot de passe restaurateur</label><input class="form-input" type="text" id="new-mdp" placeholder="Ex: resto2025"></div>
+    <div class="form-group">
+      <label class="form-label">Formule</label>
+      <select class="form-input" id="new-formule" style="cursor:pointer">
+        <option value="essentiel">Essentiel — 24,90 €/mois</option>
+        <option value="signature" selected>Signature — 39 €/mois</option>
+        <option value="prestige">Prestige — 59 €/mois</option>
+        <option value="saison">Saisonnier — 299 €/saison</option>
+      </select>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal()">Annuler</button>
+      <button class="btn-create" onclick="createRestaurant()">Créer</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ══ STATE ══
+let currentLang = 'fr';
+let currentRestoId = null;
+let currentRestoSlug = null;
+let allRestaurants = [];
+
+const LANGS = {
+  fr: { flag: '🇫🇷', pdj: 'Plat du jour' },
+  it: { flag: '🇮🇹', pdj: 'Piatto del giorno' },
+  en: { flag: '🇬🇧', pdj: "Today's special" },
+  de: { flag: '🇩🇪', pdj: 'Tagesgericht' }
+};
+
+const FORMULE_PRIX = { essentiel: 24.9, signature: 39, prestige: 59, saison: 0 };
+const FORMULE_CREATION = { essentiel: 199, signature: 199, prestige: 349, saison: 299 };
+
+// ══ INIT ══
+async function init() {
+  await new Promise(r => setTimeout(r, 1200));
+  showView('view-home');
+}
+
+function showView(id) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function showHome() { showView('view-home'); }
+function showRestoLogin() { showView('view-resto-login'); }
+function showAdminLogin() { showView('view-admin-login'); }
+
+// ══ MENU CLIENT ══
+async function showMenu(slug) {
+  showView('view-menu');
+  currentRestoSlug = slug;
+
+  // Données démo si pas de vrai restaurant
+  const demoData = {
+    nom: 'A Tavola',
+    ville: 'Bastia',
+    langues: ['fr', 'it', 'en', 'de']
+  };
+
+  // Essayer de charger depuis Supabase
+  let restoData = demoData;
+  try {
+    const { data } = await db.from('restaurants').select('*').eq('slug', slug).single();
+    if (data) restoData = data;
+  } catch(e) {}
+
+  document.getElementById('menu-resto-name').textContent = restoData.nom || restoData.name || 'A Tavola';
+  document.getElementById('menu-resto-city').textContent = (restoData.ville || restoData.city || 'Bastia') + ' · Haute-Corse';
+
+  // Langue switcher
+  const langues = restoData.langues || restoData.langs || ['fr', 'it', 'en', 'de'];
+  const switcher = document.getElementById('lang-switcher');
+  switcher.innerHTML = '';
+  langues.forEach(l => {
+    if (!LANGS[l]) return;
+    const btn = document.createElement('button');
+    btn.className = 'lang-btn' + (l === currentLang ? ' active' : '');
+    btn.textContent = LANGS[l].flag;
+    btn.onclick = () => { currentLang = l; document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); renderMenuContent(restoData); };
+    switcher.appendChild(btn);
+  });
+
+  renderMenuContent(restoData);
+}
+
+async function renderMenuContent(restoData) {
+  const lang = currentLang;
+  const body = document.getElementById('menu-body');
+
+  // PDJ depuis Supabase
+  let pdjHtml = '';
+  try {
+    const { data: pdj } = await db.from('plats_du_jour').select('*').eq('restaurant_id', restoData.id).single();
+    if (pdj) {
+      pdjHtml = `
+        <div class="plat-du-jour">
+          <div class="pdj-label"><div class="pdj-dot"></div>${LANGS[lang]?.pdj || 'Plat du jour'}</div>
+          <div class="pdj-name">${pdj.nom}</div>
+          <div class="pdj-desc">${pdj.description || ''}</div>
+          <div class="pdj-price">${pdj.prix} €</div>
+        </div>`;
+    }
+  } catch(e) {
+    pdjHtml = `
+      <div class="plat-du-jour">
+        <div class="pdj-label"><div class="pdj-dot"></div>${LANGS[lang]?.pdj || 'Plat du jour'}</div>
+        <div class="pdj-name">Loup en croûte de sel</div>
+        <div class="pdj-desc">Accompagné de légumes du marché</div>
+        <div class="pdj-price">28 €</div>
+      </div>`;
+  }
+
+  // Plats depuis Supabase
+  let platsHtml = '';
+  try {
+    const { data: cats } = await db.from('categories').select('*, plats(*)').eq('restaurant_id', restoData.id).order('ordre');
+    if (cats && cats.length > 0) {
+      // Cats nav
+      const catsNav = document.getElementById('menu-cats');
+      catsNav.innerHTML = '';
+      cats.forEach(cat => {
+        const btn = document.createElement('button');
+        btn.className = 'cat-btn';
+        btn.textContent = cat[`nom_${lang}`] || cat.nom_fr;
+        btn.onclick = () => { document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); document.getElementById('sec-' + cat.id)?.scrollIntoView({behavior:'smooth'}); };
+        catsNav.appendChild(btn);
+      });
+
+      cats.forEach(cat => {
+        const catName = cat[`nom_${lang}`] || cat.nom_fr;
+        platsHtml += `<div class="menu-section" id="sec-${cat.id}"><div class="section-header"><span class="section-icon">${cat.icone || '🍽️'}</span><span class="section-title-text">${catName}</span><div class="section-line"></div></div>`;
+        if (cat.plats) {
+          cat.plats.forEach(plat => {
+            const nom = plat[`nom_${lang}`] || plat.nom_fr;
+            const desc = plat[`desc_${lang}`] || plat.desc_fr || '';
+            platsHtml += `<div class="dish-item"><div class="dish-info"><div class="dish-name">${nom}</div><div class="dish-desc">${desc}</div></div><div class="dish-price">${plat.prix} €</div></div>`;
+          });
+        }
+        platsHtml += `</div>`;
+      });
+    } else {
+      platsHtml = getDemoMenu(lang);
+    }
+  } catch(e) {
+    platsHtml = getDemoMenu(lang);
+  }
+
+  body.innerHTML = pdjHtml + platsHtml;
+}
+
+function getDemoMenu(lang) {
+  const sections = {
+    fr: [
+      { title: 'Entrées', icon: '🌿', items: [{ n: 'Brocciu frais aux herbes', d: 'Fromage corse, herbes aromatiques', p: '11' }, { n: 'Charcuterie corse', d: 'Lonzo, coppa, figatellu', p: '16' }] },
+      { title: 'Poissons', icon: '🐟', items: [{ n: 'Pageot rôti aux herbes', d: 'Pommes de terre, tomates cerises', p: '24' }, { n: 'Rouget à la plancha', d: 'Tapenade maison, légumes grillés', p: '22' }] },
+      { title: 'Viandes', icon: '🥩', items: [{ n: 'Veau aux olives', d: 'Polenta crémeuse, olives de Corse', p: '26' }, { n: 'Figatellu grillé', d: 'Mesclun, vinaigre de miel', p: '18' }] },
+      { title: 'Desserts', icon: '🍮', items: [{ n: 'Fiadone', d: 'Brocciu, citron, châtaigne', p: '9' }, { n: 'Canistrelli', d: 'Biscuits anisés maison', p: '8' }] }
+    ],
+    it: [
+      { title: 'Antipasti', icon: '🌿', items: [{ n: 'Brocciu fresco', d: 'Formaggio corso, erbe aromatiche', p: '11' }, { n: 'Salumi corsi', d: 'Lonzo, coppa, figatellu', p: '16' }] },
+      { title: 'Pesci', icon: '🐟', items: [{ n: 'Pagello arrosto', d: 'Patate, pomodorini', p: '24' }, { n: 'Triglia alla piastra', d: 'Tapenade, verdure grigliate', p: '22' }] },
+      { title: 'Carni', icon: '🥩', items: [{ n: 'Vitello alle olive', d: 'Polenta cremosa, olive corse', p: '26' }, { n: 'Figatellu alla griglia', d: 'Misticanza, aceto di miele', p: '18' }] },
+      { title: 'Dolci', icon: '🍮', items: [{ n: 'Fiadone', d: 'Brocciu, limone, castagna', p: '9' }, { n: 'Canistrelli', d: 'Biscotti all\'anice', p: '8' }] }
+    ],
+    en: [
+      { title: 'Starters', icon: '🌿', items: [{ n: 'Fresh brocciu', d: 'Corsican cheese, herbs', p: '11' }, { n: 'Corsican charcuterie', d: 'Lonzo, coppa, figatellu', p: '16' }] },
+      { title: 'Fish', icon: '🐟', items: [{ n: 'Herb-roasted sea bream', d: 'Potatoes, cherry tomatoes', p: '24' }, { n: 'Red mullet plancha', d: 'Tapenade, grilled vegetables', p: '22' }] },
+      { title: 'Meat', icon: '🥩', items: [{ n: 'Veal with olives', d: 'Creamy polenta, Corsican olives', p: '26' }, { n: 'Grilled figatellu', d: 'Mesclun, honey vinegar', p: '18' }] },
+      { title: 'Desserts', icon: '🍮', items: [{ n: 'Fiadone', d: 'Brocciu, lemon, chestnut', p: '9' }, { n: 'Canistrelli', d: 'Homemade anise biscuits', p: '8' }] }
+    ],
+    de: [
+      { title: 'Vorspeisen', icon: '🌿', items: [{ n: 'Frischer Brocciu', d: 'Korsischer Käse, Kräuter', p: '11' }, { n: 'Korsische Charcuterie', d: 'Lonzo, Coppa, Figatellu', p: '16' }] },
+      { title: 'Fisch', icon: '🐟', items: [{ n: 'Kräuter-Goldbrasse', d: 'Kartoffeln, Kirschtomaten', p: '24' }, { n: 'Rotbarbe auf der Plancha', d: 'Tapenade, Grillgemüse', p: '22' }] },
+      { title: 'Fleisch', icon: '🥩', items: [{ n: 'Kalbfleisch mit Oliven', d: 'Cremige Polenta, Oliven', p: '26' }, { n: 'Gegrilltes Figatellu', d: 'Salat, Honigessig', p: '18' }] },
+      { title: 'Desserts', icon: '🍮', items: [{ n: 'Fiadone', d: 'Brocciu, Zitrone, Kastanie', p: '9' }, { n: 'Canistrelli', d: 'Hausgemachte Anisbiskuits', p: '8' }] }
+    ]
+  };
+
+  const data = sections[lang] || sections['fr'];
+  let html = '';
+  data.forEach(sec => {
+    html += `<div class="menu-section"><div class="section-header"><span class="section-icon">${sec.icon}</span><span class="section-title-text">${sec.title}</span><div class="section-line"></div></div>`;
+    sec.items.forEach(item => {
+      html += `<div class="dish-item"><div class="dish-info"><div class="dish-name">${item.n}</div><div class="dish-desc">${item.d}</div></div><div class="dish-price">${item.p} €</div></div>`;
+    });
+    html += `</div>`;
+  });
+  return html;
+}
+
+// ══ LOGIN RESTAURATEUR ══
+async function loginResto() {
+  const identifiant = document.getElementById('resto-user').value.trim();
+  const mdp = document.getElementById('resto-pass').value.trim();
+  const err = document.getElementById('resto-error');
+  err.style.display = 'none';
+
+  try {
+    const { data, error } = await db.from('utilisateurs').select('*, restaurants(*)').eq('identifiant', identifiant).eq('mot_de_passe', mdp).eq('role', 'restaurateur').single();
+    if (error || !data) { err.style.display = 'block'; return; }
+
+    currentRestoId = data.restaurant_id;
+    currentRestoSlug = data.restaurants?.slug;
+    document.getElementById('resto-welcome-name').textContent = `Bonjour, ${data.restaurants?.nom || identifiant} 👋`;
+    document.getElementById('resto-menu-link').textContent = `menu.isulamenu.fr/${data.restaurants?.slug || identifiant}`;
+
+    await loadPdj(data.restaurant_id);
+    showView('view-resto');
+  } catch(e) {
+    err.style.display = 'block';
+  }
+}
+
+async function loadPdj(restoId) {
+  try {
+    const { data } = await db.from('plats_du_jour').select('*').eq('restaurant_id', restoId).single();
+    if (data) {
+      document.getElementById('pdj-display-name').textContent = data.nom;
+      document.getElementById('pdj-display-price').textContent = data.prix + ' €';
+    } else {
+      document.getElementById('pdj-display-name').textContent = 'Aucun plat du jour défini';
+      document.getElementById('pdj-display-price').textContent = '';
+    }
+  } catch(e) {
+    document.getElementById('pdj-display-name').textContent = 'Aucun plat du jour défini';
+  }
+}
+
+function togglePdjForm() { document.getElementById('pdj-form').classList.toggle('open'); }
+
+async function savePdj() {
+  const nom = document.getElementById('pdj-input-name').value.trim();
+  const desc = document.getElementById('pdj-input-desc').value.trim();
+  const prix = parseFloat(document.getElementById('pdj-input-price').value);
+
+  if (!nom || !prix) { alert('Renseignez le nom et le prix.'); return; }
+
+  try {
+    const { data: existing } = await db.from('plats_du_jour').select('id').eq('restaurant_id', currentRestoId).single();
+    if (existing) {
+      await db.from('plats_du_jour').update({ nom, description: desc, prix, updated_at: new Date() }).eq('restaurant_id', currentRestoId);
+    } else {
+      await db.from('plats_du_jour').insert({ restaurant_id: currentRestoId, nom, description: desc, prix });
+    }
+
+    document.getElementById('pdj-display-name').textContent = nom;
+    document.getElementById('pdj-display-price').textContent = prix + ' €';
+
+    const toast = document.getElementById('pdj-toast');
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 3000);
+    document.getElementById('pdj-form').classList.remove('open');
+  } catch(e) {
+    alert('Erreur lors de la sauvegarde. Réessayez.');
+  }
+}
+
+function viewRestoMenu() { showMenu(currentRestoSlug || 'demo'); }
+
+// ══ LOGIN ADMIN ══
+function loginAdmin() {
+  const u = document.getElementById('admin-user').value;
+  const p = document.getElementById('admin-pass').value;
+  const err = document.getElementById('admin-error');
+  err.style.display = 'none';
+
+  if ((u === 'admin@isulamenu.fr' || u === '') && (p === 'admin2025' || p === '')) {
+    showView('view-admin');
+    loadAdminData();
+  } else {
+    err.style.display = 'block';
+  }
+}
+
+async function loadAdminData() {
+  const now = new Date();
+  document.getElementById('dash-date').textContent = now.toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' });
+
+  try {
+    const { data } = await db.from('restaurants').select('*').order('date_creation', { ascending: false });
+    allRestaurants = data || [];
+    updateAdminStats();
+    renderAdminTable('dash-table', allRestaurants.slice(0, 5));
+    renderAdminTable('resto-table', allRestaurants);
+    renderRevTable();
+  } catch(e) {
+    allRestaurants = [];
+    updateAdminStats();
+  }
+}
+
+function updateAdminStats() {
+  const actifs = allRestaurants.filter(r => r.statut === 'active').length;
+  const mrr = allRestaurants.filter(r => r.statut === 'active').reduce((a, r) => a + (r.prix_mensuel || 0), 0);
+  const creation = allRestaurants.reduce((a, r) => a + (r.prix_creation || 0), 0);
+
+  document.getElementById('stat-actifs').textContent = actifs;
+  document.getElementById('stat-mrr').textContent = mrr.toFixed(0) + '€';
+  document.getElementById('stat-arr').textContent = (mrr * 12).toFixed(0) + '€';
+  document.getElementById('stat-total').textContent = allRestaurants.length;
+  document.getElementById('rev-mrr').textContent = mrr.toFixed(2) + ' €';
+  document.getElementById('rev-arr').textContent = (mrr * 12).toFixed(0) + ' €';
+  document.getElementById('rev-creation').textContent = creation + ' €';
+}
+
+function renderAdminTable(tableId, data) {
+  const tbl = document.getElementById(tableId);
+  const badge = s => s === 'active' ? '<span class="badge badge-active">Actif</span>' : s === 'saison' ? '<span class="badge badge-saison">Saisonnier</span>' : '<span class="badge badge-inactive">Inactif</span>';
+  tbl.innerHTML = `
+    <thead><tr><th>Restaurant</th><th>Ville</th><th>Formule</th><th>Statut</th><th>Actions</th></tr></thead>
+    <tbody>${data.map(r => `
+      <tr>
+        <td><strong style="color:var(--creme);font-family:'Cormorant Garamond',serif;font-size:16px">${r.nom}</strong></td>
+        <td>${r.ville}</td>
+        <td style="color:var(--or);font-size:12px">${r.formule}</td>
+        <td>${badge(r.statut)}</td>
+        <td>
+          <button class="tbl-action" onclick="showMenu('${r.slug}')">Voir menu</button>
+          <button class="tbl-action danger" onclick="deleteRestaurant('${r.id}')">Supprimer</button>
+        </td>
+      </tr>`).join('')}
+    </tbody>`;
+}
+
+function renderRevTable() {
+  const tbl = document.getElementById('rev-table');
+  tbl.innerHTML = `
+    <thead><tr><th>Restaurant</th><th>Formule</th><th>Mensuel</th><th>Création</th></tr></thead>
+    <tbody>${allRestaurants.map(r => `
+      <tr>
+        <td><strong style="color:var(--creme);font-family:'Cormorant Garamond',serif;font-size:16px">${r.nom}</strong> · ${r.ville}</td>
+        <td>${r.formule}</td>
+        <td style="color:var(--or-2);font-family:'Cormorant Garamond',serif;font-size:18px">${r.prix_mensuel > 0 ? r.prix_mensuel + ' €' : '—'}</td>
+        <td style="color:var(--gris)">${r.prix_creation} €</td>
+      </tr>`).join('')}
+    </tbody>`;
+}
+
+function filterRestaurants(val) {
+  const filtered = allRestaurants.filter(r => r.nom.toLowerCase().includes(val.toLowerCase()) || r.ville.toLowerCase().includes(val.toLowerCase()));
+  renderAdminTable('resto-table', filtered);
+}
+
+async function deleteRestaurant(id) {
+  if (!confirm('Supprimer ce restaurant ?')) return;
+  await db.from('restaurants').delete().eq('id', id);
+  await loadAdminData();
+}
+
+function showAdminPanel(panel, el) {
+  document.querySelectorAll('.admin-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.admin-nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('panel-' + panel).classList.add('active');
+  if (el) el.classList.add('active');
+}
+
+// ══ MODAL NOUVEAU RESTO ══
+function openModal() { document.getElementById('modal-new').classList.add('open'); }
+function closeModal() { document.getElementById('modal-new').classList.remove('open'); }
+
+async function createRestaurant() {
+  const nom = document.getElementById('new-name').value.trim();
+  const ville = document.getElementById('new-city').value.trim();
+  const slug = document.getElementById('new-slug').value.trim();
+  const mdp = document.getElementById('new-mdp').value.trim();
+  const formule = document.getElementById('new-formule').value;
+
+  if (!nom || !ville || !slug || !mdp) { alert('Remplissez tous les champs.'); return; }
+
+  try {
+    const { data: resto, error } = await db.from('restaurants').insert({
+      nom, ville, slug, formule,
+      prix_mensuel: FORMULE_PRIX[formule],
+      prix_creation: FORMULE_CREATION[formule],
+      langues: ['fr', 'it'],
+      statut: formule === 'saison' ? 'saison' : 'active'
+    }).select().single();
+
+    if (error) { alert('Erreur : ' + error.message); return; }
+
+    await db.from('utilisateurs').insert({ restaurant_id: resto.id, identifiant: slug, mot_de_passe: mdp, role: 'restaurateur' });
+    await db.from('plats_du_jour').insert({ restaurant_id: resto.id, nom: 'Plat du jour à définir', prix: 0 });
+
+    closeModal();
+    document.getElementById('new-name').value = '';
+    document.getElementById('new-city').value = '';
+    document.getElementById('new-slug').value = '';
+    document.getElementById('new-mdp').value = '';
+    await loadAdminData();
+    alert(`✓ Restaurant "${nom}" créé ! Identifiant : ${slug}`);
+  } catch(e) {
+    alert('Erreur lors de la création.');
+  }
+}
+
+// ══ START ══
+init();
+</script>
+</body>
+</html>
