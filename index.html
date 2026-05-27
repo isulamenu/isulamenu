@@ -957,7 +957,7 @@ window.addEventListener('load', function() {
 </div>
 
 <!-- ══ VITRINE ══ -->
-<div id="view-home" class="view" style="min-height:100vh;display:none;flex-direction:column">
+<div id="view-home" class="view">
   <div class="home-grid"></div>
 
   <!-- Header -->
@@ -1285,24 +1285,6 @@ window.addEventListener('load', function() {
     </div>
   </div>
 </div>
-
-<!-- ══ LOGIN ADMIN ══ -->
-<div id="view-admin-login" class="view">
-  <div class="login-screen">
-    <div class="login-box">
-      <div class="login-logo">Isula<span>Menu</span></div>
-      <div class="login-role">Administration</div>
-      <div class="form-group">
-        <label class="form-label">Email admin</label>
-        <input class="form-input" type="email" placeholder="admin@isulamenu.fr" id="admin-user">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Mot de passe</label>
-        <input class="form-input" type="password" placeholder="••••••••" id="admin-pass">
-      </div>
-      <button class="btn-primary" onclick="loginAdmin()">Accéder au back-office</button>
-      <div class="login-error" id="admin-error">Identifiants incorrects</div>
-
       <button class="back-btn" onclick="showHome()" style="padding:16px 0 0;margin-top:8px">← Retour</button>
     </div>
   </div>
