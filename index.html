@@ -4,7 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>IsulaMenu</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root {
@@ -336,6 +338,112 @@ body {
 .dish-name { font-family: 'Cormorant Garamond', serif; font-size: 17px; color: var(--creme); margin-bottom: 3px; }
 .dish-desc { font-size: 11.5px; color: var(--gris); line-height: 1.5; }
 .dish-price { font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 600; color: var(--or-2); white-space: nowrap; }
+
+.dish-photo {
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+  border-radius: 3px;
+  flex-shrink: 0;
+  opacity: 0.92;
+  border: 1px solid rgba(201,153,58,0.15);
+}
+
+.dish-photo-placeholder {
+  width: 64px;
+  height: 64px;
+  background: rgba(201,153,58,0.05);
+  border: 1px dashed rgba(201,153,58,0.15);
+  border-radius: 3px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  opacity: 0.4;
+}
+
+/* Upload photo dans back-office */
+.photo-upload-wrap {
+  margin-top: 8px;
+}
+
+.photo-upload-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(201,153,58,0.08);
+  border: 1px dashed rgba(201,153,58,0.3);
+  color: var(--or);
+  font-size: 11px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 8px 14px;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: all 0.2s;
+}
+
+.photo-upload-label:hover { background: rgba(201,153,58,0.12); }
+
+.photo-upload-input { display: none; }
+
+.photo-preview {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 3px;
+  border: 1px solid rgba(201,153,58,0.2);
+  margin-top: 8px;
+  display: none;
+}
+
+.plat-row {
+  background: var(--marine-2);
+  border: 1px solid rgba(201,153,58,0.08);
+  padding: 16px;
+  border-radius: 3px;
+  margin-bottom: 8px;
+  display: grid;
+  grid-template-columns: 80px 1fr auto;
+  gap: 16px;
+  align-items: center;
+}
+
+.plat-row-photo {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 3px;
+  border: 1px solid rgba(201,153,58,0.15);
+  cursor: pointer;
+}
+
+.plat-row-photo-empty {
+  width: 80px;
+  height: 80px;
+  background: rgba(201,153,58,0.05);
+  border: 1px dashed rgba(201,153,58,0.2);
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.plat-row-photo-empty:hover { background: rgba(201,153,58,0.1); }
+
+.plat-row-info h4 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 17px;
+  color: var(--creme);
+  margin-bottom: 3px;
+}
+
+.plat-row-info p { font-size: 12px; color: var(--gris); }
+.plat-row-price { font-family: 'Cormorant Garamond', serif; font-size: 18px; color: var(--or-2); }
 
 /* ══ LOGIN ══ */
 .login-screen {
@@ -695,10 +803,88 @@ table.admin-tbl tr:hover td { background: rgba(201,153,58,0.03); }
 
 @keyframes fadeIn { from { opacity:0; transform:translateX(-8px); } to { opacity:1; transform:translateX(0); } }
 
+/* Formulaire création plats */
+.form-section {
+  background: var(--marine-2);
+  border: 1px solid rgba(201,153,58,0.12);
+  border-radius: 4px;
+  padding: 24px;
+  margin-bottom: 20px;
+}
+
+.form-section-title {
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--or);
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.form-section-title::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: rgba(201,153,58,0.15);
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.form-grid-full {
+  grid-column: 1 / -1;
+}
+
+.btn-add {
+  background: rgba(76,175,106,0.15);
+  border: 1px solid rgba(76,175,106,0.3);
+  color: var(--vert);
+  font-family: 'Jost', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 11px 20px;
+  cursor: pointer;
+  transition: all 0.2s;
+  border-radius: 2px;
+  margin-top: 8px;
+}
+
+.btn-add:hover { background: rgba(76,175,106,0.25); }
+
+.cat-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(201,153,58,0.1);
+  border: 1px solid rgba(201,153,58,0.2);
+  color: var(--or-2);
+  font-size: 12px;
+  padding: 6px 12px;
+  border-radius: 2px;
+  margin: 4px;
+}
+
+.cat-tag-del {
+  cursor: pointer;
+  color: var(--rouge);
+  font-size: 14px;
+  line-height: 1;
+}
+
+.cat-tag-del:hover { opacity: 0.7; }
+
 @media (max-width: 768px) {
   .admin-sidebar { display: none; }
   .admin-main { margin-left: 0; max-width: 100vw; padding: 20px 16px; }
   .admin-stats { grid-template-columns: 1fr 1fr; }
+  .form-grid { grid-template-columns: 1fr; }
 }
 </style>
 </head>
@@ -708,8 +894,12 @@ table.admin-tbl tr:hover td { background: rgba(201,153,58,0.03); }
 <script>
 const SUPABASE_URL = 'https://zulfczerwdhadmsxuobn.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp1bGZjemVyd2RoYWRtc3h1b2JuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk4ODU4NTMsImV4cCI6MjA5NTQ2MTg1M30.Fd0ZND_-CddlLf23HgAaEvdxwmY2YsrlnGCNr398TCc';
-const { createClient } = supabase;
-const db = createClient(SUPABASE_URL, SUPABASE_KEY);
+let db;
+window.addEventListener('load', function() {
+  const { createClient } = supabase;
+  db = createClient(SUPABASE_URL, SUPABASE_KEY);
+  init();
+});
 </script>
 
 <!-- ══ LOADING ══ -->
@@ -868,6 +1058,7 @@ const db = createClient(SUPABASE_URL, SUPABASE_KEY);
       <div class="admin-nav-item active" onclick="showAdminPanel('dashboard', this)"><span class="admin-nav-icon">◈</span> Dashboard</div>
       <div class="admin-nav-item" onclick="showAdminPanel('restaurants', this)"><span class="admin-nav-icon">⊞</span> Restaurants</div>
       <div class="admin-nav-item" onclick="showAdminPanel('revenus', this)"><span class="admin-nav-icon">◎</span> Revenus</div>
+      <div class="admin-nav-item" onclick="showAdminPanel('carte', this)"><span class="admin-nav-icon">🍽</span> Gérer carte</div>
       <div class="admin-sidebar-footer">
         <button onclick="showHome()">← Déconnexion</button>
       </div>
@@ -925,6 +1116,113 @@ const db = createClient(SUPABASE_URL, SUPABASE_KEY);
         </div>
       </div>
 
+    </div>
+
+      <!-- Carte -->
+      <div class="admin-panel" id="panel-carte">
+        <div class="admin-topbar">
+          <div><div class="admin-page-title">Gérer la carte</div><div class="admin-page-sub">Créer catégories, plats et ajouter des photos</div></div>
+        </div>
+
+        <!-- Sélecteur restaurant -->
+        <div class="form-section">
+          <div class="form-section-title">Restaurant</div>
+          <select class="form-input" id="carte-resto-select" onchange="loadCarteResto(this.value)" style="max-width:360px;cursor:pointer">
+            <option value="">-- Choisir un restaurant --</option>
+          </select>
+        </div>
+
+        <!-- Ajouter une catégorie -->
+        <div class="form-section" id="section-add-cat" style="display:none">
+          <div class="form-section-title">Ajouter une catégorie</div>
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label">Nom (FR)</label>
+              <input class="form-input" type="text" id="cat-nom-fr" placeholder="Ex: Poissons">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Nom (IT)</label>
+              <input class="form-input" type="text" id="cat-nom-it" placeholder="Ex: Pesci">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Nom (EN)</label>
+              <input class="form-input" type="text" id="cat-nom-en" placeholder="Ex: Fish">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Nom (DE)</label>
+              <input class="form-input" type="text" id="cat-nom-de" placeholder="Ex: Fisch">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Icône</label>
+              <input class="form-input" type="text" id="cat-icone" placeholder="Ex: 🐟">
+            </div>
+          </div>
+          <button class="btn-add" onclick="addCategorie()">+ Ajouter la catégorie</button>
+        </div>
+
+        <!-- Ajouter un plat -->
+        <div class="form-section" id="section-add-plat" style="display:none">
+          <div class="form-section-title">Ajouter un plat</div>
+          <div class="form-group">
+            <label class="form-label">Catégorie</label>
+            <select class="form-input" id="plat-cat-select" style="cursor:pointer">
+              <option value="">-- Choisir une catégorie --</option>
+            </select>
+          </div>
+          <div class="form-grid">
+            <div class="form-group form-grid-full">
+              <label class="form-label">Nom du plat (FR)</label>
+              <input class="form-input" type="text" id="plat-nom-fr" placeholder="Ex: Pageot rôti aux herbes">
+            </div>
+            <div class="form-group form-grid-full">
+              <label class="form-label">Description (FR)</label>
+              <input class="form-input" type="text" id="plat-desc-fr" placeholder="Ex: Pommes de terre, tomates cerises">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Nom (IT)</label>
+              <input class="form-input" type="text" id="plat-nom-it" placeholder="Ex: Pagello arrosto">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Nom (EN)</label>
+              <input class="form-input" type="text" id="plat-nom-en" placeholder="Ex: Roasted sea bream">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Prix (€)</label>
+              <input class="form-input" type="number" id="plat-prix" placeholder="Ex: 24">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Tags (optionnel)</label>
+              <input class="form-input" type="text" id="plat-tags" placeholder="Ex: local, végétarien">
+            </div>
+          </div>
+          <button class="btn-add" onclick="addPlat()">+ Ajouter le plat</button>
+          <div class="success-toast" id="plat-toast">✓ Plat ajouté avec succès !</div>
+        </div>
+
+        <!-- Liste des plats -->
+        <div id="carte-content"></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL PHOTO ══ -->
+<div class="modal-overlay" id="modal-photo">
+  <div class="modal-box">
+    <div class="modal-title">Ajouter une photo</div>
+    <div class="modal-sub" id="modal-photo-plat-name">Plat sélectionné</div>
+    <div class="form-group">
+      <label class="form-label">Photo du plat</label>
+      <label class="photo-upload-label">
+        📷 &nbsp;Choisir une photo
+        <input class="photo-upload-input" type="file" accept="image/jpeg,image/png,image/webp" id="photo-file-input" onchange="previewPhoto(this)">
+      </label>
+      <img id="photo-preview" class="photo-preview">
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closePhotoModal()">Annuler</button>
+      <button class="btn-create" onclick="uploadPhoto()">Enregistrer la photo</button>
     </div>
   </div>
 </div>
@@ -991,48 +1289,79 @@ async function showMenu(slug) {
   showView('view-menu');
   currentRestoSlug = slug;
 
-  // Données démo si pas de vrai restaurant
+  // Données démo par défaut
   const demoData = {
     nom: 'A Tavola',
     ville: 'Bastia',
     langues: ['fr', 'it', 'en', 'de']
   };
 
-  // Essayer de charger depuis Supabase
-  let restoData = demoData;
-  try {
-    const { data } = await db.from('restaurants').select('*').eq('slug', slug).single();
-    if (data) restoData = data;
-  } catch(e) {}
+  // Afficher immédiatement avec les données démo
+  document.getElementById('menu-resto-name').textContent = demoData.nom;
+  document.getElementById('menu-resto-city').textContent = demoData.ville + ' · Haute-Corse';
 
-  document.getElementById('menu-resto-name').textContent = restoData.nom || restoData.name || 'A Tavola';
-  document.getElementById('menu-resto-city').textContent = (restoData.ville || restoData.city || 'Bastia') + ' · Haute-Corse';
-
-  // Langue switcher
-  const langues = restoData.langues || restoData.langs || ['fr', 'it', 'en', 'de'];
+  // Langue switcher immédiat
   const switcher = document.getElementById('lang-switcher');
   switcher.innerHTML = '';
-  langues.forEach(l => {
+  demoData.langues.forEach(l => {
     if (!LANGS[l]) return;
     const btn = document.createElement('button');
     btn.className = 'lang-btn' + (l === currentLang ? ' active' : '');
     btn.textContent = LANGS[l].flag;
-    btn.onclick = () => { currentLang = l; document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); renderMenuContent(restoData); };
+    btn.onclick = () => { currentLang = l; document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); renderMenuContent(demoData); };
     switcher.appendChild(btn);
   });
 
-  renderMenuContent(restoData);
+  // Afficher menu demo immédiatement
+  renderMenuContent(demoData);
+
+  // Essayer de charger depuis Supabase en arrière-plan
+  if (slug !== 'demo' && db) {
+    try {
+      const { data } = await db.from('restaurants').select('*').eq('slug', slug).single();
+      if (data) {
+        document.getElementById('menu-resto-name').textContent = data.nom;
+        document.getElementById('menu-resto-city').textContent = data.ville + ' · Haute-Corse';
+        
+        const langues = data.langues || ['fr', 'it', 'en', 'de'];
+        switcher.innerHTML = '';
+        langues.forEach(l => {
+          if (!LANGS[l]) return;
+          const btn = document.createElement('button');
+          btn.className = 'lang-btn' + (l === currentLang ? ' active' : '');
+          btn.textContent = LANGS[l].flag;
+          btn.onclick = () => { currentLang = l; document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); renderMenuContent(data); };
+          switcher.appendChild(btn);
+        });
+        renderMenuContent(data);
+      }
+    } catch(e) {}
+  }
 }
 
 async function renderMenuContent(restoData) {
   const lang = currentLang;
   const body = document.getElementById('menu-body');
 
-  // PDJ depuis Supabase
-  let pdjHtml = '';
+  // Afficher le menu démo immédiatement
+  const demoPdj = `
+    <div class="plat-du-jour">
+      <div class="pdj-label"><div class="pdj-dot"></div>${LANGS[lang]?.pdj || 'Plat du jour'}</div>
+      <div class="pdj-name">Loup en croûte de sel</div>
+      <div class="pdj-desc">Accompagné de légumes du marché</div>
+      <div class="pdj-price">28 €</div>
+    </div>`;
+
+  body.innerHTML = demoPdj + getDemoMenu(lang);
+
+  // Charger depuis Supabase en arrière-plan si restaurant réel
+  if (!restoData.id || !db) return;
+
   try {
+    // PDJ réel
     const { data: pdj } = await db.from('plats_du_jour').select('*').eq('restaurant_id', restoData.id).single();
-    if (pdj) {
+    let pdjHtml = demoPdj;
+    if (pdj && pdj.nom && pdj.nom !== 'Plat du jour à définir') {
       pdjHtml = `
         <div class="plat-du-jour">
           <div class="pdj-label"><div class="pdj-dot"></div>${LANGS[lang]?.pdj || 'Plat du jour'}</div>
@@ -1041,22 +1370,11 @@ async function renderMenuContent(restoData) {
           <div class="pdj-price">${pdj.prix} €</div>
         </div>`;
     }
-  } catch(e) {
-    pdjHtml = `
-      <div class="plat-du-jour">
-        <div class="pdj-label"><div class="pdj-dot"></div>${LANGS[lang]?.pdj || 'Plat du jour'}</div>
-        <div class="pdj-name">Loup en croûte de sel</div>
-        <div class="pdj-desc">Accompagné de légumes du marché</div>
-        <div class="pdj-price">28 €</div>
-      </div>`;
-  }
 
-  // Plats depuis Supabase
-  let platsHtml = '';
-  try {
+    // Plats réels
     const { data: cats } = await db.from('categories').select('*, plats(*)').eq('restaurant_id', restoData.id).order('ordre');
+    
     if (cats && cats.length > 0) {
-      // Cats nav
       const catsNav = document.getElementById('menu-cats');
       catsNav.innerHTML = '';
       cats.forEach(cat => {
@@ -1067,6 +1385,7 @@ async function renderMenuContent(restoData) {
         catsNav.appendChild(btn);
       });
 
+      let platsHtml = '';
       cats.forEach(cat => {
         const catName = cat[`nom_${lang}`] || cat.nom_fr;
         platsHtml += `<div class="menu-section" id="sec-${cat.id}"><div class="section-header"><span class="section-icon">${cat.icone || '🍽️'}</span><span class="section-title-text">${catName}</span><div class="section-line"></div></div>`;
@@ -1074,19 +1393,19 @@ async function renderMenuContent(restoData) {
           cat.plats.forEach(plat => {
             const nom = plat[`nom_${lang}`] || plat.nom_fr;
             const desc = plat[`desc_${lang}`] || plat.desc_fr || '';
-            platsHtml += `<div class="dish-item"><div class="dish-info"><div class="dish-name">${nom}</div><div class="dish-desc">${desc}</div></div><div class="dish-price">${plat.prix} €</div></div>`;
+            const photoHtml = plat.photo_url ? `<img class="dish-photo" src="${plat.photo_url}" alt="${nom}">` : '';
+            platsHtml += `<div class="dish-item">${photoHtml}<div class="dish-info"><div class="dish-name">${nom}</div><div class="dish-desc">${desc}</div></div><div class="dish-price">${plat.prix} €</div></div>`;
           });
         }
-        platsHtml += `</div>`;
+        platsHtml += '</div>';
       });
+      body.innerHTML = pdjHtml + platsHtml;
     } else {
-      platsHtml = getDemoMenu(lang);
+      body.innerHTML = pdjHtml + getDemoMenu(lang);
     }
   } catch(e) {
-    platsHtml = getDemoMenu(lang);
+    // Garder le menu démo en cas d'erreur
   }
-
-  body.innerHTML = pdjHtml + platsHtml;
 }
 
 function getDemoMenu(lang) {
@@ -1122,7 +1441,7 @@ function getDemoMenu(lang) {
   data.forEach(sec => {
     html += `<div class="menu-section"><div class="section-header"><span class="section-icon">${sec.icon}</span><span class="section-title-text">${sec.title}</span><div class="section-line"></div></div>`;
     sec.items.forEach(item => {
-      html += `<div class="dish-item"><div class="dish-info"><div class="dish-name">${item.n}</div><div class="dish-desc">${item.d}</div></div><div class="dish-price">${item.p} €</div></div>`;
+      html += `<div class="dish-item">${item.img ? `<img class="dish-photo" src="${item.img}" alt="${item.n}">` : ''}<div class="dish-info"><div class="dish-name">${item.n}</div><div class="dish-desc">${item.d}</div></div><div class="dish-price">${item.p} €</div></div>`;
     });
     html += `</div>`;
   });
@@ -1224,6 +1543,7 @@ async function loadAdminData() {
     renderAdminTable('dash-table', allRestaurants.slice(0, 5));
     renderAdminTable('resto-table', allRestaurants);
     renderRevTable();
+    populateCarteSelect();
   } catch(e) {
     allRestaurants = [];
     updateAdminStats();
@@ -1334,8 +1654,256 @@ async function createRestaurant() {
   }
 }
 
+// ══ CARTE ADMIN ══
+async function loadCarteResto(restoId) {
+  // Afficher/masquer les formulaires
+  document.getElementById('section-add-cat').style.display = restoId ? 'block' : 'none';
+  document.getElementById('section-add-plat').style.display = restoId ? 'block' : 'none';
+  
+  if (!restoId) { document.getElementById('carte-content').innerHTML = ''; return; }
+  await refreshCarte(restoId);
+}
+
+async function refreshCarte(restoId) {
+  const container = document.getElementById('carte-content');
+  container.innerHTML = '<p style="color:var(--gris);font-size:13px;padding:12px 0">Chargement...</p>';
+
+  try {
+    const { data: cats } = await db.from('categories').select('*, plats(*)').eq('restaurant_id', restoId).order('ordre');
+
+    // Peupler select catégories pour ajout plat
+    const catSelect = document.getElementById('plat-cat-select');
+    catSelect.innerHTML = '<option value="">-- Choisir une catégorie --</option>';
+    if (cats) {
+      cats.forEach(cat => {
+        const opt = document.createElement('option');
+        opt.value = cat.id;
+        opt.textContent = cat.icone + ' ' + cat.nom_fr;
+        catSelect.appendChild(opt);
+      });
+    }
+
+    if (!cats || cats.length === 0) {
+      container.innerHTML = `
+        <div style="text-align:center;padding:40px;color:var(--gris)">
+          <div style="font-size:32px;margin-bottom:12px">🍽️</div>
+          <p>Aucune catégorie pour ce restaurant.</p>
+          <p style="font-size:12px;margin-top:8px">Commencez par ajouter une catégorie ci-dessus.</p>
+        </div>`;
+      return;
+    }
+
+    let html = '<div class="form-section"><div class="form-section-title">Carte actuelle</div>';
+    cats.forEach(cat => {
+      html += `<div style="margin-bottom:24px">
+        <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--or);margin-bottom:12px;display:flex;align-items:center;gap:10px">
+          ${cat.icone || '🍽️'} ${cat.nom_fr}
+          <div style="flex:1;height:1px;background:rgba(201,153,58,0.12)"></div>
+          <button onclick="deleteCategorie('${cat.id}'" style="background:transparent;border:none;color:var(--rouge);cursor:pointer;font-size:11px">Supprimer</button>
+        </div>`;
+
+      if (cat.plats && cat.plats.length > 0) {
+        cat.plats.forEach(plat => {
+          const photoEl = plat.photo_url
+            ? `<img class="plat-row-photo" src="${plat.photo_url}" alt="${plat.nom_fr}" onclick="openPhotoModal('${plat.id}', '${plat.nom_fr}')">`
+            : `<div class="plat-row-photo-empty" onclick="openPhotoModal('${plat.id}', '${plat.nom_fr}')">📷</div>`;
+
+          html += `<div class="plat-row">
+            ${photoEl}
+            <div class="plat-row-info">
+              <h4>${plat.nom_fr}</h4>
+              <p>${plat.desc_fr || ''}</p>
+              <p style="color:var(--or);font-size:10px;margin-top:4px;letter-spacing:0.5px">📷 Cliquer pour ajouter/modifier la photo</p>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px">
+              <div class="plat-row-price">${plat.prix} €</div>
+              <button onclick="deletePlat('${plat.id}')" style="background:transparent;border:none;color:var(--rouge);cursor:pointer;font-size:10px">Supprimer</button>
+            </div>
+          </div>`;
+        });
+      } else {
+        html += `<p style="font-size:12px;color:var(--gris);padding:8px 0">Aucun plat — ajoutez-en un ci-dessus.</p>`;
+      }
+      html += '</div>';
+    });
+    html += '</div>';
+
+    container.innerHTML = html;
+  } catch(e) {
+    container.innerHTML = '<p style="color:var(--rouge);font-size:13px">Erreur de chargement.</p>';
+    console.error(e);
+  }
+}
+
+let currentPlatId = null;
+let currentCarteRestoId = null;
+
+// Override loadCarteResto pour sauvegarder restoId courant
+const _origLoadCarte = loadCarteResto;
+
+async function addCategorie() {
+  const restoId = document.getElementById('carte-resto-select').value;
+  if (!restoId) { alert('Sélectionnez un restaurant.'); return; }
+
+  const nomFr = document.getElementById('cat-nom-fr').value.trim();
+  if (!nomFr) { alert('Le nom français est obligatoire.'); return; }
+
+  const nomIt = document.getElementById('cat-nom-it').value.trim();
+  const nomEn = document.getElementById('cat-nom-en').value.trim();
+  const nomDe = document.getElementById('cat-nom-de').value.trim();
+  const icone = document.getElementById('cat-icone').value.trim() || '🍽️';
+
+  try {
+    const { error } = await db.from('categories').insert({
+      restaurant_id: restoId,
+      nom_fr: nomFr,
+      nom_it: nomIt || nomFr,
+      nom_en: nomEn || nomFr,
+      nom_de: nomDe || nomFr,
+      icone,
+      ordre: 0
+    });
+
+    if (error) { alert('Erreur: ' + error.message); return; }
+
+    // Reset form
+    document.getElementById('cat-nom-fr').value = '';
+    document.getElementById('cat-nom-it').value = '';
+    document.getElementById('cat-nom-en').value = '';
+    document.getElementById('cat-nom-de').value = '';
+    document.getElementById('cat-icone').value = '';
+
+    await refreshCarte(restoId);
+    alert('✓ Catégorie "' + nomFr + '" ajoutée !');
+  } catch(e) {
+    alert('Erreur lors de la création.');
+  }
+}
+
+async function addPlat() {
+  const restoId = document.getElementById('carte-resto-select').value;
+  const catId = document.getElementById('plat-cat-select').value;
+  if (!restoId || !catId) { alert('Sélectionnez un restaurant et une catégorie.'); return; }
+
+  const nomFr = document.getElementById('plat-nom-fr').value.trim();
+  const prix = parseFloat(document.getElementById('plat-prix').value);
+  if (!nomFr || !prix) { alert('Le nom et le prix sont obligatoires.'); return; }
+
+  const nomIt = document.getElementById('plat-nom-it').value.trim();
+  const nomEn = document.getElementById('plat-nom-en').value.trim();
+  const descFr = document.getElementById('plat-desc-fr').value.trim();
+  const tags = document.getElementById('plat-tags').value.trim().split(',').map(t => t.trim()).filter(Boolean);
+
+  try {
+    const { error } = await db.from('plats').insert({
+      categorie_id: catId,
+      nom_fr: nomFr,
+      nom_it: nomIt || nomFr,
+      nom_en: nomEn || nomFr,
+      nom_de: nomFr,
+      desc_fr: descFr,
+      desc_it: descFr,
+      desc_en: descFr,
+      desc_de: descFr,
+      prix,
+      tags,
+      actif: true
+    });
+
+    if (error) { alert('Erreur: ' + error.message); return; }
+
+    // Reset form
+    ['plat-nom-fr','plat-nom-it','plat-nom-en','plat-desc-fr','plat-prix','plat-tags'].forEach(id => {
+      document.getElementById(id).value = '';
+    });
+
+    const toast = document.getElementById('plat-toast');
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 3000);
+
+    await refreshCarte(restoId);
+  } catch(e) {
+    alert('Erreur lors de la création.');
+  }
+}
+
+async function deleteCategorie(catId) {
+  if (!confirm('Supprimer cette catégorie et tous ses plats ?')) return;
+  const restoId = document.getElementById('carte-resto-select').value;
+  await db.from('categories').delete().eq('id', catId);
+  await refreshCarte(restoId);
+}
+
+async function deletePlat(platId) {
+  if (!confirm('Supprimer ce plat ?')) return;
+  const restoId = document.getElementById('carte-resto-select').value;
+  await db.from('plats').delete().eq('id', platId);
+  await refreshCarte(restoId);
+}
+
+function openPhotoModal(platId, platName) {
+  currentPlatId = platId;
+  document.getElementById('modal-photo-plat-name').textContent = platName;
+  document.getElementById('photo-preview').style.display = 'none';
+  document.getElementById('photo-file-input').value = '';
+  document.getElementById('modal-photo').classList.add('open');
+}
+
+function closePhotoModal() {
+  document.getElementById('modal-photo').classList.remove('open');
+  currentPlatId = null;
+}
+
+function previewPhoto(input) {
+  if (input.files && input.files[0]) {
+    const reader = new FileReader();
+    reader.onload = e => {
+      const preview = document.getElementById('photo-preview');
+      preview.src = e.target.result;
+      preview.style.display = 'block';
+    };
+    reader.readAsDataURL(input.files[0]);
+  }
+}
+
+async function uploadPhoto() {
+  const file = document.getElementById('photo-file-input').files[0];
+  if (!file || !currentPlatId) { alert('Sélectionnez une photo.'); return; }
+
+  try {
+    const fileName = `plats/${currentPlatId}_${Date.now()}.${file.name.split('.').pop()}`;
+    const { error: uploadError } = await db.storage.from('photos').upload(fileName, file, { upsert: true });
+    if (uploadError) { alert('Erreur upload: ' + uploadError.message); return; }
+
+    const { data: urlData } = db.storage.from('photos').getPublicUrl(fileName);
+    const photoUrl = urlData.publicUrl;
+
+    await db.from('plats').update({ photo_url: photoUrl }).eq('id', currentPlatId);
+
+    closePhotoModal();
+    const select = document.getElementById('carte-resto-select');
+    if (select.value) loadCarteResto(select.value);
+    alert('✓ Photo enregistrée !');
+  } catch(e) {
+    alert('Erreur lors de l upload.');
+  }
+}
+
+// Peupler le select restaurants dans panel carte
+async function populateCarteSelect() {
+  const select = document.getElementById('carte-resto-select');
+  if (!select) return;
+  select.innerHTML = '<option value="">-- Choisir un restaurant --</option>';
+  allRestaurants.forEach(r => {
+    const opt = document.createElement('option');
+    opt.value = r.id;
+    opt.textContent = r.nom + ' · ' + r.ville;
+    select.appendChild(opt);
+  });
+}
+
 // ══ START ══
-init();
+// init() appelé depuis window.load
 </script>
 </body>
 </html>
