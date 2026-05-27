@@ -898,7 +898,17 @@ let db;
 window.addEventListener('load', function() {
   const { createClient } = supabase;
   db = createClient(SUPABASE_URL, SUPABASE_KEY);
-  init();
+  
+  // Routing par URL
+  const path = window.location.pathname;
+  const slug = path.replace('/', '').trim();
+  
+  if (slug && slug !== '' && slug !== 'index.html') {
+    // URL directe vers un restaurant ex: isulamenu.fr/atavolabastitia
+    showMenu(slug);
+  } else {
+    init();
+  }
 });
 </script>
 
@@ -1900,6 +1910,18 @@ async function populateCarteSelect() {
     opt.textContent = r.nom + ' · ' + r.ville;
     select.appendChild(opt);
   });
+}
+
+// ══ PAGE 404 ══
+function show404(slug) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  const div = document.createElement('div');
+  div.style.cssText = 'min-height:100vh;background:#0A1628;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px;font-family:Jost,sans-serif';
+  div.innerHTML = '<div style="font-family:Cormorant Garamond,serif;font-size:64px;color:#C9993A;font-weight:600">404</div>' +
+    '<div style="font-family:Cormorant Garamond,serif;font-size:28px;color:#F8F2E4;margin:12px 0">Restaurant introuvable</div>' +
+    '<div style="font-size:14px;color:#6A7A8A;margin-bottom:40px">Le menu ' + slug + ' n existe pas.</div>' +
+    '<button onclick="window.location.href='/'" style="background:#C9993A;color:#0A1628;border:none;padding:14px 28px;cursor:pointer;font-size:12px;letter-spacing:2px;text-transform:uppercase">Retour accueil</button>';
+  document.body.appendChild(div);
 }
 
 // ══ START ══
