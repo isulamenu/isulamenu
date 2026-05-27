@@ -956,41 +956,36 @@ window.addEventListener('load', function() {
   </div>
 </div>
 
-<!-- ══ VITRINE ══ -->
+<!-- ══ ACCUEIL ══ -->
 <div id="view-home" class="view">
   <div class="home-grid"></div>
-
-  <!-- Header -->
-  <div style="position:relative;z-index:1;padding:24px 40px;display:flex;justify-content:space-between;align-items:center">
-    <div style="font-family:Cormorant Garamond,serif;font-size:26px;font-weight:600;color:var(--creme)">Isula<span style="color:var(--or)">Menu</span></div>
-    <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(248,242,228,0.3)">Bastia · Corse</div>
-  </div>
-
-  <!-- Centre -->
-  <div style="position:relative;z-index:1;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 24px;text-align:center">
-    <div style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--or);margin-bottom:20px;display:flex;align-items:center;gap:10px">
-      <div style="width:24px;height:1px;background:var(--or)"></div>
-      Menu digital · Restaurants corses
-      <div style="width:24px;height:1px;background:var(--or)"></div>
-    </div>
-    <div style="font-family:Cormorant Garamond,serif;font-size:clamp(36px,7vw,64px);font-weight:600;color:var(--creme);line-height:1.1;margin-bottom:16px">La carte de vos rêves,<br>accessible d'un scan.</div>
-    <div style="font-size:14px;color:rgba(248,242,228,0.45);margin-bottom:40px;max-width:400px;line-height:1.8">Multilingue · Temps réel · Personnalisé aux couleurs de votre restaurant</div>
-    <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-bottom:20px">
-      <button onclick="contactWhatsApp()" style="background:var(--or);color:var(--marine);border:none;font-family:Jost,sans-serif;font-size:11px;font-weight:500;letter-spacing:2px;text-transform:uppercase;padding:14px 28px;cursor:pointer;border-radius:2px">Demander une démo</button>
-      <button onclick="showSavoir()" style="background:transparent;border:1px solid rgba(201,153,58,0.3);color:var(--or-2);font-family:Jost,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;padding:14px 28px;cursor:pointer;border-radius:2px">En savoir plus →</button>
-    </div>
-    <button onclick="showMenu('demo')" style="background:transparent;border:none;color:rgba(248,242,228,0.3);font-family:Jost,sans-serif;font-size:11px;letter-spacing:1px;cursor:pointer;text-decoration:underline">Voir un exemple de menu</button>
-  </div>
-
-  <!-- Footer -->
-  <div style="position:relative;z-index:1;padding:16px 40px;border-top:1px solid rgba(201,153,58,0.08);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
-    <div style="font-size:10px;color:rgba(248,242,228,0.15);letter-spacing:1px">© 2025 IsulaMenu</div>
-    <div style="display:flex;gap:20px">
-      <button onclick="showRestoLogin()" style="background:transparent;border:none;color:rgba(248,242,228,0.15);font-family:Jost,sans-serif;font-size:10px;letter-spacing:1px;cursor:pointer;text-transform:uppercase">Espace restaurateur</button>
-      <button onclick="showAdminLogin()" style="background:transparent;border:none;color:rgba(248,242,228,0.15);font-family:Jost,sans-serif;font-size:10px;letter-spacing:1px;cursor:pointer;text-transform:uppercase">Administration</button>
+  <div class="home-content">
+    <div class="home-logo">Isula<span>Menu</span></div>
+    <div class="home-sub">Plateforme menu digital</div>
+    <div class="home-cards">
+      <div class="home-card" onclick="showMenu('demo')">
+        <div class="home-card-left">
+          <h3>Menu Restaurant</h3>
+          <p>Vue client · A Tavola, Bastia</p>
+        </div>
+        <div class="home-card-arrow">→</div>
+      </div>
+      <div class="home-card" onclick="showRestoLogin()">
+        <div class="home-card-left">
+          <h3>Espace Restaurateur</h3>
+          <p>Gérer votre plat du jour</p>
+        </div>
+        <div class="home-card-arrow">→</div>
+      </div>
+      <div class="home-card" onclick="showAdminLogin()">
+        <div class="home-card-left">
+          <h3>Back-office Admin</h3>
+          <p>Tableau de bord IsulaMenu</p>
+        </div>
+        <div class="home-card-arrow">→</div>
+      </div>
     </div>
   </div>
-</div>
 </div>
 
 <!-- ══ EN SAVOIR PLUS ══ -->
