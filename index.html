@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
 <style>
 :root {
   --marine: #0A1628;
@@ -1237,6 +1238,20 @@ window.addEventListener('load', function() {
   </div>
 </div>
 
+<!-- ══ MODAL QR CODE ══ -->
+<div class="modal-overlay" id="modal-qr">
+  <div class="modal-box" style="text-align:center">
+    <div class="modal-title" id="qr-resto-name">QR Code</div>
+    <div class="modal-sub" id="qr-resto-url" style="color:var(--or);margin-bottom:24px"></div>
+    <canvas id="qr-canvas" style="border-radius:8px;margin:0 auto 20px;display:block"></canvas>
+    <div style="font-size:12px;color:var(--gris);margin-bottom:20px">Scannez pour accéder au menu</div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeQrModal()">Fermer</button>
+      <button class="btn-create" onclick="downloadQr()">Télécharger PNG</button>
+    </div>
+  </div>
+</div>
+
 <!-- ══ MODAL ══ -->
 <div class="modal-overlay" id="modal-new">
   <div class="modal-box">
@@ -1587,6 +1602,7 @@ function renderAdminTable(tableId, data) {
         <td>${badge(r.statut)}</td>
         <td>
           <button class="tbl-action" onclick="showMenu('${r.slug}')">Voir menu</button>
+          <button class="tbl-action" onclick="openQrModal('${r.slug}', '${r.nom}')">QR Code</button>
           <button class="tbl-action danger" onclick="deleteRestaurant('${r.id}')">Supprimer</button>
         </td>
       </tr>`).join('')}
@@ -1910,6 +1926,44 @@ async function populateCarteSelect() {
     opt.textContent = r.nom + ' · ' + r.ville;
     select.appendChild(opt);
   });
+}
+
+// ══ QR CODE ══
+let currentQrSlug = null;
+
+function openQrModal(slug, nom) {
+  currentQrSlug = slug;
+  const url = 'https://isulamenu.fr/' + slug;
+  document.getElementById('qr-resto-name').textContent = nom;
+  document.getElementById('qr-resto-url').textContent = url;
+  document.getElementById('modal-qr').classList.add('open');
+  
+  const canvas = document.getElementById('qr-canvas');
+  QRCode.toCanvas(canvas, url, {
+    width: 220,
+    margin: 2,
+    color: {
+      dark: '#0A1628',
+      light: '#F8F2E4'
+    }
+  }, function(error) {
+    if (error) {
+      QRCode.toCanvas(canvas, url, { width: 220 });
+    }
+  });
+}
+
+function closeQrModal() {
+  document.getElementById('modal-qr').classList.remove('open');
+  currentQrSlug = null;
+}
+
+function downloadQr() {
+  const canvas = document.getElementById('qr-canvas');
+  const link = document.createElement('a');
+  link.download = 'qrcode-' + (currentQrSlug || 'menu') + '.png';
+  link.href = canvas.toDataURL('image/png');
+  link.click();
 }
 
 // ══ PAGE 404 ══
