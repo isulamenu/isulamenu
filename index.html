@@ -1059,12 +1059,15 @@ window.addEventListener('load', function() {
 
 <!-- ══ MENU CLIENT ══ -->
 <div id="view-menu" class="view">
-  <button class="back-btn" onclick="showHome()">← Retour</button>
   <div class="menu-header">
     <div class="menu-header-top">
       <div>
         <div class="menu-resto-name" id="menu-resto-name">A Tavola</div>
         <div class="menu-resto-city" id="menu-resto-city">Bastia · Haute-Corse</div>
+        <div id="menu-resto-infos" style="display:none">
+          <div id="menu-resto-horaires" style="font-size:10px;color:var(--gris);margin-top:2px"></div>
+          <div id="menu-resto-tel" style="font-size:10px;color:var(--gris)"></div>
+        </div>
       </div>
       <div class="lang-switcher" id="lang-switcher"></div>
     </div>
@@ -1093,7 +1096,6 @@ window.addEventListener('load', function() {
       </div>
       <button class="btn-primary" onclick="loginResto()">Connexion</button>
       <div class="login-error" id="resto-error">Identifiants incorrects</div>
-      <button class="back-btn" onclick="showHome()" style="padding:16px 0 0;margin-top:8px">← Retour</button>
     </div>
   </div>
 </div>
@@ -1123,7 +1125,7 @@ window.addEventListener('load', function() {
 <div id="view-resto" class="view">
   <div class="resto-topbar">
     <div class="resto-topbar-logo">Isula<span>Menu</span></div>
-    <button class="btn-logout" onclick="showHome()">Déconnexion</button>
+    <button class="btn-logout" onclick="logoutResto()">Déconnexion</button>
   </div>
   <div class="resto-content">
     <div class="resto-welcome">
@@ -1504,10 +1506,20 @@ async function init() {
 function showView(id) {
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
   document.getElementById(id).classList.add('active');
+  // Réinitialiser les couleurs si on quitte le menu
+  if (id !== 'view-menu') {
+    document.documentElement.style.setProperty('--or', '#C9993A');
+    document.documentElement.style.setProperty('--or-2', '#E2B55A');
+  }
 }
 
 function showHome() { showView('view-home'); }
 function showVitrine() { showView('view-home'); }
+function logoutResto() {
+  currentRestoId = null;
+  currentRestoSlug = null;
+  showView('view-home');
+}
 function showSavoir() { showView('view-savoir'); }
 function contactWhatsApp() {
   const msg = 'Bonjour, je souhaite une démonstration gratuite de votre service de menu digital pour mon restaurant.';
@@ -1586,6 +1598,16 @@ async function showMenu(slug) {
         }
         if (data.couleur_accent) {
           document.documentElement.style.setProperty('--or-2', data.couleur_accent);
+        }
+        
+        // Afficher horaires et téléphone
+        const infosDiv = document.getElementById('menu-resto-infos');
+        if (infosDiv) {
+          if (data.horaires || data.telephone) {
+            infosDiv.style.display = 'block';
+            if (data.horaires) document.getElementById('menu-resto-horaires').textContent = '⏰ ' + data.horaires;
+            if (data.telephone) document.getElementById('menu-resto-tel').textContent = '📞 ' + data.telephone;
+          }
         }
         
         // Afficher le logo dans le header si disponible
