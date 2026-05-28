@@ -867,6 +867,112 @@ table.admin-tbl tr:hover td { background: rgba(201,153,58,0.03); }
 
 .resto-tab-content { animation: fadeIn 0.3s ease; }
 
+/* ══ HERO MENU MOBILE ══ */
+.resto-hero {
+  background: var(--marine-2);
+  padding: 32px 24px 24px;
+  text-align: center;
+  border-bottom: 1px solid rgba(201,153,58,0.12);
+  position: relative;
+  overflow: hidden;
+}
+
+.resto-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 0%, rgba(201,153,58,0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.resto-hero-content { position: relative; z-index: 1; }
+
+.resto-logo-wrap {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: rgba(201,153,58,0.1);
+  border: 1px solid rgba(201,153,58,0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+  font-size: 36px;
+  overflow: hidden;
+}
+
+.resto-logo-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 8px;
+}
+
+.resto-hero-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 32px;
+  font-weight: 600;
+  color: var(--creme);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.resto-hero-city {
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--gris);
+  margin-bottom: 20px;
+}
+
+.resto-quick-infos {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.quick-info {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--gris-2);
+}
+
+.resto-paiements {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.paiement-badge {
+  background: rgba(201,153,58,0.08);
+  border: 1px solid rgba(201,153,58,0.15);
+  color: var(--gris-2);
+  font-size: 9px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 2px;
+}
+
+.hero-lang-switcher {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.menu-footer-brand {
+  background: var(--marine-2);
+  border-top: 1px solid rgba(201,153,58,0.08);
+  padding: 16px 24px;
+  text-align: center;
+}
+
 @media (max-width: 768px) {
   .admin-sidebar { display: none; }
   .admin-main { margin-left: 0; max-width: 100vw; padding: 20px 16px; }
@@ -1059,25 +1165,47 @@ window.addEventListener('load', function() {
 
 <!-- ══ MENU CLIENT ══ -->
 <div id="view-menu" class="view">
-  <div class="menu-header">
-    <div class="menu-header-top">
-      <div>
-        <div class="menu-resto-name" id="menu-resto-name">A Tavola</div>
-        <div class="menu-resto-city" id="menu-resto-city">Bastia · Haute-Corse</div>
-        <div id="menu-resto-infos" style="display:none">
-          <div id="menu-resto-horaires" style="font-size:10px;color:var(--gris);margin-top:2px"></div>
-          <div id="menu-resto-tel" style="font-size:10px;color:var(--gris)"></div>
+
+  <!-- Hero restaurant -->
+  <div class="resto-hero">
+    <div class="resto-hero-content">
+      <div class="resto-logo-wrap" id="menu-logo-wrap">
+        <span id="menu-logo-emoji">🍽️</span>
+      </div>
+      <div class="resto-hero-name" id="menu-resto-name">A Tavola</div>
+      <div class="resto-hero-city" id="menu-resto-city">Bastia · Haute-Corse</div>
+
+      <div class="resto-quick-infos" id="menu-quick-infos" style="display:none">
+        <div class="quick-info" id="menu-horaires-wrap" style="display:none">
+          <span>⏰</span>
+          <span id="menu-resto-horaires"></span>
+        </div>
+        <div class="quick-info" id="menu-tel-wrap" style="display:none">
+          <span>📞</span>
+          <span id="menu-resto-tel"></span>
         </div>
       </div>
-      <div class="lang-switcher" id="lang-switcher"></div>
+
+      <div class="resto-paiements" id="menu-paiements" style="display:none">
+        <div id="paiement-list" style="display:flex;flex-wrap:wrap;gap:6px;justify-content:center"></div>
+      </div>
+
+      <div class="hero-lang-switcher" id="lang-switcher"></div>
     </div>
-    <div class="menu-cats" id="menu-cats"></div>
   </div>
+
+  <!-- Catégories sticky -->
+  <div class="menu-cats" id="menu-cats" style="position:sticky;top:0;z-index:100;background:var(--marine-2);padding:12px 20px;border-bottom:1px solid rgba(201,153,58,0.08)"></div>
+
+  <!-- Corps du menu -->
   <div class="menu-body" id="menu-body"></div>
-  <div id="menu-paiement" style="padding:16px 20px;border-top:1px solid rgba(201,153,58,0.08)">
-    <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--gris);margin-bottom:8px">Moyens de paiement</div>
-    <div id="paiement-list" style="display:flex;flex-wrap:wrap;gap:6px"></div>
+
+  <!-- Footer marque -->
+  <div class="menu-footer-brand">
+    <div style="font-family:'Cormorant Garamond',serif;font-size:14px;color:rgba(248,242,228,0.2)">Isula<span style="color:rgba(201,153,58,0.4)">Menu</span></div>
+    <div style="font-size:9px;color:rgba(248,242,228,0.1);letter-spacing:1px;text-transform:uppercase;margin-top:2px">Menu digital · isulamenu.fr</div>
   </div>
+
 </div>
 
 <!-- ══ LOGIN RESTAURATEUR ══ -->
@@ -1544,6 +1672,18 @@ async function showMenu(slug) {
   document.getElementById('menu-resto-name').textContent = demoData.nom;
   document.getElementById('menu-resto-city').textContent = demoData.ville + ' · Haute-Corse';
   
+  // Reset logo
+  const logoWrap = document.getElementById('menu-logo-wrap');
+  if (logoWrap) {
+    logoWrap.innerHTML = '<span id="menu-logo-emoji">🍽️</span>';
+  }
+  
+  // Masquer infos par défaut
+  const quickInfos = document.getElementById('menu-quick-infos');
+  if (quickInfos) quickInfos.style.display = 'none';
+  const paiements = document.getElementById('menu-paiements');
+  if (paiements) paiements.style.display = 'none';
+  
   // Badge démo si slug = demo
   const existingBadge = document.getElementById('demo-badge');
   if (slug === 'demo' && !existingBadge) {
@@ -1600,13 +1740,35 @@ async function showMenu(slug) {
           document.documentElement.style.setProperty('--or-2', data.couleur_accent);
         }
         
+        // Afficher logo
+        if (data.logo_url) {
+          const logoWrap = document.getElementById('menu-logo-wrap');
+          if (logoWrap) logoWrap.innerHTML = '<img src="' + data.logo_url + '" alt="logo" style="width:100%;height:100%;object-fit:contain;padding:8px">';
+        }
+
         // Afficher horaires et téléphone
-        const infosDiv = document.getElementById('menu-resto-infos');
-        if (infosDiv) {
-          if (data.horaires || data.telephone) {
-            infosDiv.style.display = 'block';
-            if (data.horaires) document.getElementById('menu-resto-horaires').textContent = '⏰ ' + data.horaires;
-            if (data.telephone) document.getElementById('menu-resto-tel').textContent = '📞 ' + data.telephone;
+        if (data.horaires || data.telephone) {
+          const quickInfos = document.getElementById('menu-quick-infos');
+          if (quickInfos) quickInfos.style.display = 'flex';
+          if (data.horaires) {
+            document.getElementById('menu-horaires-wrap').style.display = 'flex';
+            document.getElementById('menu-resto-horaires').textContent = data.horaires;
+          }
+          if (data.telephone) {
+            document.getElementById('menu-tel-wrap').style.display = 'flex';
+            document.getElementById('menu-resto-tel').textContent = data.telephone;
+          }
+        }
+
+        // Afficher moyens de paiement
+        if (data.moyens_paiement && data.moyens_paiement.length > 0) {
+          const paiements = document.getElementById('menu-paiements');
+          if (paiements) paiements.style.display = 'block';
+          const list = document.getElementById('paiement-list');
+          if (list) {
+            list.innerHTML = data.moyens_paiement.map(p =>
+              '<span class="paiement-badge">' + p + '</span>'
+            ).join('');
           }
         }
         
