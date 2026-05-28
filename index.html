@@ -1174,6 +1174,7 @@ window.addEventListener('load', function() {
       </div>
       <div class="resto-hero-name" id="menu-resto-name">A Tavola</div>
       <div class="resto-hero-city" id="menu-resto-city">Bastia · Haute-Corse</div>
+      <div id="menu-resto-description" style="display:none;font-size:12px;color:var(--gris-2);line-height:1.6;margin-bottom:16px;max-width:280px;margin-left:auto;margin-right:auto"></div>
 
       <div class="resto-quick-infos" id="menu-quick-infos" style="display:none">
         <div class="quick-info" id="menu-horaires-wrap" style="display:none">
@@ -1288,6 +1289,17 @@ window.addEventListener('load', function() {
             <label class="form-label">Prix</label>
             <input class="form-input" type="number" id="pdj-input-price" placeholder="Ex: 26">
           </div>
+          <div class="form-group">
+            <label class="form-label">Photo du plat du jour (optionnel)</label>
+            <div id="pdj-photo-preview-wrap" style="display:none;position:relative;width:80px;margin-bottom:10px">
+              <img id="pdj-photo-preview" style="width:80px;height:80px;object-fit:cover;border-radius:4px;border:1px solid rgba(201,153,58,0.2)">
+              <button onclick="removePdjPhoto()" style="position:absolute;top:-8px;right:-8px;width:20px;height:20px;background:#E05A5A;border:none;border-radius:50%;color:white;font-size:12px;cursor:pointer">✕</button>
+            </div>
+            <label class="photo-upload-label" id="pdj-photo-upload-label" style="width:100%;justify-content:center">
+              📷  Ajouter une photo
+              <input class="photo-upload-input" type="file" accept="image/*" id="pdj-photo-file" onchange="previewPdjPhoto(this)">
+            </label>
+          </div>
           <button class="btn-save" onclick="savePdj()">✓  Enregistrer et mettre en ligne</button>
           <div class="success-toast" id="pdj-toast">✓  Plat du jour mis à jour !</div>
         </div>
@@ -1339,6 +1351,24 @@ window.addEventListener('load', function() {
           </div>
         </div>
         <div id="couleur-extraction-status" style="font-size:11px;color:var(--vert);margin-bottom:12px;display:none">✓ Couleurs extraites automatiquement depuis le logo</div>
+        <div class="pdj-editor-title" style="margin-top:20px">Moyens de paiement acceptés</div>
+        <div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:16px">
+          <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--creme);cursor:pointer">
+            <input type="checkbox" id="resto-pay-cb" style="accent-color:var(--or)"> 💳 CB Visa/Mastercard
+          </label>
+          <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--creme);cursor:pointer">
+            <input type="checkbox" id="resto-pay-especes" style="accent-color:var(--or)"> 💵 Espèces
+          </label>
+          <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--creme);cursor:pointer">
+            <input type="checkbox" id="resto-pay-tr" style="accent-color:var(--or)"> 🎫 Tickets restaurant
+          </label>
+          <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--creme);cursor:pointer">
+            <input type="checkbox" id="resto-pay-amex" style="accent-color:var(--or)"> 💎 American Express
+          </label>
+          <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--creme);cursor:pointer">
+            <input type="checkbox" id="resto-pay-cheque" style="accent-color:var(--or)"> 📝 Chèques
+          </label>
+        </div>
         <button class="btn-save" onclick="saveRestoInfos()">✓  Enregistrer les informations</button>
         <div class="success-toast" id="infos-toast">✓  Informations mises à jour !</div>
       </div>
@@ -1746,6 +1776,15 @@ async function showMenu(slug) {
           if (logoWrap) logoWrap.innerHTML = '<img src="' + data.logo_url + '" alt="logo" style="width:100%;height:100%;object-fit:contain;padding:8px">';
         }
 
+        // Afficher description
+        if (data.description) {
+          const descEl = document.getElementById('menu-resto-description');
+          if (descEl) {
+            descEl.textContent = data.description;
+            descEl.style.display = 'block';
+          }
+        }
+
         // Afficher horaires et téléphone
         if (data.horaires || data.telephone) {
           const quickInfos = document.getElementById('menu-quick-infos');
@@ -1829,13 +1868,8 @@ async function renderMenuContent(restoData) {
     const { data: pdj } = await db.from('plats_du_jour').select('*').eq('restaurant_id', restoData.id).single();
     let pdjHtml = demoPdj;
     if (pdj && pdj.nom && pdj.nom !== 'Plat du jour à définir') {
-      pdjHtml = `
-        <div class="plat-du-jour">
-          <div class="pdj-label"><div class="pdj-dot"></div>${LANGS[lang]?.pdj || 'Plat du jour'}</div>
-          <div class="pdj-name">${pdj.nom}</div>
-          <div class="pdj-desc">${pdj.description || ''}</div>
-          <div class="pdj-price">${pdj.prix} €</div>
-        </div>`;
+      const photoHtml = pdj.photo_url ? '<img src="' + pdj.photo_url + '" style="width:100%;border-radius:4px;margin-bottom:10px;max-height:180px;object-fit:cover">' : '';
+      pdjHtml = '<div class="plat-du-jour"><div class="pdj-label"><div class="pdj-dot"></div>' + (LANGS[lang]?.pdj || 'Plat du jour') + '</div>' + photoHtml + '<div class="pdj-name">' + pdj.nom + '</div><div class="pdj-desc">' + (pdj.description || '') + '</div><div class="pdj-price">' + pdj.prix + ' €</div></div>';
     }
 
     // Plats réels
@@ -2029,6 +2063,27 @@ async function loadPdj(restoId) {
 
 function togglePdjForm() { document.getElementById('pdj-form').classList.toggle('open'); }
 
+function previewPdjPhoto(input) {
+  if (!input.files || !input.files[0]) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const preview = document.getElementById('pdj-photo-preview');
+    const wrap = document.getElementById('pdj-photo-preview-wrap');
+    const label = document.getElementById('pdj-photo-upload-label');
+    preview.src = e.target.result;
+    wrap.style.display = 'block';
+    label.style.display = 'none';
+  };
+  reader.readAsDataURL(input.files[0]);
+}
+
+function removePdjPhoto() {
+  document.getElementById('pdj-photo-preview').src = '';
+  document.getElementById('pdj-photo-preview-wrap').style.display = 'none';
+  document.getElementById('pdj-photo-upload-label').style.display = 'inline-flex';
+  document.getElementById('pdj-photo-file').value = '';
+}
+
 async function savePdj() {
   const nom = document.getElementById('pdj-input-name').value.trim();
   const desc = document.getElementById('pdj-input-desc').value.trim();
@@ -2037,11 +2092,27 @@ async function savePdj() {
   if (!nom || !prix) { alert('Renseignez le nom et le prix.'); return; }
 
   try {
+    let photoUrl = null;
+    
+    // Upload photo si sélectionnée
+    const photoFile = document.getElementById('pdj-photo-file').files[0];
+    if (photoFile && currentRestoId && db) {
+      const fileName = 'pdj/' + currentRestoId + '_' + Date.now() + '.' + photoFile.name.split('.').pop();
+      const { error: uploadErr } = await db.storage.from('photos').upload(fileName, photoFile, { upsert: true });
+      if (!uploadErr) {
+        const { data: urlData } = db.storage.from('photos').getPublicUrl(fileName);
+        photoUrl = urlData.publicUrl;
+      }
+    }
+
+    const updateData = { nom, description: desc, prix, updated_at: new Date() };
+    if (photoUrl) updateData.photo_url = photoUrl;
+
     const { data: existing } = await db.from('plats_du_jour').select('id').eq('restaurant_id', currentRestoId).single();
     if (existing) {
-      await db.from('plats_du_jour').update({ nom, description: desc, prix, updated_at: new Date() }).eq('restaurant_id', currentRestoId);
+      await db.from('plats_du_jour').update(updateData).eq('restaurant_id', currentRestoId);
     } else {
-      await db.from('plats_du_jour').insert({ restaurant_id: currentRestoId, nom, description: desc, prix });
+      await db.from('plats_du_jour').insert({ restaurant_id: currentRestoId, ...updateData });
     }
 
     document.getElementById('pdj-display-name').textContent = nom;
@@ -2545,11 +2616,20 @@ async function saveRestoInfos() {
   const couleurPrincipale = document.getElementById('couleur-principale-hex').value;
   const couleurAccent = document.getElementById('couleur-accent-hex').value;
   
+  // Récupérer les moyens de paiement cochés
+  const paiements = [];
+  if (document.getElementById('resto-pay-cb')?.checked) paiements.push('CB');
+  if (document.getElementById('resto-pay-especes')?.checked) paiements.push('Especes');
+  if (document.getElementById('resto-pay-tr')?.checked) paiements.push('Tickets resto');
+  if (document.getElementById('resto-pay-amex')?.checked) paiements.push('Amex');
+  if (document.getElementById('resto-pay-cheque')?.checked) paiements.push('Cheques');
+  
   try {
     await db.from('restaurants').update({
       horaires, telephone, description,
       couleur_principale: couleurPrincipale,
-      couleur_accent: couleurAccent
+      couleur_accent: couleurAccent,
+      moyens_paiement: paiements
     }).eq('id', currentRestoId);
     
     const toast = document.getElementById('infos-toast');
@@ -2581,6 +2661,14 @@ async function loadRestoInfos(restoId) {
         preview.src = data.logo_url;
         document.getElementById('logo-preview-wrap').style.display = 'block';
         document.getElementById('logo-upload-label').style.display = 'none';
+      }
+      // Charger les moyens de paiement
+      if (data.moyens_paiement && data.moyens_paiement.length > 0) {
+        if (document.getElementById('resto-pay-cb')) document.getElementById('resto-pay-cb').checked = data.moyens_paiement.includes('CB');
+        if (document.getElementById('resto-pay-especes')) document.getElementById('resto-pay-especes').checked = data.moyens_paiement.includes('Especes');
+        if (document.getElementById('resto-pay-tr')) document.getElementById('resto-pay-tr').checked = data.moyens_paiement.includes('Tickets resto');
+        if (document.getElementById('resto-pay-amex')) document.getElementById('resto-pay-amex').checked = data.moyens_paiement.includes('Amex');
+        if (document.getElementById('resto-pay-cheque')) document.getElementById('resto-pay-cheque').checked = data.moyens_paiement.includes('Cheques');
       }
     }
   } catch(e) {}
