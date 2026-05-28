@@ -52,6 +52,493 @@ body {
 
 /* Loading supprimé */
 
+/* ══ VITRINE ══ */
+* { margin:0; padding:0; box-sizing:border-box; }
+:root {
+  --marine: #0A1628;
+  --marine-2: #111f35;
+  --or: #C9993A;
+  --or-2: #E2B55A;
+  --creme: #F8F2E4;
+  --gris: #6A7A8A;
+}
+body { background: var(--marine); color: var(--creme); font-family: 'Jost', sans-serif; font-weight: 300; overflow-x: hidden; }
+
+/* ══ HEADER ══ */
+.header {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  padding: 16px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(10,22,40,0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(201,153,58,0.08);
+}
+
+.header-logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--creme);
+}
+.header-logo span { color: var(--or); }
+
+.header-cta {
+  background: var(--or);
+  color: var(--marine);
+  border: none;
+  font-family: 'Jost', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 2px;
+}
+
+/* ══ HERO ══ */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 120px 24px 80px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(201,153,58,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(201,153,58,0.04) 1px, transparent 1px);
+  background-size: 50px 50px;
+}
+
+.hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 20% 80%, rgba(201,153,58,0.1) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(201,153,58,0.07) 0%, transparent 45%);
+}
+
+.hero-content { position: relative; z-index: 1; max-width: 700px; }
+
+.hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 9px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--or);
+  margin-bottom: 28px;
+}
+.hero-eyebrow::before, .hero-eyebrow::after { content: ''; width: 20px; height: 1px; background: var(--or); opacity: 0.5; }
+
+.hero-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(44px, 8vw, 80px);
+  font-weight: 600;
+  line-height: 1.05;
+  color: var(--creme);
+  margin-bottom: 24px;
+  letter-spacing: -1px;
+}
+
+.hero-title em { font-style: italic; color: var(--or); }
+
+.hero-sub {
+  font-size: 16px;
+  color: rgba(248,242,228,0.5);
+  line-height: 1.8;
+  max-width: 480px;
+  margin: 0 auto 48px;
+}
+
+.hero-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-bottom: 60px; }
+
+.btn-gold {
+  background: var(--or);
+  color: var(--marine);
+  border: none;
+  font-family: 'Jost', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 14px 28px;
+  cursor: pointer;
+  border-radius: 2px;
+}
+
+.btn-ghost {
+  background: transparent;
+  border: 1px solid rgba(201,153,58,0.3);
+  color: var(--or-2);
+  font-family: 'Jost', sans-serif;
+  font-size: 12px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 14px 28px;
+  cursor: pointer;
+  border-radius: 2px;
+}
+
+.hero-stats {
+  display: flex;
+  gap: 48px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.hero-stat { text-align: center; }
+.hero-stat-number {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 42px;
+  font-weight: 600;
+  color: var(--or);
+  line-height: 1;
+}
+.hero-stat-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--gris); margin-top: 4px; }
+
+/* ══ SECTION PROBLÈME ══ */
+.section { padding: 100px 24px; max-width: 900px; margin: 0 auto; }
+
+.section-eyebrow {
+  font-size: 9px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--or);
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.section-eyebrow::after { content: ''; flex: 1; height: 1px; background: rgba(201,153,58,0.2); }
+
+.section-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(32px, 5vw, 52px);
+  font-weight: 600;
+  color: var(--creme);
+  line-height: 1.1;
+  margin-bottom: 20px;
+}
+
+.section-title em { font-style: italic; color: var(--or); }
+
+.section-sub {
+  font-size: 15px;
+  color: rgba(248,242,228,0.45);
+  line-height: 1.8;
+  max-width: 560px;
+  margin-bottom: 48px;
+}
+
+/* Problèmes */
+.problems-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1px;
+  background: rgba(201,153,58,0.08);
+  margin-bottom: 60px;
+}
+
+.problem-card {
+  background: var(--marine-2);
+  padding: 28px 24px;
+}
+
+.problem-icon { font-size: 28px; margin-bottom: 12px; }
+.problem-title { font-family: 'Cormorant Garamond', serif; font-size: 20px; color: var(--creme); margin-bottom: 8px; }
+.problem-desc { font-size: 12px; color: var(--gris); line-height: 1.7; }
+
+/* ══ SECTION SOLUTION ══ */
+.solution-section {
+  background: var(--marine-2);
+  border-top: 1px solid rgba(201,153,58,0.1);
+  border-bottom: 1px solid rgba(201,153,58,0.1);
+  padding: 100px 24px;
+}
+
+.solution-inner { max-width: 900px; margin: 0 auto; }
+
+.solution-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+}
+
+/* Mockup téléphone */
+.phone-mockup {
+  background: #060E1C;
+  border: 1px solid rgba(201,153,58,0.2);
+  border-radius: 24px;
+  padding: 20px 16px;
+  max-width: 240px;
+  margin: 0 auto;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(201,153,58,0.1);
+}
+
+.phone-notch {
+  width: 60px; height: 6px;
+  background: rgba(201,153,58,0.15);
+  border-radius: 3px;
+  margin: 0 auto 16px;
+}
+
+.phone-screen-header {
+  background: var(--marine-2);
+  border-radius: 8px 8px 0 0;
+  padding: 12px;
+  text-align: center;
+  border-bottom: 1px solid rgba(201,153,58,0.1);
+}
+
+.phone-resto-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px;
+  color: var(--creme);
+  font-weight: 600;
+}
+
+.phone-resto-city { font-size: 8px; color: var(--gris); letter-spacing: 1px; text-transform: uppercase; margin-top: 2px; }
+
+.phone-langs { display: flex; justify-content: center; gap: 4px; margin-top: 8px; }
+.phone-lang { font-size: 12px; opacity: 0.5; }
+.phone-lang.active { opacity: 1; }
+
+.phone-cats {
+  display: flex;
+  gap: 6px;
+  padding: 8px 12px;
+  background: var(--marine-2);
+  border-bottom: 1px solid rgba(201,153,58,0.08);
+  overflow: hidden;
+}
+
+.phone-cat {
+  font-size: 8px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--gris);
+  padding: 3px 8px;
+  border: 1px solid rgba(201,153,58,0.1);
+  border-radius: 2px;
+  white-space: nowrap;
+}
+
+.phone-cat.active { color: var(--or); border-color: var(--or); background: rgba(201,153,58,0.08); }
+
+.phone-pdj {
+  background: linear-gradient(135deg, rgba(201,153,58,0.12), rgba(201,153,58,0.04));
+  border: 1px solid rgba(201,153,58,0.2);
+  border-radius: 4px;
+  padding: 10px 12px;
+  margin: 8px;
+}
+
+.phone-pdj-label { font-size: 7px; letter-spacing: 2px; text-transform: uppercase; color: var(--or); margin-bottom: 4px; }
+.phone-pdj-name { font-family: 'Cormorant Garamond', serif; font-size: 14px; color: var(--creme); }
+.phone-pdj-price { font-size: 12px; color: var(--or-2); margin-top: 2px; }
+
+.phone-dish {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+}
+
+.phone-dish-name { font-family: 'Cormorant Garamond', serif; font-size: 12px; color: var(--creme); }
+.phone-dish-price { font-size: 11px; color: var(--or-2); }
+
+/* Arguments */
+.args { display: flex; flex-direction: column; gap: 28px; }
+
+.arg { display: flex; gap: 16px; align-items: flex-start; }
+.arg-icon {
+  width: 44px; height: 44px;
+  background: rgba(201,153,58,0.08);
+  border: 1px solid rgba(201,153,58,0.2);
+  border-radius: 4px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+.arg-content { flex: 1; }
+.arg-title { font-family: 'Cormorant Garamond', serif; font-size: 20px; color: var(--creme); margin-bottom: 4px; }
+.arg-desc { font-size: 12px; color: var(--gris); line-height: 1.7; }
+
+/* ══ SECTION ARGUMENTS ══ */
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1px;
+  background: rgba(201,153,58,0.08);
+}
+
+.feature-card {
+  background: var(--marine);
+  padding: 32px 24px;
+  text-align: center;
+}
+
+.feature-number {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 48px;
+  font-weight: 600;
+  color: var(--or);
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.feature-title { font-family: 'Cormorant Garamond', serif; font-size: 18px; color: var(--creme); margin-bottom: 8px; }
+.feature-desc { font-size: 11px; color: var(--gris); line-height: 1.7; }
+
+/* ══ SECTION TÉMOIGNAGES ══ */
+.testimonials { padding: 100px 24px; background: var(--marine-2); border-top: 1px solid rgba(201,153,58,0.08); }
+.testimonials-inner { max-width: 900px; margin: 0 auto; }
+
+.testimonials-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
+
+.testimonial-card {
+  background: var(--marine);
+  border: 1px solid rgba(201,153,58,0.12);
+  padding: 28px 24px;
+  border-radius: 4px;
+  position: relative;
+}
+
+.testimonial-card::before {
+  content: '«';
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 64px;
+  color: rgba(201,153,58,0.15);
+  position: absolute;
+  top: 8px;
+  left: 20px;
+  line-height: 1;
+}
+
+.testimonial-text { font-size: 13px; color: rgba(248,242,228,0.6); line-height: 1.8; margin-bottom: 20px; font-style: italic; }
+.testimonial-author { font-size: 12px; color: var(--or-2); font-weight: 500; }
+.testimonial-place { font-size: 10px; color: var(--gris); letter-spacing: 1px; margin-top: 2px; }
+
+/* ══ SECTION FORMULES ══ */
+.formules-section { padding: 100px 24px; max-width: 900px; margin: 0 auto; }
+
+.formules-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 0;
+  border: 1px solid rgba(201,153,58,0.15);
+}
+
+.formule-card { padding: 36px 28px; border-right: 1px solid rgba(201,153,58,0.15); }
+.formule-card:last-child { border-right: none; }
+.formule-card.popular { border-top: 2px solid var(--or); position: relative; }
+
+.formule-popular-badge {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--or);
+  color: var(--marine);
+  font-size: 8px;
+  font-weight: 500;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 3px 12px;
+}
+
+.formule-name { font-family: 'Cormorant Garamond', serif; font-size: 26px; color: var(--creme); margin-bottom: 4px; }
+.formule-sub { font-size: 11px; color: var(--gris); margin-bottom: 24px; }
+.formule-price { font-family: 'Cormorant Garamond', serif; font-size: 20px; color: var(--gris); margin-bottom: 20px; font-style: italic; }
+
+.formule-features { list-style: none; }
+.formule-features li {
+  font-size: 12px;
+  color: rgba(248,242,228,0.6);
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  line-height: 1.5;
+}
+.formule-features li::before { content: '✓'; color: var(--or); flex-shrink: 0; }
+
+/* ══ SECTION LOCALE ══ */
+.local-section {
+  background: var(--marine-2);
+  border-top: 1px solid rgba(201,153,58,0.1);
+  padding: 100px 24px;
+  text-align: center;
+}
+
+.local-inner { max-width: 600px; margin: 0 auto; }
+
+.local-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(32px, 5vw, 52px); font-weight: 600; color: var(--creme); line-height: 1.1; margin-bottom: 20px; }
+.local-title em { font-style: italic; color: var(--or); }
+.local-sub { font-size: 15px; color: rgba(248,242,228,0.45); line-height: 1.8; margin-bottom: 40px; }
+
+.local-steps { display: flex; flex-direction: column; gap: 16px; text-align: left; margin-bottom: 48px; }
+.local-step { display: flex; gap: 16px; align-items: flex-start; }
+.local-step-num {
+  width: 28px; height: 28px;
+  border: 1px solid rgba(201,153,58,0.3);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px;
+  color: var(--or);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.local-step-text { font-size: 13px; color: rgba(248,242,228,0.6); line-height: 1.7; }
+.local-step-text strong { color: var(--creme); font-weight: 400; }
+
+/* ══ CTA FINAL ══ */
+.cta-section { padding: 100px 24px; text-align: center; max-width: 700px; margin: 0 auto; }
+.cta-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(32px, 5vw, 56px); font-weight: 600; color: var(--creme); line-height: 1.1; margin-bottom: 16px; }
+.cta-title em { font-style: italic; color: var(--or); }
+.cta-sub { font-size: 15px; color: rgba(248,242,228,0.4); margin-bottom: 40px; line-height: 1.7; }
+.cta-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+/* ══ FOOTER ══ */
+.footer {
+  padding: 24px 40px;
+  border-top: 1px solid rgba(201,153,58,0.08);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.footer-logo { font-family: 'Cormorant Garamond', serif; font-size: 18px; color: rgba(248,242,228,0.3); }
+.footer-logo span { color: rgba(201,153,58,0.4); }
+.footer-copy { font-size: 10px; color: rgba(248,242,228,0.15); letter-spacing: 1px; }
+.footer-links { display: flex; gap: 20px; }
+.footer-link { font-size: 9px; color: rgba(248,242,228,0.15); letter-spacing: 1px; text-transform: uppercase; cursor: pointer; }
+
+@media (max-width: 600px) {
+  .header { padding: 14px 20px; }
+  .solution-grid { grid-template-columns: 1fr; }
+  .footer { padding: 20px; }
+}
+
 /* ══ ACCUEIL ══ */
 #view-home {
   display: none;
@@ -1072,39 +1559,300 @@ window.addEventListener('load', function() {
 
 <!-- ══ ACCUEIL ══ -->
 <div id="view-home" class="view active">
-  <div class="home-grid"></div>
-  <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 15% 85%,rgba(201,153,58,0.12) 0%,transparent 50%),radial-gradient(ellipse at 85% 15%,rgba(201,153,58,0.07) 0%,transparent 45%);pointer-events:none"></div>
 
-  <div style="position:relative;z-index:1;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px;text-align:center">
+<!-- HEADER FIXE -->
+<div class="header" id="vitrine-header">
+  <div class="header-logo">Isula<span>Menu</span></div>
+  <button class="header-cta" onclick="contactWhatsApp()">Demander une démo</button>
+</div>
 
-    <div style="display:flex;align-items:center;gap:14px;margin-bottom:32px">
-      <div style="width:30px;height:1px;background:#C9993A;opacity:0.5"></div>
-      <div style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:#C9993A;font-family:Jost,sans-serif">Solutions digitales · Restauration Corse</div>
-      <div style="width:30px;height:1px;background:#C9993A;opacity:0.5"></div>
+<!-- ══ HERO ══ -->
+<div class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Solutions digitales · Restauration Corse</div>
+    <h1 class="hero-title">
+      La carte de vos rêves,<br>
+      <em>accessible d'un scan.</em>
+    </h1>
+    <p class="hero-sub">Menus digitaux multilingues pour restaurants corses. Vos clients lisent dans leur langue, vous gérez en 30 secondes.</p>
+    <div class="hero-btns">
+      <button class="btn-gold" onclick="contactWhatsApp()">Demander une démo gratuite</button>
+      <button class="btn-ghost" onclick="showMenu('demo')">Voir un exemple →</button>
     </div>
-
-    <div style="font-family:'Cormorant Garamond',serif;font-size:clamp(52px,12vw,80px);font-weight:600;color:#F8F2E4;line-height:1;margin-bottom:8px;letter-spacing:-2px">Isula<span style="color:#C9993A">Menu</span></div>
-
-    <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(16px,3vw,22px);color:rgba(248,242,228,0.45);margin-bottom:12px">La carte de vos rêves, accessible d'un scan.</div>
-
-    <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(248,242,228,0.2);margin-bottom:52px;font-family:Jost,sans-serif">Multilingue &nbsp;·&nbsp; Temps réel &nbsp;·&nbsp; Personnalisé</div>
-
-    <div style="display:flex;flex-direction:column;gap:10px;width:100%;max-width:320px;margin-bottom:36px">
-      <button onclick="contactWhatsApp()" style="background:#C9993A;color:#0A1628;border:none;font-family:Jost,sans-serif;font-size:11px;font-weight:500;letter-spacing:2px;text-transform:uppercase;padding:15px 28px;cursor:pointer;border-radius:2px">Demander une démo gratuite</button>
-      <button onclick="showMenu('demo')" style="background:transparent;border:1px solid rgba(201,153,58,0.3);color:#E2B55A;font-family:Jost,sans-serif;font-size:11px;font-weight:300;letter-spacing:2px;text-transform:uppercase;padding:15px 28px;cursor:pointer;border-radius:2px">Voir un exemple de menu →</button>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-number">4</div>
+        <div class="hero-stat-label">Langues</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-number">30s</div>
+        <div class="hero-stat-label">Pour mettre à jour</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-number">100%</div>
+        <div class="hero-stat-label">Local · Corse</div>
+      </div>
     </div>
-
-    <div style="font-size:10px;color:rgba(248,242,228,0.18);letter-spacing:1px;text-transform:uppercase;cursor:default;font-family:Jost,sans-serif">Conditions générales d'utilisation</div>
-
   </div>
+</div>
 
-  <div style="position:relative;z-index:1;padding:14px 40px;border-top:1px solid rgba(201,153,58,0.07);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
-    <div style="font-size:9px;color:rgba(248,242,228,0.12);letter-spacing:1px;font-family:Jost,sans-serif">© 2025 IsulaMenu · Bastia, Corse</div>
-    <div style="display:flex;gap:24px">
-      <button onclick="showRestoLogin()" style="background:transparent;border:none;color:rgba(248,242,228,0.12);font-family:Jost,sans-serif;font-size:9px;letter-spacing:1px;cursor:pointer;text-transform:uppercase">Restaurateur</button>
-      <button onclick="showAdminLogin()" style="background:transparent;border:none;color:rgba(248,242,228,0.12);font-family:Jost,sans-serif;font-size:9px;letter-spacing:1px;cursor:pointer;text-transform:uppercase">Administration</button>
+<!-- ══ PROBLÈME ══ -->
+<div style="background:var(--marine-2);border-top:1px solid rgba(201,153,58,0.08);border-bottom:1px solid rgba(201,153,58,0.08);padding:100px 24px">
+  <div style="max-width:900px;margin:0 auto">
+    <div class="section-eyebrow">Le problème</div>
+    <h2 class="section-title">Votre carte papier<br>vous <em>coûte cher.</em></h2>
+    <p class="section-sub">Chaque saison une nouvelle impression. Chaque faute de frappe, une correction. Et vos clients étrangers qui ne comprennent rien. Il y a une meilleure façon.</p>
+    <div class="problems-grid">
+      <div class="problem-card">
+        <div class="problem-icon">💸</div>
+        <div class="problem-title">Réimpression coûteuse</div>
+        <div class="problem-desc">Chaque modification de carte, chaque saison, chaque nouvelle photo — c'est une facture imprimeur.</div>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon">🌍</div>
+        <div class="problem-title">Clients étrangers perdus</div>
+        <div class="problem-desc">En Corse, 40% des touristes sont étrangers. Sans traduction, ils commandent moins ou repartent.</div>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon">📞</div>
+        <div class="problem-title">Modifications impossibles</div>
+        <div class="problem-desc">Le plat du jour change chaque matin. Mettre à jour la carte imprimée ? Impossible sans retouch.</div>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon">🦠</div>
+        <div class="problem-title">Hygiène discutable</div>
+        <div class="problem-desc">Une carte qui passe de main en main toute la journée. Vos clients le remarquent.</div>
+      </div>
     </div>
   </div>
+</div>
+
+<!-- ══ SOLUTION ══ -->
+<div class="solution-section">
+  <div class="solution-inner">
+    <div class="section-eyebrow">La solution</div>
+    <h2 class="section-title" style="margin-bottom:60px">Un menu digital <em>fait pour vous,</em><br>géré par nous.</h2>
+    <div class="solution-grid">
+      <!-- Mockup téléphone -->
+      <div class="phone-mockup">
+        <div class="phone-notch"></div>
+        <div class="phone-screen-header">
+          <div class="phone-resto-name">A Tavola</div>
+          <div class="phone-resto-city">Bastia · Haute-Corse</div>
+          <div class="phone-langs">
+            <span class="phone-lang active">🇫🇷</span>
+            <span class="phone-lang">🇮🇹</span>
+            <span class="phone-lang">🇬🇧</span>
+            <span class="phone-lang">🇩🇪</span>
+          </div>
+        </div>
+        <div class="phone-cats">
+          <div class="phone-cat active">Entrées</div>
+          <div class="phone-cat">Poissons</div>
+          <div class="phone-cat">Viandes</div>
+          <div class="phone-cat">Desserts</div>
+        </div>
+        <div class="phone-pdj">
+          <div class="phone-pdj-label">✦ Plat du jour</div>
+          <div class="phone-pdj-name">Loup en croûte de sel</div>
+          <div class="phone-pdj-price">28 €</div>
+        </div>
+        <div class="phone-dish">
+          <div class="phone-dish-name">Brocciu frais</div>
+          <div class="phone-dish-price">11 €</div>
+        </div>
+        <div class="phone-dish">
+          <div class="phone-dish-name">Charcuterie corse</div>
+          <div class="phone-dish-price">16 €</div>
+        </div>
+        <div class="phone-dish">
+          <div class="phone-dish-name">Pageot rôti</div>
+          <div class="phone-dish-price">24 €</div>
+        </div>
+      </div>
+      <!-- Arguments -->
+      <div class="args">
+        <div class="arg">
+          <div class="arg-icon">🌍</div>
+          <div class="arg-content">
+            <div class="arg-title">4 langues automatiques</div>
+            <div class="arg-desc">Français, Italien, Anglais, Allemand. Un seul QR code pour tous vos clients. Les touristes commandent plus facilement.</div>
+          </div>
+        </div>
+        <div class="arg">
+          <div class="arg-icon">⚡</div>
+          <div class="arg-content">
+            <div class="arg-title">Plat du jour en 30 secondes</div>
+            <div class="arg-desc">Depuis votre téléphone, modifiez le plat du jour en temps réel. Vos clients voient la mise à jour instantanément.</div>
+          </div>
+        </div>
+        <div class="arg">
+          <div class="arg-icon">🎨</div>
+          <div class="arg-content">
+            <div class="arg-title">Aux couleurs de votre restaurant</div>
+            <div class="arg-desc">Votre logo, vos couleurs. Le menu est à votre image, pas un template générique que tout le monde utilise.</div>
+          </div>
+        </div>
+        <div class="arg">
+          <div class="arg-icon">📍</div>
+          <div class="arg-content">
+            <div class="arg-title">On s'occupe de tout</div>
+            <div class="arg-desc">Vous nous donnez votre carte, on la crée. Vous n'avez rien à faire techniquement. On est joignables 6j/7.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CHIFFRES ══ -->
+<div style="padding:80px 24px;max-width:900px;margin:0 auto">
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-number">4</div>
+      <div class="feature-title">Langues</div>
+      <div class="feature-desc">FR, IT, EN, DE — tous vos clients lisent dans leur langue maternelle</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-number">30s</div>
+      <div class="feature-title">Mise à jour</div>
+      <div class="feature-desc">Plat du jour modifiable depuis votre téléphone en quelques secondes</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-number">0€</div>
+      <div class="feature-title">Impression</div>
+      <div class="feature-desc">Plus jamais de facture imprimeur pour mettre à jour votre carte</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-number">∞</div>
+      <div class="feature-title">Modifications</div>
+      <div class="feature-desc">Changez vos prix, ajoutez des plats, modifiez les descriptions sans limite</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ TÉMOIGNAGES ══ -->
+<div class="testimonials">
+  <div class="testimonials-inner">
+    <div class="section-eyebrow">Ils nous font confiance</div>
+    <h2 class="section-title" style="margin-bottom:48px">Ce que disent<br>nos <em>restaurateurs.</em></h2>
+    <div class="testimonials-grid">
+      <div class="testimonial-card">
+        <p class="testimonial-text">Mes clients italiens et allemands commandent enfin sans hésiter. Le menu dans leur langue, ça change tout pour eux.</p>
+        <div class="testimonial-author">Marco T.</div>
+        <div class="testimonial-place">Restaurant · Porto-Vecchio</div>
+      </div>
+      <div class="testimonial-card">
+        <p class="testimonial-text">Je mets à jour mon plat du jour chaque matin depuis mon téléphone. En 30 secondes c'est en ligne. Incroyable.</p>
+        <div class="testimonial-author">Marie-Ange F.</div>
+        <div class="testimonial-place">Bistrot · Ajaccio</div>
+      </div>
+      <div class="testimonial-card">
+        <p class="testimonial-text">Un service local, réactif, qui connaît la réalité d'un restaurant corse. Pas une boîte parisienne qui ne comprend rien.</p>
+        <div class="testimonial-author">Jean-Pierre C.</div>
+        <div class="testimonial-place">Pizzeria · Bastia</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ FORMULES ══ -->
+<div class="formules-section">
+  <div class="section-eyebrow">Nos formules</div>
+  <h2 class="section-title" style="margin-bottom:12px">Simple, <em>sans surprise.</em></h2>
+  <p class="section-sub">Sans engagement. Résiliable à tout moment. Contactez-nous pour connaître nos tarifs.</p>
+  <div class="formules-grid">
+    <div class="formule-card">
+      <div class="formule-name">Essentiel</div>
+      <div class="formule-sub">Pour démarrer simplement</div>
+      <div class="formule-price">Sur devis</div>
+      <ul class="formule-features">
+        <li>Menu digital responsive</li>
+        <li>QR codes personnalisés</li>
+        <li>2 langues au choix</li>
+        <li>1 refonte de carte / an</li>
+        <li>Plat du jour modifiable</li>
+      </ul>
+    </div>
+    <div class="formule-card popular">
+      <div class="formule-popular-badge">Populaire</div>
+      <div class="formule-name">Signature</div>
+      <div class="formule-sub">Le choix des restaurateurs actifs</div>
+      <div class="formule-price">Sur devis</div>
+      <ul class="formule-features">
+        <li>Tout Essentiel inclus</li>
+        <li>4 langues (FR, IT, EN, DE)</li>
+        <li>2 refontes de carte / an</li>
+        <li>Modifications illimitées</li>
+        <li>Photos des plats</li>
+      </ul>
+    </div>
+    <div class="formule-card">
+      <div class="formule-name">Prestige</div>
+      <div class="formule-sub">Pour une image irréprochable</div>
+      <div class="formule-price">Sur devis</div>
+      <ul class="formule-features">
+        <li>Tout Signature inclus</li>
+        <li>Site vitrine complet</li>
+        <li>Logo et couleurs auto</li>
+        <li>Support prioritaire 6j/7</li>
+        <li>Bilan mensuel</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ══ LOCAL ══ -->
+<div class="local-section">
+  <div class="local-inner">
+    <div class="section-eyebrow" style="justify-content:center">Pourquoi nous</div>
+    <h2 class="local-title">Un service <em>corse,</em><br>pour les Corses.</h2>
+    <p class="local-sub">Pas une plateforme anonyme. Une équipe locale qui connaît votre réalité, vos contraintes, votre saison.</p>
+    <div class="local-steps">
+      <div class="local-step">
+        <div class="local-step-num">1</div>
+        <div class="local-step-text"><strong>Vous nous contactez.</strong> On se déplace dans votre établissement pour comprendre votre carte et votre image.</div>
+      </div>
+      <div class="local-step">
+        <div class="local-step-num">2</div>
+        <div class="local-step-text"><strong>On crée votre menu digital.</strong> Design aux couleurs de votre restaurant, plats traduits, photos intégrées.</div>
+      </div>
+      <div class="local-step">
+        <div class="local-step-num">3</div>
+        <div class="local-step-text"><strong>On vous remet le QR code.</strong> À poser sur vos tables. Vos clients scannent, lisent dans leur langue, commandent.</div>
+      </div>
+      <div class="local-step">
+        <div class="local-step-num">4</div>
+        <div class="local-step-text"><strong>Vous gérez en autonomie.</strong> Plat du jour, horaires, infos — tout depuis votre téléphone en 30 secondes.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CTA FINAL ══ -->
+<div class="cta-section">
+  <h2 class="cta-title">Une démo gratuite,<br><em>chez vous.</em></h2>
+  <p class="cta-sub">On vient dans votre établissement et on vous montre le résultat en direct. Sans engagement, sans obligation.</p>
+  <div class="cta-btns">
+    <button class="btn-gold" onclick="contactWhatsApp()">Nous contacter sur WhatsApp</button>
+    <a href="mailto:contact@isulamenu.fr" style="text-decoration:none">
+      <button class="btn-ghost">contact@isulamenu.fr</button>
+    </a>
+  </div>
+</div>
+
+<!-- ══ FOOTER ══ -->
+<div class="footer">
+  <div class="footer-logo">Isula<span>Menu</span></div>
+  <div class="footer-copy">© 2025 IsulaMenu · Bastia, Corse</div>
+  <div class="footer-links">
+    <span class="footer-link" onclick="showRestoLogin()" style="cursor:pointer">Restaurateur</span>
+    <span class="footer-link" onclick="showAdminLogin()" style="cursor:pointer">Administration</span>
+    <span class="footer-link" style="cursor:default;opacity:0.5">CGU</span>
+  </div>
+</div>
+
 </div>
 
 <!-- ══ EN SAVOIR PLUS ══ -->
@@ -1753,6 +2501,9 @@ function showView(id) {
     document.documentElement.style.setProperty('--or', '#C9993A');
     document.documentElement.style.setProperty('--or-2', '#E2B55A');
   }
+  // Masquer/afficher le header vitrine
+  const header = document.getElementById('vitrine-header');
+  if (header) header.style.display = id === 'view-home' ? 'flex' : 'none';
 }
 
 function showHome() { showView('view-home'); }
