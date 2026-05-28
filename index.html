@@ -1202,9 +1202,9 @@ window.addEventListener('load', function() {
   <div class="menu-body" id="menu-body"></div>
 
   <!-- Footer marque -->
-  <div class="menu-footer-brand" onclick="showHome()" style="cursor:pointer">
-    <div style="font-family:'Cormorant Garamond',serif;font-size:14px;color:rgba(248,242,228,0.25);transition:color 0.2s">Isula<span style="color:rgba(201,153,58,0.5)">Menu</span></div>
-    <div style="font-size:9px;color:rgba(248,242,228,0.15);letter-spacing:1px;text-transform:uppercase;margin-top:2px">← Retour à l'accueil</div>
+  <div class="menu-footer-brand">
+    <div style="font-family:'Cormorant Garamond',serif;font-size:13px;color:rgba(248,242,228,0.15)">Isula<span style="color:rgba(201,153,58,0.3)">Menu</span></div>
+    <div style="font-size:9px;color:rgba(248,242,228,0.08);letter-spacing:1px;text-transform:uppercase;margin-top:2px">Menu digital · isulamenu.fr</div>
   </div>
 
 </div>
@@ -1708,12 +1708,33 @@ async function showMenu(slug) {
     logoWrap.innerHTML = '<span id="menu-logo-emoji">🍽️</span>';
   }
   
+  // Supprimer tout bouton retour résiduel
+  document.querySelectorAll('.back-btn').forEach(b => {
+    if (b.closest('#view-menu') || !b.closest('.view')) b.remove();
+  });
+  
   // Masquer infos par défaut
   const quickInfos = document.getElementById('menu-quick-infos');
   if (quickInfos) quickInfos.style.display = 'none';
   const paiements = document.getElementById('menu-paiements');
   if (paiements) paiements.style.display = 'none';
   
+  // Footer cliquable uniquement sur la demo
+  const footerBrand = document.querySelector('.menu-footer-brand');
+  if (footerBrand) {
+    if (slug === 'demo') {
+      footerBrand.style.cursor = 'pointer';
+      footerBrand.onclick = () => showHome();
+      footerBrand.querySelector('div:last-child').textContent = '← Retour à l accueil';
+      footerBrand.querySelector('div:last-child').style.color = 'rgba(248,242,228,0.2)';
+    } else {
+      footerBrand.style.cursor = 'default';
+      footerBrand.onclick = null;
+      footerBrand.querySelector('div:last-child').textContent = 'Menu digital · isulamenu.fr';
+      footerBrand.querySelector('div:last-child').style.color = 'rgba(248,242,228,0.08)';
+    }
+  }
+
   // Badge démo si slug = demo
   const existingBadge = document.getElementById('demo-badge');
   if (slug === 'demo' && !existingBadge) {
