@@ -962,31 +962,36 @@ window.addEventListener('load', function() {
 <!-- ══ ACCUEIL ══ -->
 <div id="view-home" class="view">
   <div class="home-grid"></div>
-  <div class="home-content">
-    <div class="home-logo">Isula<span>Menu</span></div>
-    <div class="home-sub">Plateforme menu digital</div>
-    <div class="home-cards">
-      <div class="home-card" onclick="showMenu('demo')">
-        <div class="home-card-left">
-          <h3>Menu Restaurant</h3>
-          <p>Vue client · A Tavola, Bastia</p>
-        </div>
-        <div class="home-card-arrow">→</div>
-      </div>
-      <div class="home-card" onclick="showRestoLogin()">
-        <div class="home-card-left">
-          <h3>Espace Restaurateur</h3>
-          <p>Gérer votre plat du jour</p>
-        </div>
-        <div class="home-card-arrow">→</div>
-      </div>
-      <div class="home-card" onclick="showAdminLogin()">
-        <div class="home-card-left">
-          <h3>Back-office Admin</h3>
-          <p>Tableau de bord IsulaMenu</p>
-        </div>
-        <div class="home-card-arrow">→</div>
-      </div>
+  <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 15% 85%,rgba(201,153,58,0.12) 0%,transparent 50%),radial-gradient(ellipse at 85% 15%,rgba(201,153,58,0.07) 0%,transparent 45%);pointer-events:none"></div>
+
+  <div style="position:relative;z-index:1;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px;text-align:center">
+
+    <div style="display:flex;align-items:center;gap:14px;margin-bottom:32px">
+      <div style="width:30px;height:1px;background:#C9993A;opacity:0.5"></div>
+      <div style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:#C9993A;font-family:Jost,sans-serif">Solutions digitales · Restauration Corse</div>
+      <div style="width:30px;height:1px;background:#C9993A;opacity:0.5"></div>
+    </div>
+
+    <div style="font-family:'Cormorant Garamond',serif;font-size:clamp(52px,12vw,80px);font-weight:600;color:#F8F2E4;line-height:1;margin-bottom:8px;letter-spacing:-2px">Isula<span style="color:#C9993A">Menu</span></div>
+
+    <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(16px,3vw,22px);color:rgba(248,242,228,0.45);margin-bottom:12px">La carte de vos rêves, accessible d'un scan.</div>
+
+    <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(248,242,228,0.2);margin-bottom:52px;font-family:Jost,sans-serif">Multilingue &nbsp;·&nbsp; Temps réel &nbsp;·&nbsp; Personnalisé</div>
+
+    <div style="display:flex;flex-direction:column;gap:10px;width:100%;max-width:320px;margin-bottom:36px">
+      <button onclick="contactWhatsApp()" style="background:#C9993A;color:#0A1628;border:none;font-family:Jost,sans-serif;font-size:11px;font-weight:500;letter-spacing:2px;text-transform:uppercase;padding:15px 28px;cursor:pointer;border-radius:2px">Demander une démo gratuite</button>
+      <button onclick="showMenu('demo')" style="background:transparent;border:1px solid rgba(201,153,58,0.3);color:#E2B55A;font-family:Jost,sans-serif;font-size:11px;font-weight:300;letter-spacing:2px;text-transform:uppercase;padding:15px 28px;cursor:pointer;border-radius:2px">Voir un exemple de menu →</button>
+    </div>
+
+    <div style="font-size:10px;color:rgba(248,242,228,0.18);letter-spacing:1px;text-transform:uppercase;cursor:default;font-family:Jost,sans-serif">Conditions générales d'utilisation</div>
+
+  </div>
+
+  <div style="position:relative;z-index:1;padding:14px 40px;border-top:1px solid rgba(201,153,58,0.07);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+    <div style="font-size:9px;color:rgba(248,242,228,0.12);letter-spacing:1px;font-family:Jost,sans-serif">© 2025 IsulaMenu · Bastia, Corse</div>
+    <div style="display:flex;gap:24px">
+      <button onclick="showRestoLogin()" style="background:transparent;border:none;color:rgba(248,242,228,0.12);font-family:Jost,sans-serif;font-size:9px;letter-spacing:1px;cursor:pointer;text-transform:uppercase">Restaurateur</button>
+      <button onclick="showAdminLogin()" style="background:transparent;border:none;color:rgba(248,242,228,0.12);font-family:Jost,sans-serif;font-size:9px;letter-spacing:1px;cursor:pointer;text-transform:uppercase">Administration</button>
     </div>
   </div>
 </div>
