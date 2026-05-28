@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>IsulaMenu — Menu digital pour restaurants corses</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='url(%23g)'/%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23C9993A'/%3E%3Cstop offset='1' stop-color='%23E2B55A'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='18' font-weight='700' fill='%230A1628' text-anchor='middle'%3EIM%3C/text%3E%3C/svg%3E">
 <meta name="description" content="IsulaMenu cree des menus digitaux multilingues pour les restaurants corses. Accessible par QR code, mis a jour en temps reel, personnalise a votre image.">
 <meta name="keywords" content="menu digital Corse, carte restaurant QR code, menu numérique Bastia, restaurant Corse">
 <meta property="og:title" content="IsulaMenu — Menu digital Corse">
@@ -911,9 +912,9 @@ table.admin-tbl tr:hover td { background: rgba(201,153,58,0.03); }
 /* ══ HERO MENU MOBILE ══ */
 .resto-hero {
   background: var(--marine-2);
-  padding: 32px 24px 24px;
+  padding: 36px 24px 28px;
   text-align: center;
-  border-bottom: 1px solid rgba(201,153,58,0.12);
+  border-bottom: 1px solid rgba(201,153,58,0.1);
   position: relative;
   overflow: hidden;
 }
@@ -922,23 +923,44 @@ table.admin-tbl tr:hover td { background: rgba(201,153,58,0.03); }
   content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse at 50% 0%, rgba(201,153,58,0.08) 0%, transparent 70%);
+  background: radial-gradient(ellipse at 50% 0%, rgba(201,153,58,0.08) 0%, transparent 65%);
   pointer-events: none;
 }
 
 .resto-hero-content { position: relative; z-index: 1; }
 
+/* Eyebrow */
+.hero-eyebrow {
+  font-size: 9px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--or);
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+.hero-eyebrow::before, .hero-eyebrow::after {
+  content: '';
+  width: 20px;
+  height: 1px;
+  background: var(--or);
+  opacity: 0.4;
+}
+
+/* Logo */
 .resto-logo-wrap {
-  width: 90px;
-  height: 90px;
+  width: 80px;
+  height: 80px;
   border-radius: 12px;
   background: rgba(201,153,58,0.06);
   border: 1px solid rgba(201,153,58,0.2);
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 auto 16px;
-  font-size: 36px;
+  margin: 0 auto 18px;
+  font-size: 34px;
   overflow: hidden;
 }
 
@@ -949,39 +971,29 @@ table.admin-tbl tr:hover td { background: rgba(201,153,58,0.03); }
   border-radius: 12px;
 }
 
+/* Nom */
 .resto-hero-name {
   font-family: 'Cormorant Garamond', serif;
-  font-size: 32px;
+  font-size: 48px;
   font-weight: 600;
   color: var(--creme);
   line-height: 1;
-  margin-bottom: 4px;
-}
-
-.resto-hero-city {
-  font-size: 10px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--gris);
   margin-bottom: 20px;
+  letter-spacing: -1px;
 }
 
-.resto-quick-infos {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-  margin-bottom: 16px;
-  flex-wrap: wrap;
-}
-
-.quick-info {
+/* Séparateur */
+.hero-divider {
   display: flex;
   align-items: center;
-  gap: 6px;
-  font-size: 11px;
-  color: var(--gris-2);
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 20px;
 }
+.hero-divider-line { width: 40px; height: 1px; background: rgba(201,153,58,0.2); }
+.hero-divider-star { color: var(--or); font-size: 10px; }
 
+/* Paiements */
 .resto-paiements {
   display: flex;
   justify-content: center;
@@ -1001,6 +1013,7 @@ table.admin-tbl tr:hover td { background: rgba(201,153,58,0.03); }
   border-radius: 2px;
 }
 
+/* Langues */
 .hero-lang-switcher {
   display: flex;
   justify-content: center;
@@ -1212,29 +1225,51 @@ window.addEventListener('load', function() {
   <!-- Hero restaurant -->
   <div class="resto-hero">
     <div class="resto-hero-content">
+
+      <!-- Eyebrow ville -->
+      <div class="hero-eyebrow" id="menu-resto-city">Bastia · Haute-Corse</div>
+
+      <!-- Logo -->
       <div class="resto-logo-wrap" id="menu-logo-wrap">
         <span id="menu-logo-emoji">🍽️</span>
       </div>
-      <div class="resto-hero-name" id="menu-resto-name">A Tavola</div>
-      <div class="resto-hero-city" id="menu-resto-city">Bastia · Haute-Corse</div>
-      <div id="menu-resto-description" style="display:none;font-size:12px;color:var(--gris-2);line-height:1.6;margin-bottom:16px;max-width:280px;margin-left:auto;margin-right:auto"></div>
 
-      <div class="resto-quick-infos" id="menu-quick-infos" style="display:none">
-        <div class="quick-info" id="menu-horaires-wrap" style="display:none">
-          <span>⏰</span>
-          <span id="menu-resto-horaires"></span>
+      <!-- Nom -->
+      <div class="resto-hero-name" id="menu-resto-name">A Tavola</div>
+
+      <!-- Description italique -->
+      <div id="menu-resto-description" style="display:none;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:15px;color:rgba(201,153,58,0.65);line-height:1.6;margin-bottom:16px"></div>
+
+      <!-- Séparateur -->
+      <div class="hero-divider">
+        <div class="hero-divider-line"></div>
+        <div class="hero-divider-star">✦</div>
+        <div class="hero-divider-line"></div>
+      </div>
+
+      <!-- Infos : adresse, horaires, tel -->
+      <div id="menu-quick-infos" style="display:none;margin-bottom:16px">
+        <div id="menu-adresse-wrap" style="display:none;font-size:11px;color:rgba(248,242,228,0.35);margin-bottom:6px">
+          <span>📍</span> <span id="menu-resto-adresse"></span>
         </div>
-        <div class="quick-info" id="menu-tel-wrap" style="display:none">
-          <span>📞</span>
-          <span id="menu-resto-tel"></span>
+        <div style="display:flex;justify-content:center;gap:20px;flex-wrap:wrap">
+          <div id="menu-horaires-wrap" style="display:none;font-size:11px;color:rgba(248,242,228,0.4);display:flex;align-items:center;gap:5px">
+            <span>⏰</span><span id="menu-resto-horaires"></span>
+          </div>
+          <div id="menu-tel-wrap" style="display:none;font-size:11px;color:rgba(248,242,228,0.4);display:flex;align-items:center;gap:5px">
+            <span>📞</span><span id="menu-resto-tel"></span>
+          </div>
         </div>
       </div>
 
+      <!-- Moyens de paiement -->
       <div class="resto-paiements" id="menu-paiements" style="display:none">
         <div id="paiement-list" style="display:flex;flex-wrap:wrap;gap:6px;justify-content:center"></div>
       </div>
 
+      <!-- Langues -->
       <div class="hero-lang-switcher" id="lang-switcher"></div>
+
     </div>
   </div>
 
@@ -1360,6 +1395,10 @@ window.addEventListener('load', function() {
         <div class="form-group">
           <label class="form-label">Téléphone</label>
           <input class="form-input" type="tel" id="resto-telephone" placeholder="Ex: 04 95 XX XX XX">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Adresse</label>
+          <input class="form-input" type="text" id="resto-adresse" placeholder="Ex: 2 rue du Port, Bastia">
         </div>
         <div class="form-group">
           <label class="form-label">Description courte</label>
@@ -1874,10 +1913,14 @@ async function showMenu(slug) {
           }
         }
 
-        // Afficher horaires et téléphone
-        if (data.horaires || data.telephone) {
+        // Afficher adresse, horaires et téléphone
+        if (data.adresse || data.horaires || data.telephone) {
           const quickInfos = document.getElementById('menu-quick-infos');
-          if (quickInfos) quickInfos.style.display = 'flex';
+          if (quickInfos) quickInfos.style.display = 'block';
+          if (data.adresse) {
+            document.getElementById('menu-adresse-wrap').style.display = 'block';
+            document.getElementById('menu-resto-adresse').textContent = data.adresse;
+          }
           if (data.horaires) {
             document.getElementById('menu-horaires-wrap').style.display = 'flex';
             document.getElementById('menu-resto-horaires').textContent = data.horaires;
@@ -2703,6 +2746,7 @@ async function saveRestoInfos() {
   
   const horaires = document.getElementById('resto-horaires').value;
   const telephone = document.getElementById('resto-telephone').value;
+  const adresse = document.getElementById('resto-adresse')?.value || '';
   const description = document.getElementById('resto-description').value;
   const couleurPrincipale = document.getElementById('couleur-principale-hex').value;
   const couleurAccent = document.getElementById('couleur-accent-hex').value;
@@ -2717,7 +2761,7 @@ async function saveRestoInfos() {
   
   try {
     await db.from('restaurants').update({
-      horaires, telephone, description,
+      horaires, telephone, adresse, description,
       couleur_principale: couleurPrincipale,
       couleur_accent: couleurAccent,
       moyens_paiement: paiements
@@ -2738,6 +2782,7 @@ async function loadRestoInfos(restoId) {
     if (data) {
       if (data.horaires) document.getElementById('resto-horaires').value = data.horaires;
       if (data.telephone) document.getElementById('resto-telephone').value = data.telephone;
+      if (data.adresse && document.getElementById('resto-adresse')) document.getElementById('resto-adresse').value = data.adresse;
       if (data.description) document.getElementById('resto-description').value = data.description;
       if (data.couleur_principale) {
         document.getElementById('couleur-principale').value = data.couleur_principale;
