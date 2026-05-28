@@ -1811,18 +1811,7 @@ async function showMenu(slug) {
           }
         }
         
-        // Afficher le logo dans le header si disponible
-        if (data.logo_url) {
-          const existingLogo = document.getElementById('menu-logo');
-          if (!existingLogo) {
-            const logoEl = document.createElement('img');
-            logoEl.id = 'menu-logo';
-            logoEl.src = data.logo_url;
-            logoEl.style.cssText = 'width:40px;height:40px;object-fit:contain;border-radius:4px;margin-right:8px';
-            const nameEl = document.getElementById('menu-resto-name');
-            nameEl.parentNode.insertBefore(logoEl, nameEl);
-          }
-        }
+
 
         const langues = data.langues || ['fr', 'it', 'en', 'de'];
         switcher.innerHTML = '';
