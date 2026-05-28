@@ -3,7 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>IsulaMenu</title>
+<title>IsulaMenu — Menu digital pour restaurants corses</title>
+<meta name="description" content="IsulaMenu cree des menus digitaux multilingues pour les restaurants corses. Accessible par QR code, mis a jour en temps reel, personnalise a votre image.">
+<meta name="keywords" content="menu digital Corse, carte restaurant QR code, menu numérique Bastia, restaurant Corse">
+<meta property="og:title" content="IsulaMenu — Menu digital Corse">
+<meta property="og:description" content="Menus digitaux multilingues pour restaurants corses. Scannez, commandez, profitez.">
+<meta property="og:url" content="https://isulamenu.fr">
+<meta property="og:type" content="website">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://isulamenu.fr">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
@@ -655,7 +663,40 @@ body {
   z-index: 10;
   display: flex;
   flex-direction: column;
+  transition: transform 0.3s ease;
 }
+
+.admin-sidebar.mobile-hidden {
+  transform: translateX(-100%);
+}
+
+.admin-hamburger {
+  display: none;
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 200;
+  background: var(--marine-2);
+  border: 1px solid rgba(201,153,58,0.2);
+  color: var(--or);
+  font-size: 18px;
+  width: 40px;
+  height: 40px;
+  border-radius: 4px;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+}
+
+.admin-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 9;
+}
+
+.admin-overlay.show { display: block; }
 
 .admin-logo { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 600; color: var(--creme); padding: 0 20px 24px; border-bottom: 1px solid rgba(201,153,58,0.08); margin-bottom: 20px; }
 .admin-logo span { color: var(--or); }
@@ -754,7 +795,7 @@ table.admin-tbl tr:hover td { background: rgba(201,153,58,0.03); }
 .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(8,15,26,0.85); z-index: 1000; align-items: center; justify-content: center; padding: 20px; }
 .modal-overlay.open { display: flex; }
 
-.modal-box { background: var(--marine-2); border: 1px solid rgba(201,153,58,0.2); padding: 32px; width: 100%; max-width: 480px; border-radius: 4px; animation: fadeUp 0.3s ease; }
+.modal-box { background: var(--marine-2); border: 1px solid rgba(201,153,58,0.2); padding: 24px; width: 100%; max-width: 480px; border-radius: 4px; animation: fadeUp 0.3s ease; max-height: 90vh; overflow-y: auto; }
 .modal-title { font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 600; color: var(--creme); margin-bottom: 4px; }
 .modal-sub { font-size: 12px; color: var(--gris); margin-bottom: 24px; }
 .modal-actions { display: flex; gap: 10px; margin-top: 20px; }
@@ -888,11 +929,11 @@ table.admin-tbl tr:hover td { background: rgba(201,153,58,0.03); }
 .resto-hero-content { position: relative; z-index: 1; }
 
 .resto-logo-wrap {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  background: rgba(201,153,58,0.1);
-  border: 1px solid rgba(201,153,58,0.25);
+  width: 90px;
+  height: 90px;
+  border-radius: 12px;
+  background: rgba(201,153,58,0.06);
+  border: 1px solid rgba(201,153,58,0.2);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -904,8 +945,8 @@ table.admin-tbl tr:hover td { background: rgba(201,153,58,0.03); }
 .resto-logo-wrap img {
   width: 100%;
   height: 100%;
-  object-fit: contain;
-  padding: 8px;
+  object-fit: cover;
+  border-radius: 12px;
 }
 
 .resto-hero-name {
@@ -974,8 +1015,10 @@ table.admin-tbl tr:hover td { background: rgba(201,153,58,0.03); }
 }
 
 @media (max-width: 768px) {
-  .admin-sidebar { display: none; }
-  .admin-main { margin-left: 0; max-width: 100vw; padding: 20px 16px; }
+  .admin-sidebar { transform: translateX(-100%); }
+  .admin-sidebar.mobile-open { transform: translateX(0); }
+  .admin-hamburger { display: flex; }
+  .admin-main { margin-left: 0; max-width: 100vw; padding: 60px 16px 20px; }
   .admin-stats { grid-template-columns: 1fr 1fr; }
   .form-grid { grid-template-columns: 1fr; }
   .resto-content { padding: 16px; }
@@ -1408,7 +1451,9 @@ window.addEventListener('load', function() {
 <!-- ══ BACK-OFFICE ══ -->
 <div id="view-admin" class="view">
   <div class="admin-layout">
-    <div class="admin-sidebar">
+    <button class="admin-hamburger" onclick="toggleAdminMenu()" id="admin-hamburger">☰</button>
+    <div class="admin-overlay" id="admin-overlay" onclick="closeAdminMenu()"></div>
+    <div class="admin-sidebar" id="admin-sidebar">
       <div class="admin-logo">Isula<span>Menu</span></div>
       <div class="admin-nav-item active" onclick="showAdminPanel('dashboard', this)"><span class="admin-nav-icon">◈</span> Dashboard</div>
       <div class="admin-nav-item" onclick="showAdminPanel('restaurants', this)"><span class="admin-nav-icon">⊞</span> Restaurants</div>
@@ -1673,6 +1718,24 @@ function showView(id) {
 
 function showHome() { showView('view-home'); }
 function showVitrine() { showView('view-home'); }
+
+function toggleAdminMenu() {
+  const sidebar = document.getElementById('admin-sidebar');
+  const overlay = document.getElementById('admin-overlay');
+  const btn = document.getElementById('admin-hamburger');
+  sidebar.classList.toggle('mobile-open');
+  overlay.classList.toggle('show');
+  btn.textContent = sidebar.classList.contains('mobile-open') ? '✕' : '☰';
+}
+
+function closeAdminMenu() {
+  const sidebar = document.getElementById('admin-sidebar');
+  const overlay = document.getElementById('admin-overlay');
+  const btn = document.getElementById('admin-hamburger');
+  sidebar.classList.remove('mobile-open');
+  overlay.classList.remove('show');
+  btn.textContent = '☰';
+}
 function logoutResto() {
   currentRestoId = null;
   currentRestoSlug = null;
@@ -1682,6 +1745,10 @@ function showSavoir() { showView('view-savoir'); }
 function contactWhatsApp() {
   const msg = 'Bonjour, je souhaite une démonstration gratuite de votre service de menu digital pour mon restaurant.';
   window.open('https://wa.me/33600000000?text=' + encodeURIComponent(msg), '_blank');
+}
+
+function contactEmail() {
+  window.location.href = 'mailto:contact@isulamenu.fr?subject=Demande de démonstration IsulaMenu&body=Bonjour, je souhaite une démonstration gratuite de votre service de menu digital pour mon restaurant.';
 }
 function showRestoLogin() { showView('view-resto-login'); }
 function showAdminLogin() { showView('view-admin-login'); }
@@ -1753,7 +1820,8 @@ async function showMenu(slug) {
       banner.innerHTML = '<div style="font-size:11px;color:var(--gris-2)">Ceci est une <span style="color:var(--or-2)">démo IsulaMenu</span></div><button onclick="contactWhatsApp()" style="background:var(--or);color:var(--marine);border:none;font-family:Jost,sans-serif;font-size:10px;font-weight:500;letter-spacing:2px;text-transform:uppercase;padding:8px 16px;cursor:pointer;border-radius:2px">Demander un devis →</button>';
       document.body.appendChild(banner);
     }
-  } else if (slug !== 'demo') {
+  } else {
+    // Nettoyer les éléments démo pour un vrai restaurant
     const banner = document.getElementById('demo-banner');
     if (banner) banner.remove();
     const badge = document.getElementById('demo-badge');
@@ -2137,7 +2205,19 @@ async function savePdj() {
   }
 }
 
-function viewRestoMenu() { showMenu(currentRestoSlug || 'demo'); }
+function viewRestoMenu() {
+  showMenu(currentRestoSlug || 'demo');
+  // Ajouter bouton retour vers espace restaurateur
+  setTimeout(() => {
+    const footer = document.querySelector('.menu-footer-brand');
+    if (footer && currentRestoId) {
+      footer.style.cursor = 'pointer';
+      footer.onclick = () => showView('view-resto');
+      footer.querySelector('div:last-child').textContent = '← Retour à mon espace';
+      footer.querySelector('div:last-child').style.color = 'rgba(248,242,228,0.25)';
+    }
+  }, 100);
+}
 
 // ══ LOGIN ADMIN ══
 function loginAdmin() {
@@ -2236,6 +2316,7 @@ function showAdminPanel(panel, el) {
   document.querySelectorAll('.admin-nav-item').forEach(n => n.classList.remove('active'));
   document.getElementById('panel-' + panel).classList.add('active');
   if (el) el.classList.add('active');
+  closeAdminMenu(); // Fermer sur mobile après sélection
 }
 
 // ══ MODAL NOUVEAU RESTO ══
