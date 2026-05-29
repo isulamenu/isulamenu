@@ -1716,6 +1716,68 @@ table.admin-tbl tr:hover td { background: rgba(201,153,58,0.03); }
 .plat-thumb-new:hover { border-color: rgba(201,153,58,0.4); }
 .plat-thumb-new img { width: 100%; height: 100%; object-fit: cover; }
 
+/* ══ ONGLETS FORMULAIRE ══ */
+.form-tabs-bar {
+  display: flex;
+  gap: 0;
+  margin-bottom: 16px;
+  border-bottom: 1px solid rgba(201,153,58,0.08);
+}
+.form-tab-btn {
+  padding: 8px 14px;
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--gris);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+  background: none;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  font-family: Jost, sans-serif;
+}
+.form-tab-btn.active { color: var(--or-2); border-bottom-color: var(--or); }
+.form-tab-content { display: none; }
+.form-tab-content.active { display: block; }
+
+/* ══ ALLERGÈNES ══ */
+.allergens-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+  margin-bottom: 12px;
+}
+.allergen-chip {
+  background: var(--marine-3);
+  border: 1px solid rgba(201,153,58,0.08);
+  border-radius: 4px;
+  padding: 7px 4px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.15s;
+  user-select: none;
+}
+.allergen-chip:hover { border-color: rgba(232,146,58,0.3); }
+.allergen-chip.on { background: rgba(232,146,58,0.1); border-color: rgba(232,146,58,0.4); }
+.allergen-chip-icon { font-size: 18px; display: block; margin-bottom: 3px; }
+.allergen-chip-name { font-size: 8px; letter-spacing: 0.5px; text-transform: uppercase; color: var(--gris); line-height: 1.2; }
+.allergen-chip.on .allergen-chip-name { color: #E8923A; }
+
+.allergen-badge-display {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 10px;
+  background: rgba(232,146,58,0.08);
+  border: 1px solid rgba(232,146,58,0.15);
+  border-radius: 3px;
+  padding: 1px 5px;
+  margin: 2px;
+}
+.allergen-badge-display span { font-size: 8px; color: #E8923A; letter-spacing: 1px; text-transform: uppercase; }
+
 @media (max-width: 900px) {
   .carte-layout-grid { grid-template-columns: 1fr; }
 }
@@ -2587,45 +2649,110 @@ window.addEventListener('load', function() {
                 <button class="btn-new" onclick="toggleAddPlatForm()">+ Ajouter un plat</button>
               </div>
 
-              <!-- Formulaire ajout plat -->
+              <!-- Formulaire ajout/modification plat -->
               <div id="add-plat-form" style="display:none;padding:16px 20px;background:rgba(201,153,58,0.03);border-bottom:1px solid rgba(201,153,58,0.08)">
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:10px">
-                  <div class="form-group">
-                    <label class="form-label">Nom du plat (FR) *</label>
-                    <input class="form-input" type="text" id="plat-nom-fr" placeholder="Ex: Brocciu frais aux herbes">
+                <input type="hidden" id="plat-edit-id" value="">
+                <div id="plat-form-title" style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--or);margin-bottom:12px">+ Nouveau plat</div>
+
+                <!-- Onglets -->
+                <div class="form-tabs-bar">
+                  <button class="form-tab-btn active" onclick="switchPlatTab('infos', this)">Infos & Prix</button>
+                  <button class="form-tab-btn" onclick="switchPlatTab('traductions', this)">🌍 Traductions</button>
+                  <button class="form-tab-btn" onclick="switchPlatTab('allergenes', this)">⚠️ Allergènes</button>
+                </div>
+
+                <!-- Tab Infos -->
+                <div id="plat-tab-infos" class="form-tab-content active">
+                  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
+                    <div class="form-group">
+                      <label class="form-label">🇫🇷 Nom du plat *</label>
+                      <input class="form-input" type="text" id="plat-nom-fr" placeholder="Ex: Brocciu frais aux herbes">
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label">🇫🇷 Description</label>
+                      <input class="form-input" type="text" id="plat-desc-fr" placeholder="Ex: Fromage corse, herbes du maquis">
+                    </div>
                   </div>
-                  <div class="form-group">
-                    <label class="form-label">Description (FR)</label>
-                    <input class="form-input" type="text" id="plat-desc-fr" placeholder="Ex: Fromage corse, herbes du maquis">
-                  </div>
-                  <div class="form-group">
-                    <label class="form-label">Nom (IT)</label>
-                    <input class="form-input" type="text" id="plat-nom-it" placeholder="Ex: Brocciu fresco">
-                  </div>
-                  <div class="form-group">
-                    <label class="form-label">Nom (EN)</label>
-                    <input class="form-input" type="text" id="plat-nom-en" placeholder="Ex: Fresh brocciu">
+                  <div style="display:grid;grid-template-columns:100px 1fr 80px;gap:12px;margin-bottom:12px">
+                    <div class="form-group">
+                      <label class="form-label">Prix (€) *</label>
+                      <input class="form-input" type="number" id="plat-prix" placeholder="11">
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label">Tags</label>
+                      <input class="form-input" type="text" id="plat-tags" placeholder="local, végétarien, premium">
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label">Icône</label>
+                      <input class="form-input" type="text" id="plat-icone" placeholder="🧀">
+                    </div>
                   </div>
                 </div>
-                <div style="display:grid;grid-template-columns:100px 1fr 100px;gap:12px;margin-bottom:12px">
-                  <div class="form-group">
-                    <label class="form-label">Prix (€) *</label>
-                    <input class="form-input" type="number" id="plat-prix" placeholder="11">
+
+                <!-- Tab Traductions -->
+                <div id="plat-tab-traductions" class="form-tab-content">
+                  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
+                    <div class="form-group">
+                      <label class="form-label">🇮🇹 Nom (IT)</label>
+                      <input class="form-input" type="text" id="plat-nom-it" placeholder="Ex: Brocciu fresco alle erbe">
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label">🇮🇹 Description (IT)</label>
+                      <input class="form-input" type="text" id="plat-desc-it" placeholder="Formaggio corso fresco...">
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label">🇬🇧 Nom (EN)</label>
+                      <input class="form-input" type="text" id="plat-nom-en" placeholder="Ex: Fresh brocciu with herbs">
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label">🇬🇧 Description (EN)</label>
+                      <input class="form-input" type="text" id="plat-desc-en" placeholder="Fresh Corsican cheese...">
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label">🇩🇪 Nom (DE)</label>
+                      <input class="form-input" type="text" id="plat-nom-de" placeholder="Ex: Frischer Brocciu mit Kräutern">
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label">🇩🇪 Description (DE)</label>
+                      <input class="form-input" type="text" id="plat-desc-de" placeholder="Frischer korsischer Käse...">
+                    </div>
                   </div>
-                  <div class="form-group">
-                    <label class="form-label">Tags</label>
-                    <input class="form-input" type="text" id="plat-tags" placeholder="local, végétarien, premium">
-                  </div>
-                  <div class="form-group">
-                    <label class="form-label">Icône</label>
-                    <input class="form-input" type="text" id="plat-icone" placeholder="🧀">
+                  <div style="font-size:10px;color:var(--gris);line-height:1.6;background:rgba(201,153,58,0.04);border:1px solid rgba(201,153,58,0.08);padding:8px 12px;border-radius:3px">
+                    💡 Si laissé vide, le nom français sera affiché par défaut.
                   </div>
                 </div>
-                <div style="display:flex;gap:8px;justify-content:flex-end">
+
+                <!-- Tab Allergènes -->
+                <div id="plat-tab-allergenes" class="form-tab-content">
+                  <div style="font-size:11px;color:var(--gris-2);margin-bottom:12px;line-height:1.6">
+                    Cliquez pour sélectionner les allergènes présents dans ce plat.
+                  </div>
+                  <div class="allergens-grid" id="allergens-grid">
+                    <div class="allergen-chip" data-allergen="Gluten" onclick="toggleAllergen(this)"><span class="allergen-chip-icon">🌾</span><div class="allergen-chip-name">Gluten</div></div>
+                    <div class="allergen-chip" data-allergen="Lactose" onclick="toggleAllergen(this)"><span class="allergen-chip-icon">🥛</span><div class="allergen-chip-name">Lactose</div></div>
+                    <div class="allergen-chip" data-allergen="Oeufs" onclick="toggleAllergen(this)"><span class="allergen-chip-icon">🥚</span><div class="allergen-chip-name">Oeufs</div></div>
+                    <div class="allergen-chip" data-allergen="Poisson" onclick="toggleAllergen(this)"><span class="allergen-chip-icon">🐟</span><div class="allergen-chip-name">Poisson</div></div>
+                    <div class="allergen-chip" data-allergen="Crustaces" onclick="toggleAllergen(this)"><span class="allergen-chip-icon">🦐</span><div class="allergen-chip-name">Crustacés</div></div>
+                    <div class="allergen-chip" data-allergen="Arachides" onclick="toggleAllergen(this)"><span class="allergen-chip-icon">🥜</span><div class="allergen-chip-name">Arachides</div></div>
+                    <div class="allergen-chip" data-allergen="FruitsACoque" onclick="toggleAllergen(this)"><span class="allergen-chip-icon">🌰</span><div class="allergen-chip-name">Fruits à coque</div></div>
+                    <div class="allergen-chip" data-allergen="Celeri" onclick="toggleAllergen(this)"><span class="allergen-chip-icon">🌱</span><div class="allergen-chip-name">Céleri</div></div>
+                    <div class="allergen-chip" data-allergen="Moutarde" onclick="toggleAllergen(this)"><span class="allergen-chip-icon">🟡</span><div class="allergen-chip-name">Moutarde</div></div>
+                    <div class="allergen-chip" data-allergen="Soja" onclick="toggleAllergen(this)"><span class="allergen-chip-icon">🫘</span><div class="allergen-chip-name">Soja</div></div>
+                    <div class="allergen-chip" data-allergen="Mollusques" onclick="toggleAllergen(this)"><span class="allergen-chip-icon">🐚</span><div class="allergen-chip-name">Mollusques</div></div>
+                    <div class="allergen-chip" data-allergen="Sesame" onclick="toggleAllergen(this)"><span class="allergen-chip-icon">⚫</span><div class="allergen-chip-name">Sésame</div></div>
+                    <div class="allergen-chip" data-allergen="Sulfites" onclick="toggleAllergen(this)"><span class="allergen-chip-icon">🍷</span><div class="allergen-chip-name">Sulfites</div></div>
+                    <div class="allergen-chip" data-allergen="Lupin" onclick="toggleAllergen(this)"><span class="allergen-chip-icon">🌿</span><div class="allergen-chip-name">Lupin</div></div>
+                  </div>
+                  <div style="font-size:10px;color:var(--gris);line-height:1.6;background:rgba(232,146,58,0.04);border:1px solid rgba(232,146,58,0.08);padding:8px 12px;border-radius:3px">
+                    ⚖️ Obligation légale EU 1169/2011 — Les allergènes sélectionnés apparaissent automatiquement sur la carte client.
+                  </div>
+                </div>
+
+                <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px;padding-top:12px;border-top:1px solid rgba(201,153,58,0.08)">
                   <button onclick="toggleAddPlatForm()" style="background:transparent;border:1px solid rgba(201,153,58,0.15);color:var(--gris);font-family:Jost,sans-serif;font-size:11px;letter-spacing:1px;padding:9px 16px;cursor:pointer;border-radius:2px">Annuler</button>
-                  <button onclick="addPlatNew()" class="btn-save">✓ Ajouter le plat</button>
+                  <button onclick="savePlatNew()" class="btn-save" id="plat-save-btn">✓ Ajouter le plat</button>
                 </div>
-                <div class="success-toast" id="plat-added-toast">✓ Plat ajouté !</div>
+                <div class="success-toast" id="plat-added-toast">✓ Plat enregistré !</div>
               </div>
 
               <!-- Liste des plats -->
@@ -3968,7 +4095,75 @@ function toggleAddPlatForm() {
   }
 }
 
-async function addPlatNew() {
+function switchPlatTab(name, btn) {
+  document.querySelectorAll('.form-tab-content').forEach(function(t) { t.classList.remove('active'); });
+  document.querySelectorAll('.form-tab-btn').forEach(function(b) { b.classList.remove('active'); });
+  document.getElementById('plat-tab-' + name).classList.add('active');
+  btn.classList.add('active');
+}
+
+function toggleAllergen(el) {
+  el.classList.toggle('on');
+}
+
+function getSelectedAllergens() {
+  var selected = [];
+  document.querySelectorAll('.allergen-chip.on').forEach(function(el) {
+    selected.push(el.dataset.allergen);
+  });
+  return selected;
+}
+
+function resetAllergens() {
+  document.querySelectorAll('.allergen-chip').forEach(function(el) {
+    el.classList.remove('on');
+  });
+}
+
+function setAllergens(allergens) {
+  resetAllergens();
+  (allergens || []).forEach(function(a) {
+    var el = document.querySelector('.allergen-chip[data-allergen="' + a + '"]');
+    if (el) el.classList.add('on');
+  });
+}
+
+function resetPlatForm() {
+  ['plat-nom-fr','plat-nom-it','plat-nom-en','plat-nom-de',
+   'plat-desc-fr','plat-desc-it','plat-desc-en','plat-desc-de',
+   'plat-prix','plat-tags','plat-icone'].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+  document.getElementById('plat-edit-id').value = '';
+  document.getElementById('plat-form-title').textContent = '+ Nouveau plat';
+  document.getElementById('plat-save-btn').textContent = '✓ Ajouter le plat';
+  resetAllergens();
+}
+
+function editPlat(plat) {
+  // Préremplir le formulaire
+  document.getElementById('plat-edit-id').value = plat.id;
+  document.getElementById('plat-nom-fr').value = plat.nom_fr || '';
+  document.getElementById('plat-nom-it').value = plat.nom_it || '';
+  document.getElementById('plat-nom-en').value = plat.nom_en || '';
+  document.getElementById('plat-nom-de').value = plat.nom_de || '';
+  document.getElementById('plat-desc-fr').value = plat.desc_fr || '';
+  document.getElementById('plat-desc-it').value = plat.desc_it || '';
+  document.getElementById('plat-desc-en').value = plat.desc_en || '';
+  document.getElementById('plat-desc-de').value = plat.desc_de || '';
+  document.getElementById('plat-prix').value = plat.prix || '';
+  document.getElementById('plat-tags').value = (plat.tags || []).join(', ');
+  document.getElementById('plat-icone').value = plat.icone || '';
+  setAllergens(plat.allergenes || []);
+  document.getElementById('plat-form-title').textContent = '✎ Modifier — ' + plat.nom_fr;
+  document.getElementById('plat-save-btn').textContent = '✓ Enregistrer';
+  // Afficher le formulaire et scroller vers lui
+  document.getElementById('add-plat-form').style.display = 'block';
+  document.getElementById('add-plat-form').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+async function savePlatNew() {
   if (!currentCatId) return;
   var nomFr = document.getElementById('plat-nom-fr').value.trim();
   var prix = parseFloat(document.getElementById('plat-prix').value);
@@ -3976,22 +4171,31 @@ async function addPlatNew() {
 
   var nomIt = document.getElementById('plat-nom-it').value.trim() || nomFr;
   var nomEn = document.getElementById('plat-nom-en').value.trim() || nomFr;
+  var nomDe = document.getElementById('plat-nom-de').value.trim() || nomFr;
   var descFr = document.getElementById('plat-desc-fr').value.trim();
+  var descIt = document.getElementById('plat-desc-it').value.trim() || descFr;
+  var descEn = document.getElementById('plat-desc-en').value.trim() || descFr;
+  var descDe = document.getElementById('plat-desc-de').value.trim() || descFr;
   var tags = document.getElementById('plat-tags').value.trim().split(',').map(function(t) { return t.trim(); }).filter(Boolean);
+  var allergenes = getSelectedAllergens();
+  var editId = document.getElementById('plat-edit-id').value;
+
+  var platData = {
+    nom_fr: nomFr, nom_it: nomIt, nom_en: nomEn, nom_de: nomDe,
+    desc_fr: descFr, desc_it: descIt, desc_en: descEn, desc_de: descDe,
+    prix: prix, tags: tags, allergenes: allergenes, actif: true
+  };
 
   try {
-    await db.from('plats').insert({
-      categorie_id: currentCatId,
-      nom_fr: nomFr, nom_it: nomIt, nom_en: nomEn, nom_de: nomFr,
-      desc_fr: descFr, desc_it: descFr, desc_en: descFr, desc_de: descFr,
-      prix: prix, tags: tags, actif: true
-    });
+    if (editId) {
+      await db.from('plats').update(platData).eq('id', editId);
+    } else {
+      platData.categorie_id = currentCatId;
+      await db.from('plats').insert(platData);
+    }
 
-    // Reset form
-    ['plat-nom-fr','plat-nom-it','plat-nom-en','plat-desc-fr','plat-prix','plat-tags','plat-icone'].forEach(function(id) {
-      var el = document.getElementById(id);
-      if (el) el.value = '';
-    });
+    resetPlatForm();
+    document.getElementById('add-plat-form').style.display = 'none';
 
     var toast = document.getElementById('plat-added-toast');
     toast.classList.add('show');
@@ -4001,6 +4205,9 @@ async function addPlatNew() {
     await buildTree(currentCarteRestoId);
   } catch(e) { alert('Erreur: ' + e.message); }
 }
+
+// Garder addPlatNew comme alias pour compatibilité
+function addPlatNew() { savePlatNew(); }
 
 async function loadPlatsForCat(catId) {
   var list = document.getElementById('plats-list');
@@ -4057,8 +4264,19 @@ async function loadPlatsForCat(catId) {
         tagsEl.appendChild(tag);
       });
 
+      var allergenIcons = { Gluten:'🌾', Lactose:'🥛', Oeufs:'🥚', Poisson:'🐟', Crustaces:'🦐', Arachides:'🥜', FruitsACoque:'🌰', Celeri:'🌱', Moutarde:'🟡', Soja:'🫘', Mollusques:'🐚', Sesame:'⚫', Sulfites:'🍷', Lupin:'🌿' };
+      var allergEl = document.createElement('div');
+      allergEl.style.cssText = 'display:flex;gap:3px;flex-wrap:wrap;margin-top:4px';
+      (plat.allergenes || []).forEach(function(a) {
+        var badge = document.createElement('span');
+        badge.style.cssText = 'display:inline-flex;align-items:center;gap:2px;font-size:10px;background:rgba(232,146,58,0.08);border:1px solid rgba(232,146,58,0.15);border-radius:3px;padding:1px 5px';
+        badge.innerHTML = (allergenIcons[a] || '\u26a0\ufe0f') + ' <span style="font-size:8px;color:#E8923A;letter-spacing:1px;text-transform:uppercase">' + a + '</span>';
+        allergEl.appendChild(badge);
+      });
+
       infoDiv.appendChild(nameEl);
       infoDiv.appendChild(descEl);
+      if ((plat.allergenes || []).length > 0) infoDiv.appendChild(allergEl);
       infoDiv.appendChild(tagsEl);
 
       // Prix + actions
@@ -4502,6 +4720,7 @@ function show404(slug) {
 
 // ══ START ══
 // init() appelé depuis window.load
+
 </script>
 </body>
 </html>
