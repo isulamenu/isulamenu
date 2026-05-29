@@ -1524,6 +1524,108 @@ table.admin-tbl tr:hover td { background: rgba(201,153,58,0.03); }
   .resto-content { padding: 16px; }
   .resto-tab { font-size: 10px; padding: 10px 4px; }
 }
+
+/* ══ SERVICES CSS ══ */
+.services-bar {
+  background: var(--marine-2);
+  border-bottom: 1px solid rgba(201,153,58,0.08);
+  display: flex;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding: 0 4px;
+}
+.services-bar::-webkit-scrollbar { display: none; }
+
+.service-tab {
+  flex-shrink: 0;
+  padding: 13px 16px;
+  font-family: Jost, sans-serif;
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--gris);
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  display: flex; align-items: center; gap: 6px;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.service-tab:hover { color: var(--creme-2); }
+.service-tab.active { color: var(--or-2); border-bottom-color: var(--or); }
+.service-tab-icon { font-size: 13px; }
+
+.service-panel { display: none; }
+.service-panel.active { display: block; }
+
+.cats-wrap {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(8,14,26,0.95);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(201,153,58,0.06);
+  padding: 10px 20px;
+  display: flex; gap: 8px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.cats-wrap::-webkit-scrollbar { display: none; }
+
+.cat-chip {
+  flex-shrink: 0;
+  font-family: Jost, sans-serif;
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--gris-2);
+  background: transparent;
+  border: 1px solid rgba(201,153,58,0.1);
+  padding: 5px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+  display: flex; align-items: center; gap: 5px;
+}
+.cat-chip.active { color: var(--or-2); border-color: rgba(201,153,58,0.35); background: rgba(201,153,58,0.08); }
+
+.pdj-card {
+  background: linear-gradient(135deg, rgba(201,153,58,0.1), rgba(201,153,58,0.03));
+  border: 1px solid rgba(201,153,58,0.25);
+  border-radius: 8px;
+  padding: 18px 18px 16px;
+  margin-bottom: 28px;
+  position: relative;
+  overflow: hidden;
+}
+.pdj-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(to right, var(--or), var(--or-2), transparent);
+}
+.pdj-badge {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-size: 8px; letter-spacing: 3px; text-transform: uppercase;
+  color: var(--or); margin-bottom: 12px;
+}
+.pdj-live-dot {
+  width: 5px; height: 5px;
+  background: var(--vert);
+  border-radius: 50%;
+  animation: livepulse 2s infinite;
+}
+@keyframes livepulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.3;transform:scale(0.7)} }
+
+.dish-tag.tag-vege { color: #4CAF6A; border-color: rgba(76,175,106,0.25); background: rgba(76,175,106,0.06); }
+.dish-tag.tag-local { color: var(--or); border-color: rgba(201,153,58,0.2); background: rgba(201,153,58,0.05); }
+.dish-tag.tag-premium { color: var(--or-2); border-color: rgba(226,181,90,0.2); background: rgba(226,181,90,0.05); }
+.dish-tag.tag-allergen { color: var(--rouge); border-color: rgba(224,90,90,0.2); background: rgba(224,90,90,0.05); }
+
+.section-count { font-size: 9px; color: rgba(201,153,58,0.3); letter-spacing: 1px; margin-left: auto; }
 </style>
 </head>
 <body>
@@ -1988,62 +2090,51 @@ window.addEventListener('load', function() {
   <!-- Hero restaurant -->
   <div class="resto-hero">
     <div class="resto-hero-content">
-
-      <!-- Eyebrow ville -->
       <div class="hero-eyebrow" id="menu-resto-city">Bastia · Haute-Corse</div>
-
-      <!-- Logo -->
       <div class="resto-logo-wrap" id="menu-logo-wrap">
         <span id="menu-logo-emoji">🍽️</span>
       </div>
-
-      <!-- Nom -->
       <div class="resto-hero-name" id="menu-resto-name">A Tavola</div>
-
-      <!-- Description italique -->
       <div id="menu-resto-description" style="display:none;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:15px;color:rgba(201,153,58,0.65);line-height:1.6;margin-bottom:16px"></div>
-
-      <!-- Séparateur -->
       <div class="hero-divider">
         <div class="hero-divider-line"></div>
         <div class="hero-divider-star">✦</div>
         <div class="hero-divider-line"></div>
       </div>
-
-      <!-- Infos : adresse, horaires, tel -->
       <div id="menu-quick-infos" style="display:none;margin-bottom:16px">
         <div id="menu-adresse-wrap" style="display:none;font-size:11px;color:rgba(248,242,228,0.35);margin-bottom:6px">
           <span>📍</span> <span id="menu-resto-adresse"></span>
         </div>
         <div style="display:flex;justify-content:center;gap:20px;flex-wrap:wrap">
-          <div id="menu-horaires-wrap" style="display:none;font-size:11px;color:rgba(248,242,228,0.4);display:flex;align-items:center;gap:5px">
+          <div id="menu-horaires-wrap" style="display:none;font-size:11px;color:rgba(248,242,228,0.4);align-items:center;gap:5px">
             <span>⏰</span><span id="menu-resto-horaires"></span>
           </div>
-          <div id="menu-tel-wrap" style="display:none;font-size:11px;color:rgba(248,242,228,0.4);display:flex;align-items:center;gap:5px">
+          <div id="menu-tel-wrap" style="display:none;font-size:11px;color:rgba(248,242,228,0.4);align-items:center;gap:5px">
             <span>📞</span><span id="menu-resto-tel"></span>
           </div>
         </div>
       </div>
-
-      <!-- Moyens de paiement -->
       <div class="resto-paiements" id="menu-paiements" style="display:none">
         <div id="paiement-list" style="display:flex;flex-wrap:wrap;gap:6px;justify-content:center"></div>
       </div>
-
-      <!-- Langues -->
       <div class="hero-lang-switcher" id="lang-switcher"></div>
-
     </div>
   </div>
 
-  <!-- Catégories sticky -->
-  <div class="menu-cats" id="menu-cats" style="position:sticky;top:0;z-index:100;background:var(--marine-2);padding:12px 20px;border-bottom:1px solid rgba(201,153,58,0.08)"></div>
+  <!-- Barre services dynamique -->
+  <div class="services-bar" id="menu-services-bar" style="display:none"></div>
 
-  <!-- Corps du menu -->
+  <!-- Catégories sticky -->
+  <div class="cats-wrap" id="menu-cats" style="display:none"></div>
+
+  <!-- Panels dynamiques -->
+  <div id="menu-panels"></div>
+
+  <!-- Corps statique (démo/fallback) -->
   <div class="menu-body" id="menu-body"></div>
 
-  <!-- Footer marque -->
-  <div class="menu-footer-brand">
+  <!-- Footer -->
+  <div class="menu-footer-brand" id="menu-footer-brand">
     <div style="font-family:'Cormorant Garamond',serif;font-size:13px;color:rgba(248,242,228,0.15)">Isula<span style="color:rgba(201,153,58,0.3)">Menu</span></div>
     <div style="font-size:9px;color:rgba(248,242,228,0.08);letter-spacing:1px;text-transform:uppercase;margin-top:2px">Menu digital · isulamenu.fr</div>
   </div>
@@ -2334,6 +2425,23 @@ window.addEventListener('load', function() {
           </select>
         </div>
 
+        <!-- Gérer les services -->
+        <div class="form-section" id="section-services" style="display:none">
+          <div class="form-section-title">Services (Midi, Soir, Tapas...)</div>
+          <div id="services-list" style="margin-bottom:16px"></div>
+          <div style="display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap">
+            <div class="form-group" style="margin:0;flex:1;min-width:160px">
+              <label class="form-label">Nom du service</label>
+              <input class="form-input" type="text" id="new-service-nom" placeholder="Ex: Carte du midi">
+            </div>
+            <div class="form-group" style="margin:0;width:80px">
+              <label class="form-label">Icône</label>
+              <input class="form-input" type="text" id="new-service-icone" placeholder="🌞">
+            </div>
+            <button class="btn-add" onclick="addService()" style="margin:0;padding:11px 20px">+ Ajouter</button>
+          </div>
+        </div>
+
         <!-- Ajouter une catégorie -->
         <div class="form-section" id="section-add-cat" style="display:none">
           <div class="form-section-title">Ajouter une catégorie</div>
@@ -2357,6 +2465,12 @@ window.addEventListener('load', function() {
             <div class="form-group">
               <label class="form-label">Icône</label>
               <input class="form-input" type="text" id="cat-icone" placeholder="Ex: 🐟">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Service (optionnel)</label>
+              <select class="form-input" id="cat-service-select" style="cursor:pointer">
+                <option value="">-- Sans service spécifique --</option>
+              </select>
             </div>
           </div>
           <button class="btn-add" onclick="addCategorie()">+ Ajouter la catégorie</button>
@@ -2523,6 +2637,158 @@ function showView(id) {
 
 function showHome() { showView('view-home'); }
 function showVitrine() { showView('view-home'); }
+
+// ══ SERVICES ══
+function switchServicePanel(id, btn) {
+  document.querySelectorAll('.service-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.service-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById('sp-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+
+function goToCategory(id, btn) {
+  const panel = btn.closest('.service-panel');
+  if (panel) panel.querySelectorAll('.cat-chip').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  const el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+async function renderMenuWithServices(restoData, cats) {
+  const servicesBar = document.getElementById('menu-services-bar');
+  const menuCats = document.getElementById('menu-cats');
+  const menuPanels = document.getElementById('menu-panels');
+  const menuBody = document.getElementById('menu-body');
+
+  // Charger les services du restaurant
+  let services = [];
+  try {
+    const { data } = await db.from('services').select('*').eq('restaurant_id', restoData.id).eq('actif', true).order('ordre');
+    services = data || [];
+  } catch(e) {}
+
+  if (services.length === 0) {
+    // Pas de services — affichage classique sans onglets
+    servicesBar.style.display = 'none';
+    menuCats.style.display = 'flex';
+    menuPanels.innerHTML = '';
+    renderClassicMenu(cats);
+    return;
+  }
+
+  // Avec services — affichage avec onglets
+  servicesBar.style.display = 'flex';
+  menuCats.style.display = 'none';
+  menuBody.innerHTML = '';
+
+  // Construire la barre de services
+  servicesBar.innerHTML = '';
+  services.forEach(function(s, i) {
+    const btn = document.createElement('button');
+    btn.className = 'service-tab' + (i === 0 ? ' active' : '');
+    btn.innerHTML = '<span class="service-tab-icon">' + (s.icone || '🍽️') + '</span> ' + s.nom;
+    btn.onclick = function() { switchServicePanel(s.id, btn); };
+    servicesBar.appendChild(btn);
+  });
+
+  // Construire les panels
+  menuPanels.innerHTML = '';
+  services.forEach(function(s, i) {
+    var serviceCats = cats.filter(function(c) { return c.service_id === s.id; });
+    
+    var panel = document.createElement('div');
+    panel.id = 'sp-' + s.id;
+    panel.className = 'service-panel' + (i === 0 ? ' active' : '');
+    
+    var catsWrap = document.createElement('div');
+    catsWrap.className = 'cats-wrap';
+    serviceCats.forEach(function(cat) {
+      var chip = document.createElement('button');
+      chip.className = 'cat-chip';
+      chip.innerHTML = (cat.icone || '') + ' ' + (cat['nom_' + currentLang] || cat.nom_fr);
+      (function(catId, chipEl) {
+        chipEl.onclick = function() { goToCategory('cat-' + catId, chipEl); };
+      })(cat.id, chip);
+      catsWrap.appendChild(chip);
+    });
+    
+    var body = document.createElement('div');
+    body.className = 'menu-body';
+    
+    serviceCats.forEach(function(cat) {
+      var catName = cat['nom_' + currentLang] || cat.nom_fr;
+      var section = document.createElement('div');
+      section.className = 'menu-section';
+      section.id = 'cat-' + cat.id;
+      
+      var sHtml = '<div class="section-header"><span class="section-emoji">' + (cat.icone || '🍽️') + '</span><span class="section-name">' + catName + '</span><span class="section-count">' + (cat.plats ? cat.plats.length : 0) + ' plats</span></div>';
+      
+      if (cat.plats && cat.plats.length > 0) {
+        cat.plats.forEach(function(plat) {
+          var nom = plat['nom_' + currentLang] || plat.nom_fr;
+          var desc = plat['desc_' + currentLang] || plat.desc_fr || '';
+          var tags = (plat.tags || []).map(function(t) {
+            var cls = (t === 'vegetarien' || t === 'végétarien') ? 'tag-vege' : t === 'local' ? 'tag-local' : t === 'premium' ? 'tag-premium' : 'tag-local';
+            return '<span class="dish-tag ' + cls + '">' + t + '</span>';
+          }).join('');
+          var photo = plat.photo_url ? '<div class="dish-thumb"><img src="' + plat.photo_url + '" style="width:100%;height:100%;object-fit:cover"></div>' : '<div class="dish-thumb" style="font-size:24px;display:flex;align-items:center;justify-content:center">🍽️</div>';
+          sHtml += '<div class="dish">' + photo + '<div class="dish-body"><div class="dish-name">' + nom + '</div><div class="dish-desc">' + desc + '</div>' + (tags ? '<div class="dish-tags">' + tags + '</div>' : '') + '</div><div class="dish-right"><div class="dish-price">' + plat.prix + ' €</div></div></div>';
+        });
+      } else {
+        sHtml += '<p style="font-size:12px;color:var(--gris);padding:8px 0">Aucun plat.</p>';
+      }
+      section.innerHTML = sHtml;
+      body.appendChild(section);
+    });
+    
+    panel.appendChild(catsWrap);
+    panel.appendChild(body);
+    menuPanels.appendChild(panel);
+  });
+}
+
+function renderClassicMenu(cats) {
+  const menuBody = document.getElementById('menu-body');
+  const menuCatsEl = document.getElementById('menu-cats');
+  
+  // Chips
+  menuCatsEl.innerHTML = '';
+  cats.forEach(function(cat) {
+    var chip = document.createElement('button');
+    chip.className = 'cat-chip';
+    chip.innerHTML = (cat.icone || '') + ' ' + (cat['nom_' + currentLang] || cat.nom_fr);
+    (function(cId, cEl) { cEl.onclick = function() { goToCategory('cat-' + cId, cEl); }; })(cat.id, chip);
+    menuCatsEl.appendChild(chip);
+  });
+
+  // Plats
+  let html = '';
+  cats.forEach(cat => {
+    const catName = cat['nom_' + currentLang] || cat.nom_fr;
+    html += '<div class="menu-section" id="cat-' + cat.id + '">' +
+      '<div class="section-header">' +
+      '<span class="section-emoji">' + (cat.icone || '🍽️') + '</span>' +
+      '<span class="section-name">' + catName + '</span>' +
+      '<span class="section-count">' + (cat.plats ? cat.plats.length : 0) + ' plats</span>' +
+      '</div>';
+    
+    if (cat.plats && cat.plats.length > 0) {
+      cat.plats.forEach(plat => {
+        const nom = plat['nom_' + currentLang] || plat.nom_fr;
+        const desc = plat['desc_' + currentLang] || plat.desc_fr || '';
+        const photoHtml = plat.photo_url ?
+          '<div class="dish-thumb"><img src="' + plat.photo_url + '" alt="' + nom + '"></div>' :
+          '<div class="dish-thumb" style="font-size:26px;display:flex;align-items:center;justify-content:center">🍽️</div>';
+        html += '<div class="dish">' + photoHtml +
+          '<div class="dish-body"><div class="dish-name">' + nom + '</div><div class="dish-desc">' + desc + '</div></div>' +
+          '<div class="dish-right"><div class="dish-price">' + plat.prix + ' €</div></div>' +
+          '</div>';
+      });
+    }
+    html += '</div>';
+  });
+  menuBody.innerHTML = html;
+}
 
 function toggleAdminMenu() {
   const sidebar = document.getElementById('admin-sidebar');
@@ -2763,33 +3029,14 @@ async function renderMenuContent(restoData) {
     const { data: cats } = await db.from('categories').select('*, plats(*)').eq('restaurant_id', restoData.id).order('ordre');
     
     if (cats && cats.length > 0) {
-      const catsNav = document.getElementById('menu-cats');
-      catsNav.innerHTML = '';
-      cats.forEach(cat => {
-        const btn = document.createElement('button');
-        btn.className = 'cat-btn';
-        btn.textContent = cat[`nom_${lang}`] || cat.nom_fr;
-        btn.onclick = () => { document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); document.getElementById('sec-' + cat.id)?.scrollIntoView({behavior:'smooth'}); };
-        catsNav.appendChild(btn);
-      });
-
-      let platsHtml = '';
-      cats.forEach(cat => {
-        const catName = cat[`nom_${lang}`] || cat.nom_fr;
-        platsHtml += `<div class="menu-section" id="sec-${cat.id}"><div class="section-header"><span class="section-icon">${cat.icone || '🍽️'}</span><span class="section-title-text">${catName}</span><div class="section-line"></div></div>`;
-        if (cat.plats) {
-          cat.plats.forEach(plat => {
-            const nom = plat[`nom_${lang}`] || plat.nom_fr;
-            const desc = plat[`desc_${lang}`] || plat.desc_fr || '';
-            const photoHtml = plat.photo_url ? `<img class="dish-photo" src="${plat.photo_url}" alt="${nom}">` : '';
-            platsHtml += `<div class="dish-item">${photoHtml}<div class="dish-info"><div class="dish-name">${nom}</div><div class="dish-desc">${desc}</div></div><div class="dish-price">${plat.prix} €</div></div>`;
-          });
-        }
-        platsHtml += '</div>';
-      });
-      body.innerHTML = pdjHtml + platsHtml;
+      // Afficher le PDJ
+      document.getElementById('menu-body').innerHTML = pdjHtml;
+      // Rendre avec services
+      await renderMenuWithServices(restoData, cats);
     } else {
-      body.innerHTML = pdjHtml + getDemoMenu(lang);
+      document.getElementById('menu-services-bar').style.display = 'none';
+      document.getElementById('menu-cats').style.display = 'none';
+      document.getElementById('menu-body').innerHTML = pdjHtml + getDemoMenu(lang);
     }
   } catch(e) {
     // Garder le menu démo en cas d'erreur
@@ -3185,12 +3432,93 @@ async function createRestaurant() {
 
 // ══ CARTE ADMIN ══
 async function loadCarteResto(restoId) {
-  // Afficher/masquer les formulaires
+  document.getElementById('section-services').style.display = restoId ? 'block' : 'none';
   document.getElementById('section-add-cat').style.display = restoId ? 'block' : 'none';
   document.getElementById('section-add-plat').style.display = restoId ? 'block' : 'none';
   
   if (!restoId) { document.getElementById('carte-content').innerHTML = ''; return; }
+  
+  currentCarteRestoId = restoId;
+  await loadServices(restoId);
   await refreshCarte(restoId);
+}
+
+async function loadServices(restoId) {
+  try {
+    const { data } = await db.from('services').select('*').eq('restaurant_id', restoId).order('ordre');
+    const services = data || [];
+    
+    // Afficher la liste des services
+    const list = document.getElementById('services-list');
+    if (services.length === 0) {
+      list.innerHTML = '<p style="font-size:12px;color:var(--gris);margin-bottom:12px">Aucun service créé. Ajoutez Midi, Soir, Tapas, Boissons...</p>';
+    } else {
+      list.innerHTML = '';
+      services.forEach(function(s) {
+        const div = document.createElement('div');
+        div.style.cssText = 'display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--marine-2);border:1px solid rgba(201,153,58,0.08);border-radius:3px;margin-bottom:6px';
+        div.innerHTML = '<span style="font-size:18px">' + (s.icone || '🍽️') + '</span>' +
+          '<span style="font-size:13px;color:var(--creme);flex:1">' + s.nom + '</span>';
+        
+        const label = document.createElement('label');
+        label.style.cssText = 'display:flex;align-items:center;gap:6px;font-size:11px;color:var(--gris);cursor:pointer';
+        const cb = document.createElement('input');
+        cb.type = 'checkbox';
+        cb.checked = s.actif;
+        cb.style.accentColor = 'var(--or)';
+        cb.onchange = function() { toggleService(s.id, this.checked); };
+        label.appendChild(cb);
+        label.appendChild(document.createTextNode(' Actif'));
+        
+        const delBtn = document.createElement('button');
+        delBtn.textContent = '✕';
+        delBtn.style.cssText = 'background:transparent;border:none;color:var(--rouge);cursor:pointer;font-size:12px';
+        delBtn.onclick = function() { deleteService(s.id); };
+        
+        div.appendChild(label);
+        div.appendChild(delBtn);
+        list.appendChild(div);
+      });
+    }
+    
+    // Peupler le select de services dans le formulaire catégorie
+    const select = document.getElementById('cat-service-select');
+    if (select) {
+      select.innerHTML = '<option value="">-- Sans service spécifique --</option>';
+      services.forEach(function(s) {
+        const opt = document.createElement('option');
+        opt.value = s.id;
+        opt.textContent = (s.icone || '') + ' ' + s.nom;
+        select.appendChild(opt);
+      });
+    }
+  } catch(e) { console.error(e); }
+}
+
+async function addService() {
+  const restoId = document.getElementById('carte-resto-select').value;
+  const nom = document.getElementById('new-service-nom').value.trim();
+  const icone = document.getElementById('new-service-icone').value.trim() || '🍽️';
+  
+  if (!restoId || !nom) { alert('Renseignez le nom du service.'); return; }
+  
+  try {
+    await db.from('services').insert({ restaurant_id: restoId, nom, icone, ordre: 0, actif: true });
+    document.getElementById('new-service-nom').value = '';
+    document.getElementById('new-service-icone').value = '';
+    await loadServices(restoId);
+  } catch(e) { alert('Erreur: ' + e.message); }
+}
+
+async function toggleService(id, actif) {
+  await db.from('services').update({ actif }).eq('id', id);
+}
+
+async function deleteService(id) {
+  if (!confirm('Supprimer ce service ? Les catégories liées ne seront plus assignées.')) return;
+  await db.from('services').delete().eq('id', id);
+  const restoId = document.getElementById('carte-resto-select').value;
+  await loadServices(restoId);
 }
 
 async function refreshCarte(restoId) {
@@ -3283,6 +3611,7 @@ async function addCategorie() {
   const icone = document.getElementById('cat-icone').value.trim() || '🍽️';
 
   try {
+    const serviceId = document.getElementById('cat-service-select')?.value || null;
     const { error } = await db.from('categories').insert({
       restaurant_id: restoId,
       nom_fr: nomFr,
@@ -3290,7 +3619,8 @@ async function addCategorie() {
       nom_en: nomEn || nomFr,
       nom_de: nomDe || nomFr,
       icone,
-      ordre: 0
+      ordre: 0,
+      service_id: serviceId || null
     });
 
     if (error) { alert('Erreur: ' + error.message); return; }
