@@ -1626,6 +1626,99 @@ table.admin-tbl tr:hover td { background: rgba(201,153,58,0.03); }
 .dish-tag.tag-allergen { color: var(--rouge); border-color: rgba(224,90,90,0.2); background: rgba(224,90,90,0.05); }
 
 .section-count { font-size: 9px; color: rgba(201,153,58,0.3); letter-spacing: 1px; margin-left: auto; }
+
+/* ══ CARTE LAYOUT ══ */
+.carte-layout-grid {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 20px;
+  min-height: 500px;
+}
+
+.carte-step {
+  flex: 1;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-right: 1px solid rgba(201,153,58,0.08);
+}
+.carte-step:last-child { border-right: none; }
+.carte-step.done .step-num-s { background: var(--vert); border-color: var(--vert); color: white; }
+.carte-step.active .step-num-s { border-color: var(--or); color: var(--or); background: rgba(201,153,58,0.1); }
+
+.step-num-s {
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  border: 1px solid rgba(201,153,58,0.2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; color: var(--gris); flex-shrink: 0;
+}
+
+.step-lbl { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--gris); }
+.step-val { font-size: 12px; color: var(--creme); margin-top: 2px; }
+.carte-step.active .step-lbl { color: var(--or); }
+
+/* Tree items */
+.tree-service-header {
+  padding: 11px 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: background 0.2s;
+  border-bottom: 1px solid rgba(201,153,58,0.04);
+}
+.tree-service-header:hover { background: rgba(201,153,58,0.03); }
+.tree-service-header.open { background: rgba(201,153,58,0.05); }
+
+.tree-cat-item {
+  padding: 8px 16px 8px 42px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 12px;
+  color: var(--gris-2);
+  transition: all 0.15s;
+  border-left: 2px solid transparent;
+  margin-left: 0;
+}
+.tree-cat-item:hover { color: var(--creme); background: rgba(201,153,58,0.03); }
+.tree-cat-item.active { color: var(--or-2); border-left-color: var(--or); background: rgba(201,153,58,0.05); }
+
+/* Plat card dans le nouveau panel */
+.plat-card-new {
+  display: grid;
+  grid-template-columns: 52px 1fr auto;
+  gap: 12px;
+  align-items: center;
+  padding: 12px;
+  border: 1px solid rgba(201,153,58,0.06);
+  border-radius: 4px;
+  margin-bottom: 8px;
+  background: rgba(0,0,0,0.2);
+  transition: border-color 0.2s;
+}
+.plat-card-new:hover { border-color: rgba(201,153,58,0.15); }
+
+.plat-thumb-new {
+  width: 52px; height: 52px;
+  border-radius: 4px;
+  background: rgba(201,153,58,0.06);
+  border: 1px dashed rgba(201,153,58,0.15);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px;
+  cursor: pointer;
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+.plat-thumb-new:hover { border-color: rgba(201,153,58,0.4); }
+.plat-thumb-new img { width: 100%; height: 100%; object-fit: cover; }
+
+@media (max-width: 900px) {
+  .carte-layout-grid { grid-template-columns: 1fr; }
+}
 </style>
 </head>
 <body>
@@ -2413,110 +2506,144 @@ window.addEventListener('load', function() {
 
       <!-- Carte -->
       <div class="admin-panel" id="panel-carte">
+
+        <!-- TOPBAR -->
         <div class="admin-topbar">
-          <div><div class="admin-page-title">Gérer la carte</div><div class="admin-page-sub">Créer catégories, plats et ajouter des photos</div></div>
-        </div>
-
-        <!-- Sélecteur restaurant -->
-        <div class="form-section">
-          <div class="form-section-title">Restaurant</div>
-          <select class="form-input" id="carte-resto-select" onchange="loadCarteResto(this.value)" style="max-width:360px;cursor:pointer">
-            <option value="">-- Choisir un restaurant --</option>
-          </select>
-        </div>
-
-        <!-- Gérer les services -->
-        <div class="form-section" id="section-services" style="display:none">
-          <div class="form-section-title">Services (Midi, Soir, Tapas...)</div>
-          <div id="services-list" style="margin-bottom:16px"></div>
-          <div style="display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap">
-            <div class="form-group" style="margin:0;flex:1;min-width:160px">
-              <label class="form-label">Nom du service</label>
-              <input class="form-input" type="text" id="new-service-nom" placeholder="Ex: Carte du midi">
-            </div>
-            <div class="form-group" style="margin:0;width:80px">
-              <label class="form-label">Icône</label>
-              <input class="form-input" type="text" id="new-service-icone" placeholder="🌞">
-            </div>
-            <button class="btn-add" onclick="addService()" style="margin:0;padding:11px 20px">+ Ajouter</button>
+          <div>
+            <div class="admin-page-title">Gérer la carte</div>
+            <div class="admin-page-sub" id="carte-resto-sub">Sélectionnez un restaurant</div>
           </div>
-        </div>
-
-        <!-- Ajouter une catégorie -->
-        <div class="form-section" id="section-add-cat" style="display:none">
-          <div class="form-section-title">Ajouter une catégorie</div>
-          <div class="form-grid">
-            <div class="form-group">
-              <label class="form-label">Nom (FR)</label>
-              <input class="form-input" type="text" id="cat-nom-fr" placeholder="Ex: Poissons">
-            </div>
-            <div class="form-group">
-              <label class="form-label">Nom (IT)</label>
-              <input class="form-input" type="text" id="cat-nom-it" placeholder="Ex: Pesci">
-            </div>
-            <div class="form-group">
-              <label class="form-label">Nom (EN)</label>
-              <input class="form-input" type="text" id="cat-nom-en" placeholder="Ex: Fish">
-            </div>
-            <div class="form-group">
-              <label class="form-label">Nom (DE)</label>
-              <input class="form-input" type="text" id="cat-nom-de" placeholder="Ex: Fisch">
-            </div>
-            <div class="form-group">
-              <label class="form-label">Icône</label>
-              <input class="form-input" type="text" id="cat-icone" placeholder="Ex: 🐟">
-            </div>
-            <div class="form-group">
-              <label class="form-label">Service (optionnel)</label>
-              <select class="form-input" id="cat-service-select" style="cursor:pointer">
-                <option value="">-- Sans service spécifique --</option>
-              </select>
-            </div>
-          </div>
-          <button class="btn-add" onclick="addCategorie()">+ Ajouter la catégorie</button>
-        </div>
-
-        <!-- Ajouter un plat -->
-        <div class="form-section" id="section-add-plat" style="display:none">
-          <div class="form-section-title">Ajouter un plat</div>
-          <div class="form-group">
-            <label class="form-label">Catégorie</label>
-            <select class="form-input" id="plat-cat-select" style="cursor:pointer">
-              <option value="">-- Choisir une catégorie --</option>
+          <div style="display:flex;gap:10px;align-items:center">
+            <select class="form-input" id="carte-resto-select" onchange="loadCarteResto(this.value)" style="max-width:240px;cursor:pointer;padding:8px 14px">
+              <option value="">-- Choisir un restaurant --</option>
             </select>
+            <button class="btn-new" id="btn-new-service" onclick="showNewServiceForm()" style="display:none">+ Nouveau service</button>
           </div>
-          <div class="form-grid">
-            <div class="form-group form-grid-full">
-              <label class="form-label">Nom du plat (FR)</label>
-              <input class="form-input" type="text" id="plat-nom-fr" placeholder="Ex: Pageot rôti aux herbes">
-            </div>
-            <div class="form-group form-grid-full">
-              <label class="form-label">Description (FR)</label>
-              <input class="form-input" type="text" id="plat-desc-fr" placeholder="Ex: Pommes de terre, tomates cerises">
-            </div>
-            <div class="form-group">
-              <label class="form-label">Nom (IT)</label>
-              <input class="form-input" type="text" id="plat-nom-it" placeholder="Ex: Pagello arrosto">
-            </div>
-            <div class="form-group">
-              <label class="form-label">Nom (EN)</label>
-              <input class="form-input" type="text" id="plat-nom-en" placeholder="Ex: Roasted sea bream">
-            </div>
-            <div class="form-group">
-              <label class="form-label">Prix (€)</label>
-              <input class="form-input" type="number" id="plat-prix" placeholder="Ex: 24">
-            </div>
-            <div class="form-group">
-              <label class="form-label">Tags (optionnel)</label>
-              <input class="form-input" type="text" id="plat-tags" placeholder="Ex: local, végétarien">
-            </div>
-          </div>
-          <button class="btn-add" onclick="addPlat()">+ Ajouter le plat</button>
-          <div class="success-toast" id="plat-toast">✓ Plat ajouté avec succès !</div>
         </div>
 
-        <!-- Liste des plats -->
-        <div id="carte-content"></div>
+        <!-- STEPS -->
+        <div id="carte-steps" style="display:none;background:var(--marine-2);border:1px solid rgba(201,153,58,0.1);border-radius:4px;overflow:hidden;margin-bottom:24px;display:none">
+          <div style="display:flex">
+            <div class="carte-step done" id="step-resto">
+              <div class="step-num-s">✓</div>
+              <div><div class="step-lbl">Restaurant</div><div class="step-val" id="step-resto-val">—</div></div>
+            </div>
+            <div class="carte-step" id="step-service">
+              <div class="step-num-s">2</div>
+              <div><div class="step-lbl">Service</div><div class="step-val" id="step-service-val">—</div></div>
+            </div>
+            <div class="carte-step" id="step-cat">
+              <div class="step-num-s">3</div>
+              <div><div class="step-lbl">Catégorie</div><div class="step-val" id="step-cat-val">—</div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- LAYOUT CARTE -->
+        <div id="carte-layout" style="display:none;gap:20px" class="carte-layout-grid">
+
+          <!-- ARBORESCENCE GAUCHE -->
+          <div style="background:var(--marine-2);border:1px solid rgba(201,153,58,0.1);border-radius:4px;overflow:hidden">
+            <div style="padding:12px 16px;border-bottom:1px solid rgba(201,153,58,0.08);display:flex;justify-content:space-between;align-items:center">
+              <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--or)">Structure</div>
+              <button onclick="showNewServiceForm()" style="background:rgba(201,153,58,0.1);border:1px solid rgba(201,153,58,0.2);color:var(--or);font-size:16px;width:24px;height:24px;border-radius:3px;cursor:pointer;display:flex;align-items:center;justify-content:center">+</button>
+            </div>
+
+            <!-- Formulaire nouveau service inline -->
+            <div id="new-service-form" style="display:none;padding:12px 16px;background:rgba(201,153,58,0.04);border-bottom:1px solid rgba(201,153,58,0.08)">
+              <div style="display:flex;gap:8px;margin-bottom:8px">
+                <input class="form-input" type="text" id="new-service-nom" placeholder="Ex: Carte du midi" style="flex:1;padding:7px 10px;font-size:12px">
+                <input class="form-input" type="text" id="new-service-icone" placeholder="🌞" style="width:48px;padding:7px 10px;font-size:14px;text-align:center">
+              </div>
+              <div style="display:flex;gap:6px">
+                <button onclick="addService()" class="btn-save" style="flex:1;padding:7px;font-size:10px">✓ Créer</button>
+                <button onclick="hideNewServiceForm()" style="background:transparent;border:1px solid rgba(201,153,58,0.15);color:var(--gris);font-family:Jost,sans-serif;font-size:10px;padding:7px 12px;cursor:pointer;border-radius:2px">✕</button>
+              </div>
+            </div>
+
+            <!-- Liste services/catégories -->
+            <div id="tree-content"></div>
+
+          </div>
+
+          <!-- CONTENU DROIT -->
+          <div style="background:var(--marine-2);border:1px solid rgba(201,153,58,0.1);border-radius:4px;overflow:hidden" id="content-panel">
+
+            <!-- État initial -->
+            <div id="content-empty" style="padding:60px 20px;text-align:center;color:var(--gris)">
+              <div style="font-size:40px;margin-bottom:12px;opacity:0.3">🍽️</div>
+              <div style="font-size:13px;line-height:1.7">Sélectionnez une catégorie<br>dans l'arborescence à gauche</div>
+            </div>
+
+            <!-- Contenu catégorie -->
+            <div id="content-cat" style="display:none">
+
+              <!-- Header -->
+              <div style="padding:16px 20px;border-bottom:1px solid rgba(201,153,58,0.08);display:flex;justify-content:space-between;align-items:center">
+                <div>
+                  <div style="font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--creme)" id="cat-panel-title">Catégorie</div>
+                  <div style="font-size:11px;color:var(--gris);margin-top:2px" id="cat-panel-sub"></div>
+                </div>
+                <button class="btn-new" onclick="toggleAddPlatForm()">+ Ajouter un plat</button>
+              </div>
+
+              <!-- Formulaire ajout plat -->
+              <div id="add-plat-form" style="display:none;padding:16px 20px;background:rgba(201,153,58,0.03);border-bottom:1px solid rgba(201,153,58,0.08)">
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:10px">
+                  <div class="form-group">
+                    <label class="form-label">Nom du plat (FR) *</label>
+                    <input class="form-input" type="text" id="plat-nom-fr" placeholder="Ex: Brocciu frais aux herbes">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Description (FR)</label>
+                    <input class="form-input" type="text" id="plat-desc-fr" placeholder="Ex: Fromage corse, herbes du maquis">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Nom (IT)</label>
+                    <input class="form-input" type="text" id="plat-nom-it" placeholder="Ex: Brocciu fresco">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Nom (EN)</label>
+                    <input class="form-input" type="text" id="plat-nom-en" placeholder="Ex: Fresh brocciu">
+                  </div>
+                </div>
+                <div style="display:grid;grid-template-columns:100px 1fr 100px;gap:12px;margin-bottom:12px">
+                  <div class="form-group">
+                    <label class="form-label">Prix (€) *</label>
+                    <input class="form-input" type="number" id="plat-prix" placeholder="11">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Tags</label>
+                    <input class="form-input" type="text" id="plat-tags" placeholder="local, végétarien, premium">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Icône</label>
+                    <input class="form-input" type="text" id="plat-icone" placeholder="🧀">
+                  </div>
+                </div>
+                <div style="display:flex;gap:8px;justify-content:flex-end">
+                  <button onclick="toggleAddPlatForm()" style="background:transparent;border:1px solid rgba(201,153,58,0.15);color:var(--gris);font-family:Jost,sans-serif;font-size:11px;letter-spacing:1px;padding:9px 16px;cursor:pointer;border-radius:2px">Annuler</button>
+                  <button onclick="addPlatNew()" class="btn-save">✓ Ajouter le plat</button>
+                </div>
+                <div class="success-toast" id="plat-added-toast">✓ Plat ajouté !</div>
+              </div>
+
+              <!-- Liste des plats -->
+              <div id="plats-list" style="padding:12px"></div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- État vide initial -->
+        <div id="carte-empty" style="text-align:center;padding:80px 20px;color:var(--gris)">
+          <div style="font-size:48px;margin-bottom:16px;opacity:0.2">🍽️</div>
+          <div style="font-size:14px;margin-bottom:8px;color:var(--creme)">Sélectionnez un restaurant</div>
+          <div style="font-size:12px;line-height:1.7">Choisissez un restaurant dans le menu déroulant ci-dessus<br>pour gérer sa carte et ses services.</div>
+        </div>
+
       </div>
 
     </div>
@@ -3432,15 +3559,287 @@ async function createRestaurant() {
 
 // ══ CARTE ADMIN ══
 async function loadCarteResto(restoId) {
-  document.getElementById('section-services').style.display = restoId ? 'block' : 'none';
-  document.getElementById('section-add-cat').style.display = restoId ? 'block' : 'none';
-  document.getElementById('section-add-plat').style.display = restoId ? 'block' : 'none';
-  
-  if (!restoId) { document.getElementById('carte-content').innerHTML = ''; return; }
-  
+  if (!restoId) {
+    document.getElementById('carte-empty').style.display = 'block';
+    document.getElementById('carte-layout').style.display = 'none';
+    document.getElementById('btn-new-service').style.display = 'none';
+    return;
+  }
+
   currentCarteRestoId = restoId;
-  await loadServices(restoId);
-  await refreshCarte(restoId);
+  
+  // Mettre à jour le sous-titre
+  const resto = allRestaurants.find(function(r) { return r.id === restoId; });
+  if (resto) document.getElementById('carte-resto-sub').textContent = resto.nom + ' · ' + resto.ville;
+
+  document.getElementById('carte-empty').style.display = 'none';
+  document.getElementById('carte-layout').style.display = 'grid';
+  document.getElementById('btn-new-service').style.display = 'inline-block';
+
+  await buildTree(restoId);
+}
+
+async function buildTree(restoId) {
+  const treeContent = document.getElementById('tree-content');
+  treeContent.innerHTML = '<div style="padding:12px 16px;font-size:11px;color:var(--gris)">Chargement...</div>';
+
+  try {
+    // Charger services
+    const { data: services } = await db.from('services').select('*').eq('restaurant_id', restoId).order('ordre');
+    // Charger catégories
+    const { data: cats } = await db.from('categories').select('*, plats(id)').eq('restaurant_id', restoId).order('ordre');
+
+    treeContent.innerHTML = '';
+
+    if (!services || services.length === 0) {
+      treeContent.innerHTML = '<div style="padding:16px;font-size:12px;color:var(--gris);text-align:center">Aucun service.<br>Créez votre premier service avec le bouton +</div>';
+      return;
+    }
+
+    services.forEach(function(service) {
+      const serviceCats = (cats || []).filter(function(c) { return c.service_id === service.id; });
+      const noCatCats = (cats || []).filter(function(c) { return !c.service_id; });
+
+      // Service header
+      const serviceDiv = document.createElement('div');
+      serviceDiv.style.borderBottom = '1px solid rgba(201,153,58,0.05)';
+
+      const header = document.createElement('div');
+      header.className = 'tree-service-header';
+      header.innerHTML =
+        '<span style="font-size:16px">' + (service.icone || '🍽️') + '</span>' +
+        '<span style="font-size:13px;color:var(--creme);flex:1">' + service.nom + '</span>' +
+        '<span style="font-size:10px;color:var(--gris)">' + serviceCats.length + ' cat.</span>' +
+        '<span style="font-size:10px;color:var(--gris);margin-left:6px;transition:transform 0.2s" class="tree-arrow">›</span>';
+
+      const catList = document.createElement('div');
+      catList.style.display = 'none';
+
+      header.onclick = function() {
+        var isOpen = catList.style.display !== 'none';
+        catList.style.display = isOpen ? 'none' : 'block';
+        header.classList.toggle('open', !isOpen);
+        header.querySelector('.tree-arrow').style.transform = isOpen ? '' : 'rotate(90deg)';
+      };
+
+      // Catégories du service
+      serviceCats.forEach(function(cat) {
+        var catEl = document.createElement('div');
+        catEl.className = 'tree-cat-item';
+        catEl.innerHTML =
+          '<span>' + (cat.icone || '📋') + '</span>' +
+          '<span style="flex:1">' + cat.nom_fr + '</span>' +
+          '<span style="font-size:10px;color:var(--gris)">' + (cat.plats ? cat.plats.length : 0) + '</span>';
+        catEl.onclick = function() {
+          document.querySelectorAll('.tree-cat-item').forEach(function(el) { el.classList.remove('active'); });
+          catEl.classList.add('active');
+          selectCategory(cat, service);
+        };
+        catList.appendChild(catEl);
+      });
+
+      // Bouton ajouter catégorie
+      var addCatBtn = document.createElement('div');
+      addCatBtn.style.cssText = 'padding:7px 16px 10px 42px;font-size:11px;color:rgba(201,153,58,0.4);cursor:pointer;display:flex;align-items:center;gap:6px';
+      addCatBtn.textContent = '+ Ajouter une catégorie';
+      addCatBtn.onmouseenter = function() { addCatBtn.style.color = 'var(--or)'; };
+      addCatBtn.onmouseleave = function() { addCatBtn.style.color = 'rgba(201,153,58,0.4)'; };
+      addCatBtn.onclick = function() { showAddCatForm(service.id, service.nom); };
+      catList.appendChild(addCatBtn);
+
+      serviceDiv.appendChild(header);
+      serviceDiv.appendChild(catList);
+      treeContent.appendChild(serviceDiv);
+    });
+
+    // Catégories sans service
+    var noCats = (cats || []).filter(function(c) { return !c.service_id; });
+    if (noCats.length > 0) {
+      var noServiceDiv = document.createElement('div');
+      noServiceDiv.style.borderBottom = '1px solid rgba(201,153,58,0.05)';
+      var noHeader = document.createElement('div');
+      noHeader.className = 'tree-service-header';
+      noHeader.innerHTML = '<span style="font-size:16px">📋</span><span style="font-size:13px;color:var(--gris-2);flex:1;font-style:italic">Sans service</span><span style="font-size:10px;color:var(--gris)">' + noCats.length + '</span><span class="tree-arrow" style="font-size:10px;color:var(--gris);margin-left:6px">›</span>';
+      var noCatList = document.createElement('div');
+      noCatList.style.display = 'none';
+      noHeader.onclick = function() {
+        var isOpen = noCatList.style.display !== 'none';
+        noCatList.style.display = isOpen ? 'none' : 'block';
+        noHeader.querySelector('.tree-arrow').style.transform = isOpen ? '' : 'rotate(90deg)';
+      };
+      noCats.forEach(function(cat) {
+        var catEl = document.createElement('div');
+        catEl.className = 'tree-cat-item';
+        catEl.innerHTML = '<span>' + (cat.icone || '📋') + '</span><span style="flex:1">' + cat.nom_fr + '</span><span style="font-size:10px;color:var(--gris)">' + (cat.plats ? cat.plats.length : 0) + '</span>';
+        catEl.onclick = function() {
+          document.querySelectorAll('.tree-cat-item').forEach(function(el) { el.classList.remove('active'); });
+          catEl.classList.add('active');
+          selectCategory(cat, null);
+        };
+        noCatList.appendChild(catEl);
+      });
+      noServiceDiv.appendChild(noHeader);
+      noServiceDiv.appendChild(noCatList);
+      treeContent.appendChild(noServiceDiv);
+    }
+
+  } catch(e) {
+    treeContent.innerHTML = '<div style="padding:12px;color:var(--rouge);font-size:12px">Erreur: ' + e.message + '</div>';
+  }
+}
+
+var currentCatId = null;
+
+function showNewServiceForm() {
+  var form = document.getElementById('new-service-form');
+  form.style.display = form.style.display === 'none' ? 'block' : 'none';
+}
+
+function hideNewServiceForm() {
+  document.getElementById('new-service-form').style.display = 'none';
+}
+
+function showAddCatForm(serviceId, serviceNom) {
+  var nom = prompt('Nom de la catégorie (FR) — Service: ' + serviceNom);
+  if (!nom) return;
+  var icone = prompt('Icône (emoji) :', '🍽️') || '🍽️';
+  addCategorieNew(serviceId, nom, icone);
+}
+
+async function addCategorieNew(serviceId, nomFr, icone) {
+  if (!currentCarteRestoId) return;
+  try {
+    await db.from('categories').insert({
+      restaurant_id: currentCarteRestoId,
+      service_id: serviceId || null,
+      nom_fr: nomFr,
+      nom_it: nomFr,
+      nom_en: nomFr,
+      nom_de: nomFr,
+      icone: icone,
+      ordre: 0
+    });
+    await buildTree(currentCarteRestoId);
+  } catch(e) { alert('Erreur: ' + e.message); }
+}
+
+async function selectCategory(cat, service) {
+  currentCatId = cat.id;
+
+  // Mettre à jour le header
+  document.getElementById('cat-panel-title').textContent = (cat.icone || '') + ' ' + cat.nom_fr;
+  document.getElementById('cat-panel-sub').textContent = (service ? service.nom + ' · ' : '') + 'Cliquez sur + pour ajouter un plat';
+
+  document.getElementById('content-empty').style.display = 'none';
+  document.getElementById('content-cat').style.display = 'block';
+
+  await loadPlatsForCat(cat.id);
+}
+
+function toggleAddPlatForm() {
+  var form = document.getElementById('add-plat-form');
+  form.style.display = form.style.display === 'none' ? 'block' : 'none';
+  if (form.style.display === 'block') {
+    document.getElementById('plat-nom-fr').focus();
+  }
+}
+
+async function addPlatNew() {
+  if (!currentCatId) return;
+  var nomFr = document.getElementById('plat-nom-fr').value.trim();
+  var prix = parseFloat(document.getElementById('plat-prix').value);
+  if (!nomFr || !prix) { alert('Le nom et le prix sont obligatoires.'); return; }
+
+  var nomIt = document.getElementById('plat-nom-it').value.trim() || nomFr;
+  var nomEn = document.getElementById('plat-nom-en').value.trim() || nomFr;
+  var descFr = document.getElementById('plat-desc-fr').value.trim();
+  var tags = document.getElementById('plat-tags').value.trim().split(',').map(function(t) { return t.trim(); }).filter(Boolean);
+
+  try {
+    await db.from('plats').insert({
+      categorie_id: currentCatId,
+      nom_fr: nomFr, nom_it: nomIt, nom_en: nomEn, nom_de: nomFr,
+      desc_fr: descFr, desc_it: descFr, desc_en: descFr, desc_de: descFr,
+      prix: prix, tags: tags, actif: true
+    });
+
+    // Reset form
+    ['plat-nom-fr','plat-nom-it','plat-nom-en','plat-desc-fr','plat-prix','plat-tags','plat-icone'].forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) el.value = '';
+    });
+
+    var toast = document.getElementById('plat-added-toast');
+    toast.classList.add('show');
+    setTimeout(function() { toast.classList.remove('show'); }, 2500);
+
+    await loadPlatsForCat(currentCatId);
+    await buildTree(currentCarteRestoId);
+  } catch(e) { alert('Erreur: ' + e.message); }
+}
+
+async function loadPlatsForCat(catId) {
+  var list = document.getElementById('plats-list');
+  list.innerHTML = '<p style="font-size:12px;color:var(--gris);padding:8px 0">Chargement...</p>';
+
+  try {
+    var { data: plats } = await db.from('plats').select('*').eq('categorie_id', catId).order('created_at');
+
+    if (!plats || plats.length === 0) {
+      list.innerHTML = '<div style="padding:32px;text-align:center;color:var(--gris)"><div style="font-size:32px;margin-bottom:8px;opacity:0.3">🍽️</div><div style="font-size:12px">Aucun plat — cliquez sur + pour commencer</div></div>';
+      return;
+    }
+
+    list.innerHTML = '';
+    plats.forEach(function(plat) {
+      var card = document.createElement('div');
+      card.className = 'plat-card-new';
+
+      
+      var tags = (plat.tags || []).map(function(t) {
+        return '<span style="font-size:9px;letter-spacing:1px;color:var(--or);border:1px solid rgba(201,153,58,0.2);padding:1px 6px;border-radius:10px">' + t + '</span>';
+      }).join(' ');
+
+      card.appendChild(thumb);
+      var infoDiv = document.createElement('div');
+            var nameEl = document.createElement('div');
+      nameEl.style.cssText = 'font-family:Cormorant Garamond,serif;font-size:16px;color:var(--creme);margin-bottom:3px';
+      nameEl.textContent = plat.nom_fr;
+      var descEl = document.createElement('div');
+      descEl.style.cssText = 'font-size:11px;color:var(--gris);margin-bottom:5px';
+      descEl.textContent = plat.desc_fr || '';
+      var tagsEl = document.createElement('div');
+      tagsEl.style.cssText = 'display:flex;gap:4px;flex-wrap:wrap';
+      tagsEl.innerHTML = tags;
+      infoDiv.appendChild(nameEl);
+      infoDiv.appendChild(descEl);
+      infoDiv.appendChild(tagsEl);
+      var rightDiv = document.createElement('div');
+      rightDiv.style.cssText = 'display:flex;flex-direction:column;align-items:flex-end;gap:8px';
+            var priceEl = document.createElement('div');
+      priceEl.style.cssText = 'font-family:Cormorant Garamond,serif;font-size:18px;color:var(--or-2)';
+      priceEl.textContent = plat.prix + ' €';
+      rightDiv.appendChild(priceEl);
+      var delBtn = document.createElement('button');
+      delBtn.style.cssText = 'background:transparent;border:1px solid rgba(224,90,90,0.2);color:var(--rouge);font-size:10px;padding:3px 8px;cursor:pointer;border-radius:2px;font-family:Jost,sans-serif';
+      delBtn.textContent = '✕';
+      (function(pid) { delBtn.onclick = function() { deletePlatNew(pid); }; })(plat.id);
+      rightDiv.appendChild(delBtn);
+      card.appendChild(infoDiv);
+      card.appendChild(rightDiv);
+      list.appendChild(card);
+    });
+
+  } catch(e) {
+    list.innerHTML = '<p style="color:var(--rouge);font-size:12px">Erreur: ' + e.message + '</p>';
+  }
+}
+
+async function deletePlatNew(platId) {
+  if (!confirm('Supprimer ce plat ?')) return;
+  await db.from('plats').delete().eq('id', platId);
+  await loadPlatsForCat(currentCatId);
+  await buildTree(currentCarteRestoId);
 }
 
 async function loadServices(restoId) {
