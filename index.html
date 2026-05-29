@@ -1399,9 +1399,8 @@ table.admin-tbl tr:hover td { background: rgba(201,153,58,0.03); }
 /* ══ HERO MENU MOBILE ══ */
 .resto-hero {
   background: var(--marine-2);
-  padding: 36px 24px 28px;
+  padding: 40px 24px 28px;
   text-align: center;
-  border-bottom: 1px solid rgba(201,153,58,0.1);
   position: relative;
   overflow: hidden;
 }
@@ -1409,19 +1408,27 @@ table.admin-tbl tr:hover td { background: rgba(201,153,58,0.03); }
 .resto-hero::before {
   content: '';
   position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(to right, transparent, var(--or), transparent);
+}
+
+.resto-hero::after {
+  content: '';
+  position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse at 50% 0%, rgba(201,153,58,0.08) 0%, transparent 65%);
+  background: radial-gradient(ellipse at 50% -20%, rgba(201,153,58,0.1) 0%, transparent 65%);
   pointer-events: none;
 }
 
 .resto-hero-content { position: relative; z-index: 1; }
 
-/* Eyebrow */
 .hero-eyebrow {
-  font-size: 9px;
-  letter-spacing: 4px;
+  font-size: 8px;
+  letter-spacing: 5px;
   text-transform: uppercase;
   color: var(--or);
+  opacity: 0.8;
   margin-bottom: 20px;
   display: flex;
   align-items: center;
@@ -1430,57 +1437,49 @@ table.admin-tbl tr:hover td { background: rgba(201,153,58,0.03); }
 }
 .hero-eyebrow::before, .hero-eyebrow::after {
   content: '';
-  width: 20px;
-  height: 1px;
+  width: 24px; height: 1px;
   background: var(--or);
   opacity: 0.4;
 }
 
-/* Logo */
 .resto-logo-wrap {
-  width: 80px;
-  height: 80px;
-  border-radius: 12px;
-  background: rgba(201,153,58,0.06);
-  border: 1px solid rgba(201,153,58,0.2);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto 18px;
-  font-size: 34px;
+  width: 76px; height: 76px;
+  border-radius: 16px;
+  background: rgba(201,153,58,0.07);
+  border: 1px solid rgba(201,153,58,0.18);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 20px;
+  font-size: 32px;
   overflow: hidden;
 }
 
 .resto-logo-wrap img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 12px;
+  width: 100%; height: 100%;
+  object-fit: cover; border-radius: 16px;
 }
 
-/* Nom */
 .resto-hero-name {
   font-family: 'Cormorant Garamond', serif;
-  font-size: 48px;
+  font-size: 52px;
   font-weight: 600;
   color: var(--creme);
   line-height: 1;
-  margin-bottom: 20px;
-  letter-spacing: -1px;
+  letter-spacing: -1.5px;
+  margin-bottom: 6px;
 }
 
-/* Séparateur */
 .hero-divider {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  margin-bottom: 20px;
+  display: flex; align-items: center; justify-content: center;
+  gap: 14px; margin-bottom: 20px;
 }
-.hero-divider-line { width: 40px; height: 1px; background: rgba(201,153,58,0.2); }
-.hero-divider-star { color: var(--or); font-size: 10px; }
+.hero-divider-line { width: 48px; height: 1px; background: rgba(201,153,58,0.18); }
+.hero-divider-star {
+  width: 6px; height: 6px;
+  background: var(--or);
+  transform: rotate(45deg);
+  opacity: 0.6;
+}
 
-/* Paiements */
 .resto-paiements {
   display: flex;
   justify-content: center;
@@ -1490,17 +1489,16 @@ table.admin-tbl tr:hover td { background: rgba(201,153,58,0.03); }
 }
 
 .paiement-badge {
-  background: rgba(201,153,58,0.08);
-  border: 1px solid rgba(201,153,58,0.15);
-  color: var(--gris-2);
-  font-size: 9px;
-  letter-spacing: 1px;
+  background: rgba(201,153,58,0.06);
+  border: 1px solid rgba(201,153,58,0.12);
+  color: rgba(201,153,58,0.5);
+  font-size: 8px;
+  letter-spacing: 1.5px;
   text-transform: uppercase;
-  padding: 3px 8px;
-  border-radius: 2px;
+  padding: 4px 10px;
+  border-radius: 20px;
 }
 
-/* Langues */
 .hero-lang-switcher {
   display: flex;
   justify-content: center;
@@ -1509,10 +1507,43 @@ table.admin-tbl tr:hover td { background: rgba(201,153,58,0.03); }
 
 .menu-footer-brand {
   background: var(--marine-2);
-  border-top: 1px solid rgba(201,153,58,0.08);
-  padding: 16px 24px;
+  border-top: 1px solid rgba(201,153,58,0.06);
+  padding: 18px 24px;
   text-align: center;
 }
+
+/* Dish styles améliorés */
+.dish { display: flex; align-items: flex-start; padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.03); gap: 14px; }
+.dish:last-child { border-bottom: none; }
+.dish-thumb { width: 58px; height: 58px; border-radius: 6px; background: rgba(201,153,58,0.05); border: 1px solid rgba(201,153,58,0.08); display: flex; align-items: center; justify-content: center; font-size: 26px; flex-shrink: 0; overflow: hidden; }
+.dish-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.dish-body { flex: 1; min-width: 0; }
+.dish-name { font-family: "Cormorant Garamond", serif; font-size: 18px; font-weight: 600; color: var(--creme); line-height: 1.2; margin-bottom: 4px; }
+.dish-desc { font-size: 11px; color: var(--gris-2); line-height: 1.6; margin-bottom: 5px; }
+.dish-tags { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 4px; }
+.dish-tag { font-size: 8px; letter-spacing: 1px; text-transform: uppercase; padding: 2px 7px; border-radius: 20px; border: 1px solid; }
+.tag-vege { color: #4CAF6A; border-color: rgba(76,175,106,0.25); background: rgba(76,175,106,0.06); }
+.tag-local { color: var(--or); border-color: rgba(201,153,58,0.2); background: rgba(201,153,58,0.05); }
+.tag-premium { color: var(--or-2); border-color: rgba(226,181,90,0.2); background: rgba(226,181,90,0.05); }
+.dish-right { display: flex; flex-direction: column; align-items: flex-end; justify-content: center; flex-shrink: 0; }
+.dish-price { font-family: "Cormorant Garamond", serif; font-size: 19px; font-weight: 600; color: var(--or-2); white-space: nowrap; }
+
+/* Section header amélioré */
+.section-header { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; padding-bottom: 12px; border-bottom: 1px solid rgba(201,153,58,0.08); }
+.section-emoji { font-size: 16px; }
+.section-name { font-size: 9px; letter-spacing: 3px; text-transform: uppercase; color: var(--or); font-weight: 400; }
+
+/* PDJ amélioré */
+.pdj-card { background: linear-gradient(135deg, rgba(201,153,58,0.1), rgba(201,153,58,0.03)); border: 1px solid rgba(201,153,58,0.25); border-radius: 8px; padding: 18px 18px 16px; margin-bottom: 28px; position: relative; overflow: hidden; }
+.pdj-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(to right, var(--or), var(--or-2), transparent); }
+.pdj-badge { display: inline-flex; align-items: center; gap: 7px; font-size: 8px; letter-spacing: 3px; text-transform: uppercase; color: var(--or); margin-bottom: 12px; }
+.pdj-live-dot { width: 5px; height: 5px; background: var(--vert); border-radius: 50%; animation: livepulse 2s infinite; }
+.pdj-inner { display: flex; gap: 14px; align-items: flex-start; }
+.pdj-emoji { font-size: 44px; line-height: 1; flex-shrink: 0; }
+.pdj-info { flex: 1; }
+.pdj-name { font-family: "Cormorant Garamond", serif; font-size: 24px; font-weight: 600; color: var(--creme); line-height: 1.1; margin-bottom: 5px; }
+.pdj-desc { font-size: 12px; color: var(--gris-2); line-height: 1.6; margin-bottom: 10px; }
+.pdj-price { font-family: "Cormorant Garamond", serif; font-size: 22px; font-weight: 600; color: var(--or-2); }
 
 @media (max-width: 768px) {
   .admin-sidebar { transform: translateX(-100%); }
@@ -1880,6 +1911,37 @@ window.addEventListener('load', function() {
         <div class="problem-icon">📱</div>
         <div class="problem-title">Vos clients sont sur leur téléphone</div>
         <div class="problem-desc">Ils photographient la carte, cherchent les plats en ligne. Autant leur donner directement ce qu'ils veulent.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ PROBLÈME ══ -->
+<div style="background:var(--marine-2);border-top:1px solid rgba(201,153,58,0.08);border-bottom:1px solid rgba(201,153,58,0.08);padding:100px 24px">
+  <div style="max-width:900px;margin:0 auto">
+    <div class="section-eyebrow">Le constat</div>
+    <h2 class="section-title">La carte papier,<br>c est <em>une bataille perdue.</em></h2>
+    <p class="section-sub">Chaque saison, une impression. Chaque erreur, une correction couteuse. Et ces touristes italiens, allemands, anglais qui commandent au hasard faute de comprendre votre carte. Il existe une meilleure facon de faire.</p>
+    <div class="problems-grid">
+      <div class="problem-card">
+        <div class="problem-icon">💸</div>
+        <div class="problem-title">Des centaines d euros par an</div>
+        <div class="problem-desc">Imprimeur, plastification, renouvellement a chaque changement de carte ou de prix. Un cout fixe qui revient chaque saison.</div>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon">🌍</div>
+        <div class="problem-title">40% de vos clients ne comprennent rien</div>
+        <div class="problem-desc">En Corse, pres de la moitie des touristes sont etrangers. Sans traduction, ils hesitent, commandent moins, et repartent frustres.</div>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon">⏱️</div>
+        <div class="problem-title">Le plat du jour, un casse-tete quotidien</div>
+        <div class="problem-desc">Tableau ardoise, post-it, appel a la serveuse. Chaque matin, la meme question sans bonne reponse.</div>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon">📱</div>
+        <div class="problem-title">Vos clients sont sur leur telephone</div>
+        <div class="problem-desc">Ils photographient la carte, cherchent les plats en ligne. Autant leur donner directement ce qu ils veulent.</div>
       </div>
     </div>
   </div>
@@ -2986,7 +3048,7 @@ async function renderMenuWithServices(restoData, cats) {
             return '<span class="dish-tag ' + cls + '">' + t + '</span>';
           }).join('');
           var photo = plat.photo_url ? '<div class="dish-thumb"><img src="' + plat.photo_url + '" style="width:100%;height:100%;object-fit:cover"></div>' : '<div class="dish-thumb" style="font-size:24px;display:flex;align-items:center;justify-content:center">🍽️</div>';
-          sHtml += '<div class="dish">' + photo + '<div class="dish-body"><div class="dish-name">' + nom + '</div><div class="dish-desc">' + desc + '</div>' + (tags ? '<div class="dish-tags">' + tags + '</div>' : '') + '</div><div class="dish-right"><div class="dish-price">' + plat.prix + ' €</div></div></div>';
+          sHtml += '<div class="dish">' + photo + '<div class="dish-body"><div class="dish-name">' + nom + '</div><div class="dish-desc">' + desc + '</div>' + (function() { var aIcons = { Gluten:'🌾', Lactose:'🥛', Oeufs:'🥚', Poisson:'🐟', Crustaces:'🦐', Arachides:'🥜', FruitsACoque:'🌰', Celeri:'🌱', Moutarde:'🟡', Soja:'🫘', Mollusques:'🐚', Sesame:'⚫', Sulfites:'🍷', Lupin:'🌿' }; var al = (plat.allergenes || []); return al.length > 0 ? '<div style="display:flex;gap:3px;flex-wrap:wrap;margin-top:4px">' + al.map(function(a) { return '<span title="' + a + '" style="font-size:13px" aria-label="' + a + '">' + (aIcons[a] || '⚠️') + '</span>'; }).join('') + '</div>' : ''; })() + (tags ? '<div class="dish-tags">' + tags + '</div>' : '') + '</div><div class="dish-right"><div class="dish-price">' + plat.prix + ' €</div></div></div>';
         });
       } else {
         sHtml += '<p style="font-size:12px;color:var(--gris);padding:8px 0">Aucun plat.</p>';
@@ -3034,7 +3096,7 @@ function renderClassicMenu(cats) {
           '<div class="dish-thumb"><img src="' + plat.photo_url + '" alt="' + nom + '"></div>' :
           '<div class="dish-thumb" style="font-size:26px;display:flex;align-items:center;justify-content:center">🍽️</div>';
         html += '<div class="dish">' + photoHtml +
-          '<div class="dish-body"><div class="dish-name">' + nom + '</div><div class="dish-desc">' + desc + '</div></div>' +
+          '<div class="dish-body"><div class="dish-name">' + nom + '</div><div class="dish-desc">' + desc + '</div>' + (function() { var aIcons2 = { Gluten:'🌾', Lactose:'🥛', Oeufs:'🥚', Poisson:'🐟', Crustaces:'🦐', Arachides:'🥜', FruitsACoque:'🌰', Celeri:'🌱', Moutarde:'🟡', Soja:'🫘', Mollusques:'🐚', Sesame:'⚫', Sulfites:'🍷', Lupin:'🌿' }; var al2 = (plat.allergenes || []); return al2.length > 0 ? '<div style="display:flex;gap:3px;flex-wrap:wrap;margin-top:4px">' + al2.map(function(a) { return '<span title="' + a + '" style="font-size:13px">' + (aIcons2[a] || '⚠️') + '</span>'; }).join('') + '</div>' : ''; })() + '</div>' +
           '<div class="dish-right"><div class="dish-price">' + plat.prix + ' €</div></div>' +
           '</div>';
       });
