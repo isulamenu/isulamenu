@@ -212,7 +212,7 @@ body { background: var(--marine); color: var(--creme); font-family: 'Jost', sans
 .hero-stat-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--gris); margin-top: 4px; }
 
 /* ══ SECTION PROBLÈME ══ */
-.section { padding: 100px 24px; max-width: 900px; margin: 0 auto; }
+.section { padding: 100px 48px; max-width: 1200px; margin: 0 auto; }
 
 .section-eyebrow {
   font-size: 9px;
@@ -272,16 +272,19 @@ body { background: var(--marine); color: var(--creme); font-family: 'Jost', sans
   background: var(--marine-2);
   border-top: 1px solid rgba(201,153,58,0.1);
   border-bottom: 1px solid rgba(201,153,58,0.1);
-  padding: 100px 24px;
+  padding: 100px 48px;
 }
 
-.solution-inner { max-width: 900px; margin: 0 auto; }
+.solution-inner { max-width: 1200px; margin: 0 auto; }
 
 .solution-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 60px;
+  grid-template-columns: 1fr 1.3fr;
+  gap: 80px;
   align-items: center;
+}
+@media (max-width: 700px) {
+  .solution-grid { grid-template-columns: 1fr; gap: 40px; }
 }
 
 /* Mockup téléphone */
@@ -387,9 +390,12 @@ body { background: var(--marine); color: var(--creme); font-family: 'Jost', sans
 /* ══ SECTION ARGUMENTS ══ */
 .features-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(4, 1fr);
   gap: 1px;
   background: rgba(201,153,58,0.08);
+}
+@media (max-width: 700px) {
+  .features-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
 .feature-card {
@@ -411,10 +417,13 @@ body { background: var(--marine); color: var(--creme); font-family: 'Jost', sans
 .feature-desc { font-size: 11px; color: var(--gris); line-height: 1.7; }
 
 /* ══ SECTION TÉMOIGNAGES ══ */
-.testimonials { padding: 100px 24px; background: var(--marine-2); border-top: 1px solid rgba(201,153,58,0.08); }
-.testimonials-inner { max-width: 900px; margin: 0 auto; }
+.testimonials { padding: 100px 48px; background: var(--marine-2); border-top: 1px solid rgba(201,153,58,0.08); }
+.testimonials-inner { max-width: 1200px; margin: 0 auto; }
 
-.testimonials-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
+.testimonials-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+@media (max-width: 800px) {
+  .testimonials-grid { grid-template-columns: 1fr; }
+}
 
 .testimonial-card {
   background: var(--marine);
@@ -440,13 +449,17 @@ body { background: var(--marine); color: var(--creme); font-family: 'Jost', sans
 .testimonial-place { font-size: 10px; color: var(--gris); letter-spacing: 1px; margin-top: 2px; }
 
 /* ══ SECTION FORMULES ══ */
-.formules-section { padding: 100px 24px; max-width: 900px; margin: 0 auto; }
+.formules-section { padding: 100px 48px; max-width: 1200px; margin: 0 auto; }
 
 .formules-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 0;
   border: 1px solid rgba(201,153,58,0.15);
+}
+@media (max-width: 700px) {
+  .formules-grid { grid-template-columns: 1fr; }
+  .formule-card { border-right: none; border-bottom: 1px solid rgba(201,153,58,0.15); }
 }
 
 .formule-card { padding: 36px 28px; border-right: 1px solid rgba(201,153,58,0.15); }
@@ -488,7 +501,7 @@ body { background: var(--marine); color: var(--creme); font-family: 'Jost', sans
 .local-section {
   background: var(--marine-2);
   border-top: 1px solid rgba(201,153,58,0.1);
-  padding: 100px 24px;
+  padding: 100px 48px;
   text-align: center;
 }
 
@@ -514,7 +527,7 @@ body { background: var(--marine); color: var(--creme); font-family: 'Jost', sans
 .local-step-text strong { color: var(--creme); font-weight: 400; }
 
 /* ══ CTA FINAL ══ */
-.cta-section { padding: 100px 24px; text-align: center; max-width: 700px; margin: 0 auto; }
+.cta-section { padding: 100px 48px; text-align: center; max-width: 700px; margin: 0 auto; }
 .cta-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(32px, 5vw, 56px); font-weight: 600; color: var(--creme); line-height: 1.1; margin-bottom: 16px; }
 .cta-title em { font-style: italic; color: var(--or); }
 .cta-sub { font-size: 15px; color: rgba(248,242,228,0.4); margin-bottom: 40px; line-height: 1.7; }
@@ -1891,7 +1904,7 @@ window.addEventListener('load', function() {
 
 <!-- ══ PROBLÈME ══ -->
 <div style="background:var(--marine-2);border-top:1px solid rgba(201,153,58,0.08);border-bottom:1px solid rgba(201,153,58,0.08);padding:100px 24px">
-  <div style="max-width:900px;margin:0 auto">
+  <div style="max-width:1200px;margin:0 auto">
     <div class="section-eyebrow">Le constat</div>
     <h2 class="section-title">La carte papier,<br>c&apos;est <em>une bataille perdue.</em></h2>
     <p class="section-sub">Chaque saison, une impression. Chaque erreur, une correction coûteuse. Et ces touristes italiens, allemands, anglais qui commandent au hasard faute de comprendre votre carte. Il existe une meilleure façon de faire.</p>
@@ -1998,7 +2011,7 @@ window.addEventListener('load', function() {
 </div>
 
 <!-- ══ CHIFFRES ══ -->
-<div style="padding:80px 24px;max-width:900px;margin:0 auto">
+<div style="padding:80px 24px;max-width:1200px;margin:0 auto">
   <div class="features-grid">
     <div class="feature-card">
       <div class="feature-number">4</div>
@@ -2164,8 +2177,7 @@ window.addEventListener('load', function() {
 
 <!-- ══ EN SAVOIR PLUS ══ -->
 <div id="view-savoir" class="view">
-  <button class="back-btn" onclick="showHome()">← Retour</button>
-  <div style="max-width:900px;margin:0 auto;padding:40px 24px 80px">
+  <div style="max-width:1200px;margin:0 auto;padding:40px 24px 80px">
 
     <div style="text-align:center;margin-bottom:60px">
       <div style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--or);margin-bottom:16px">IsulaMenu</div>
