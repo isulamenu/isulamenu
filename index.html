@@ -3737,7 +3737,7 @@ async function loadPdj(restoId) {
   }
 }
 
-function togglePdjForm() { document.getElementById('pdj-form').classList.toggle('open'); }
+function togglePdjForm() { var f = document.getElementById('pdj-form'); f.style.display = f.style.display === 'none' ? 'block' : 'none'; }
 
 function previewPdjPhoto(input) {
   if (!input.files || !input.files[0]) return;
