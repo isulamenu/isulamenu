@@ -3048,7 +3048,9 @@ async function showMenu(slug) {
     servicesBarEl.style.display = 'none';
     menuCatsEl.style.display = 'none';
     menuBodyEl.innerHTML = '';
-    menuPanelsEl.innerHTML = getDemoMenu(currentLang);
+    menuPanelsEl.innerHTML = '';
+    var demoEl = getDemoMenu(currentLang);
+    menuPanelsEl.appendChild(demoEl);
   } else {
     renderMenuContent(demoData);
   }
@@ -3150,7 +3152,9 @@ async function renderMenuContent(restoData) {
       </div>
     </div>`;
 
-  body.innerHTML = demoPdj + getDemoMenu(lang);
+  body.innerHTML = demoPdj;
+  var demoWrap1 = getDemoMenu(lang);
+  body.appendChild(demoWrap1);
 
   // Charger depuis Supabase en arrière-plan si restaurant réel
   if (!restoData.id || !db) return;
@@ -3175,7 +3179,9 @@ async function renderMenuContent(restoData) {
     } else {
       document.getElementById('menu-services-bar').style.display = 'none';
       document.getElementById('menu-cats').style.display = 'none';
-      document.getElementById('menu-body').innerHTML = pdjHtml + getDemoMenu(lang);
+      document.getElementById('menu-body').innerHTML = pdjHtml;
+      var demoWrap2 = getDemoMenu(lang);
+      document.getElementById('menu-body').appendChild(demoWrap2);
     }
   } catch(e) {
     // Garder le menu démo en cas d'erreur
@@ -3450,7 +3456,7 @@ function getDemoMenu(lang) {
   });
 
   wrap.insertBefore(bar, wrap.firstChild);
-  return wrap.outerHTML;
+  return wrap;
 }
 
 
@@ -3466,7 +3472,7 @@ function goDemoTo(id, btn) {
   var panel = btn.closest('.service-panel');
   if (panel) panel.querySelectorAll('.cat-chip').forEach(function(c) { c.classList.remove('active'); });
   btn.classList.add('active');
-  var el = document.getElementById('demo-' + id);
+  var el = document.getElementById(id);
   if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
