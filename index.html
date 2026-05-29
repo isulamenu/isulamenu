@@ -3039,7 +3039,19 @@ async function showMenu(slug) {
   });
 
   // Afficher menu demo immédiatement
-  renderMenuContent(demoData);
+  if (slug === 'demo') {
+    // Démo complète avec services
+    var servicesBarEl = document.getElementById('menu-services-bar');
+    var menuCatsEl = document.getElementById('menu-cats');
+    var menuPanelsEl = document.getElementById('menu-panels');
+    var menuBodyEl = document.getElementById('menu-body');
+    servicesBarEl.style.display = 'none';
+    menuCatsEl.style.display = 'none';
+    menuBodyEl.innerHTML = '';
+    menuPanelsEl.innerHTML = getDemoMenu(currentLang);
+  } else {
+    renderMenuContent(demoData);
+  }
 
   // Essayer de charger depuis Supabase en arrière-plan
   if (slug !== 'demo' && db) {
@@ -3186,103 +3198,279 @@ async function renderMenuContent(restoData) {
 }
 
 function getDemoMenu(lang) {
-  const sections = {
-    fr: [
-      { title: "Entrees", icon: "🌿", items: [
-        { n: "Brocciu frais aux herbes", d: "Fromage corse frais, herbes aromatiques", p: "11", emoji: "🧀", tags: ["vegetarien", "local"] },
-        { n: "Charcuterie corse", d: "Lonzo, coppa, figatellu", p: "16", emoji: "🥩", tags: ["local"] },
-        { n: "Veloute de chataigne", d: "Creme de chataigne corse, huile de noisette", p: "9", emoji: "🌰", tags: ["vegetarien"] }
-      ]},
-      { title: "Poissons", icon: "🐟", items: [
-        { n: "Pageot roti aux herbes", d: "Pommes de terre, tomates cerises", p: "24", emoji: "🐠", tags: [] },
-        { n: "Rouget a la plancha", d: "Tapenade maison, legumes grilles", p: "22", emoji: "🐡", tags: [] },
-        { n: "Langouste grilee", d: "Beurre citronne, frites maison", p: "48", emoji: "🦞", tags: ["premium"] }
-      ]},
-      { title: "Viandes", icon: "🥩", items: [
-        { n: "Veau aux olives et citron", d: "Polenta cremeuse, olives de Corse", p: "26", emoji: "🍖", tags: ["local"] },
-        { n: "Figatellu grille", d: "Mesclun, vinaigre de miel", p: "18", emoji: "🌿", tags: ["local"] },
-        { n: "Agneau de lait roti", d: "Herbes du maquis", p: "32", emoji: "🫕", tags: ["local", "premium"] }
-      ]},
-      { title: "Desserts", icon: "🍮", items: [
-        { n: "Fiadone", d: "Gateau corse au brocciu, citron, chataigne", p: "9", emoji: "🍰", tags: ["local"] },
-        { n: "Canistrelli maison", d: "Biscuits anises, creme de brocciu", p: "8", emoji: "🍪", tags: ["local"] },
-        { n: "Gelato artisanal", d: "Myrte, chataigne ou figue", p: "7", emoji: "🍨", tags: [] }
-      ]}
-    ],
-    it: [
-      { title: "Antipasti", icon: "🌿", items: [
-        { n: "Brocciu fresco alle erbe", d: "Formaggio corso fresco, erbe aromatiche", p: "11", emoji: "🧀", tags: ["vegetariano", "locale"] },
-        { n: "Salumi corsi", d: "Lonzo, coppa, figatellu", p: "16", emoji: "🥩", tags: ["locale"] },
-        { n: "Vellutata di castagne", d: "Crema di castagne corse, olio di nocciole", p: "9", emoji: "🌰", tags: ["vegetariano"] }
-      ]},
-      { title: "Pesci", icon: "🐟", items: [
-        { n: "Pagello arrosto alle erbe", d: "Patate, pomodorini", p: "24", emoji: "🐠", tags: [] },
-        { n: "Triglia alla piastra", d: "Tapenade casalinga, verdure grigliate", p: "22", emoji: "🐡", tags: [] },
-        { n: "Aragosta alla griglia", d: "Burro al limone, patatine fritte", p: "48", emoji: "🦞", tags: ["premium"] }
-      ]},
-      { title: "Carni", icon: "🥩", items: [
-        { n: "Vitello alle olive e limone", d: "Polenta cremosa, olive corse", p: "26", emoji: "🍖", tags: ["locale"] },
-        { n: "Figatellu alla griglia", d: "Misticanza, aceto di miele", p: "18", emoji: "🌿", tags: ["locale"] }
-      ]},
-      { title: "Dolci", icon: "🍮", items: [
-        { n: "Fiadone", d: "Torta corsa al brocciu, limone, castagna", p: "9", emoji: "🍰", tags: ["locale"] },
-        { n: "Canistrelli fatti in casa", d: "Biscotti con anice, crema di brocciu", p: "8", emoji: "🍪", tags: ["locale"] }
-      ]}
-    ],
-    en: [
-      { title: "Starters", icon: "🌿", items: [
-        { n: "Fresh brocciu with herbs", d: "Fresh Corsican cheese, maquis herbs", p: "11", emoji: "🧀", tags: ["vegetarian", "local"] },
-        { n: "Corsican charcuterie", d: "Lonzo, coppa, figatellu", p: "16", emoji: "🥩", tags: ["local"] },
-        { n: "Chestnut veloute", d: "Corsican chestnut cream, hazelnut oil", p: "9", emoji: "🌰", tags: ["vegetarian"] }
-      ]},
-      { title: "Fish", icon: "🐟", items: [
-        { n: "Herb-roasted sea bream", d: "Olive oil potatoes, cherry tomatoes", p: "24", emoji: "🐠", tags: [] },
-        { n: "Red mullet on the plancha", d: "Homemade tapenade, grilled vegetables", p: "22", emoji: "🐡", tags: [] },
-        { n: "Grilled rock lobster", d: "Lemon butter, homemade fries", p: "48", emoji: "🦞", tags: ["premium"] }
-      ]},
-      { title: "Meat", icon: "🥩", items: [
-        { n: "Veal with olives and lemon", d: "Creamy polenta, Corsican olives", p: "26", emoji: "🍖", tags: ["local"] },
-        { n: "Grilled figatellu", d: "Mesclun, honey vinegar", p: "18", emoji: "🌿", tags: ["local"] }
-      ]},
-      { title: "Desserts", icon: "🍮", items: [
-        { n: "Fiadone", d: "Corsican brocciu cake, lemon, chestnut", p: "9", emoji: "🍰", tags: ["local"] },
-        { n: "Homemade canistrelli", d: "Anise biscuits, whipped brocciu cream", p: "8", emoji: "🍪", tags: ["local"] }
-      ]}
-    ],
-    de: [
-      { title: "Vorspeisen", icon: "🌿", items: [
-        { n: "Frischer Brocciu mit Kraeutern", d: "Frischer korsischer Kaese, Maquis-Kraeuter", p: "11", emoji: "🧀", tags: ["vegetarisch", "lokal"] },
-        { n: "Korsische Charcuterie", d: "Lonzo, Coppa, Figatellu", p: "16", emoji: "🥩", tags: ["lokal"] }
-      ]},
-      { title: "Fisch", icon: "🐟", items: [
-        { n: "Kraeuter-Goldbrasse", d: "Olivenoel-Kartoffeln, Kirschtomaten", p: "24", emoji: "🐠", tags: [] },
-        { n: "Rotbarbe auf der Plancha", d: "Hausgemachte Tapenade, Grillgemuese", p: "22", emoji: "🐡", tags: [] }
-      ]},
-      { title: "Fleisch", icon: "🥩", items: [
-        { n: "Kalbfleisch mit Oliven", d: "Cremige Polenta, korsische Oliven", p: "26", emoji: "🍖", tags: ["lokal"] },
-        { n: "Gegrilltes Figatellu", d: "Salat, Honigessig", p: "18", emoji: "🌿", tags: ["lokal"] }
-      ]},
-      { title: "Desserts", icon: "🍮", items: [
-        { n: "Fiadone", d: "Korsischer Brocciu-Kuchen, Zitrone, Kastanie", p: "9", emoji: "🍰", tags: ["lokal"] },
-        { n: "Hausgemachte Canistrelli", d: "Anisbiskuits, Brocciu-Creme", p: "8", emoji: "🍪", tags: ["lokal"] }
-      ]}
-    ]
+  var wrap = document.createElement('div');
+  wrap.id = 'demo-services-wrap';
+
+  var servicesList = [
+    { id: "midi", icon: "🌞", nom: { fr: "Carte du midi", it: "Pranzo", en: "Lunch menu", de: "Mittagskarte" } },
+    { id: "soir", icon: "🌙", nom: { fr: "Carte du soir", it: "Cena", en: "Dinner menu", de: "Abendkarte" } },
+    { id: "vins", icon: "🍷", nom: { fr: "Carte des vins", it: "Carta dei vini", en: "Wine list", de: "Weinkarte" } },
+    { id: "tapas", icon: "🥂", nom: { fr: "Tapas & Apero", it: "Tapas & Aperitivo", en: "Tapas & Drinks", de: "Tapas & Aperitif" } },
+    { id: "boissons", icon: "🥤", nom: { fr: "Boissons", it: "Bevande", en: "Drinks", de: "Getranke" } }
+  ];
+
+  var menuData = {
+    midi: {
+      pdj: { emoji: "🐟", nom: "Loup en croute de sel", desc: "Peche du jour, legumes du marche, huile d olive corse", prix: "28" },
+      cats: [
+        { icon: "🌿", nom: "Entrees", plats: [
+          { emoji: "🧀", nom: "Brocciu frais aux herbes", desc: "Fromage corse, herbes du maquis", prix: "11", tags: ["vegetarien", "local"] },
+          { emoji: "🥩", nom: "Charcuterie corse", desc: "Lonzo, coppa, figatellu", prix: "16", tags: ["local"] },
+          { emoji: "🌰", nom: "Veloute de chataigne", desc: "Creme de chataigne corse, huile de noisette", prix: "10", tags: ["vegetarien", "local"] },
+          { emoji: "🐚", nom: "Carpaccio de poulpe", desc: "Poulpe de Corse, citron vert, roquette", prix: "14", tags: ["local"] }
+        ]},
+        { icon: "🐟", nom: "Poissons", plats: [
+          { emoji: "🐠", nom: "Pageot roti aux herbes", desc: "Pommes de terre, tomates cerises confites", prix: "24", tags: ["local"] },
+          { emoji: "🐡", nom: "Rouget barbet a la plancha", desc: "Tapenade maison, legumes grilles", prix: "22", tags: [] },
+          { emoji: "🦞", nom: "Langouste grilee", desc: "Beurre citronne, frites maison", prix: "48", tags: ["premium"] },
+          { emoji: "🦑", nom: "Encornets farcis", desc: "Farce brocciu et herbes, coulis tomate", prix: "20", tags: ["local"] }
+        ]},
+        { icon: "🥩", nom: "Viandes", plats: [
+          { emoji: "🍖", nom: "Veau aux olives et citron", desc: "Polenta cremeuse, olives de Haute-Corse", prix: "26", tags: ["local"] },
+          { emoji: "🌿", nom: "Figatellu grille", desc: "Mesclun de saison, vinaigre de miel corse", prix: "18", tags: ["local"] },
+          { emoji: "🫕", nom: "Agneau de lait roti", desc: "Herbes du maquis, gratin dauphinois", prix: "32", tags: ["local", "premium"] }
+        ]},
+        { icon: "🍮", nom: "Desserts", plats: [
+          { emoji: "🍰", nom: "Fiadone", desc: "Gateau corse au brocciu, citron, eau-de-vie", prix: "9", tags: ["local"] },
+          { emoji: "🍪", nom: "Canistrelli maison", desc: "Biscuits anises, creme brocciu, miel de maquis", prix: "8", tags: ["local"] },
+          { emoji: "🍨", nom: "Gelato artisanal", desc: "Myrte, chataigne ou figue selon saison", prix: "7", tags: [] },
+          { emoji: "🍫", nom: "Moelleux chocolat", desc: "Chocolat 70%, coeur coulant, glace vanille", prix: "9", tags: [] }
+        ]}
+      ]
+    },
+    soir: {
+      pdj: { emoji: "🦞", nom: "Langouste a l armoricaine", desc: "Sauce tomate corsee, cognac, riz basmati", prix: "58" },
+      cats: [
+        { icon: "🌿", nom: "Entrees du soir", plats: [
+          { emoji: "🐚", nom: "Saint-Jacques poelees", desc: "Beurre blanc citron, poireaux fondants, truffe", prix: "22", tags: ["premium"] },
+          { emoji: "🫙", nom: "Foie gras mi-cuit", desc: "Chutney de figue corse, pain briolee toaste", prix: "18", tags: ["premium"] },
+          { emoji: "🦑", nom: "Risotto aux fruits de mer", desc: "Crevettes, Saint-Jacques, moules, bisque", prix: "20", tags: [] }
+        ]},
+        { icon: "🐟", nom: "Poissons du soir", plats: [
+          { emoji: "🐠", nom: "Daurade royale en croute de sel", desc: "Fenouil braise, vierge de tomates", prix: "34", tags: ["local"] },
+          { emoji: "🦞", nom: "Homard grille", desc: "Beurre clarifie aux herbes, frites maison", prix: "65", tags: ["premium"] }
+        ]},
+        { icon: "🥩", nom: "Viandes du soir", plats: [
+          { emoji: "🥩", nom: "Filet de boeuf rossini", desc: "Foie gras poele, sauce Perigueux", prix: "42", tags: ["premium"] },
+          { emoji: "🍖", nom: "Carre d agneau en croute d herbes", desc: "Gratin de courgettes, jus d agneau", prix: "36", tags: [] }
+        ]}
+      ]
+    },
+    vins: {
+      pdj: null,
+      cats: [
+        { icon: "🍷", nom: "Vins rouges corses", plats: [
+          { emoji: "🍷", nom: "Patrimonio Rouge — Domaine Leccia", desc: "AOC Patrimonio · Nielluccio · verre / bouteille", prix: "7 / 32", tags: ["local", "premium"] },
+          { emoji: "🍷", nom: "Ajaccio Rouge — Clos Capitoro", desc: "AOC Ajaccio · Nielluccio, Grenache", prix: "6 / 28", tags: ["local"] },
+          { emoji: "🍷", nom: "Corse Figari Rouge", desc: "AOC Corse · Nielluccio, Sciaccarello", prix: "26", tags: ["local"] }
+        ]},
+        { icon: "🥂", nom: "Vins blancs corses", plats: [
+          { emoji: "🥂", nom: "Vermentino — Domaine Gentile", desc: "AOC Patrimonio · verre / bouteille", prix: "6 / 26", tags: ["local"] },
+          { emoji: "🥂", nom: "Corse Calvi Blanc", desc: "AOC Corse · Vermentino · verre / bouteille", prix: "5 / 24", tags: ["local"] },
+          { emoji: "🥂", nom: "Muscat du Cap Corse", desc: "AOC Muscat · doux · verre 5cl", prix: "8", tags: ["local", "premium"] }
+        ]},
+        { icon: "🫧", nom: "Champagnes et petillants", plats: [
+          { emoji: "🫧", nom: "Champagne Brut — Laurent-Perrier", desc: "Coupe 12cl / bouteille 75cl", prix: "12 / 68", tags: ["premium"] },
+          { emoji: "🫧", nom: "Prosecco Superiore DOCG", desc: "Coupe 12cl / bouteille 75cl", prix: "7 / 32", tags: [] },
+          { emoji: "🫧", nom: "Rose petillant corse", desc: "Domaine Orenga de Gaffory · coupe / bouteille", prix: "8 / 36", tags: ["local"] }
+        ]},
+        { icon: "🌍", nom: "Vins du monde", plats: [
+          { emoji: "🍷", nom: "Bordeaux Grand Cru Classe", desc: "Saint-Emilion · bouteille 75cl", prix: "55", tags: ["premium"] },
+          { emoji: "🥂", nom: "Sancerre Blanc", desc: "Loire · Sauvignon · bouteille 75cl", prix: "38", tags: [] }
+        ]}
+      ]
+    },
+    tapas: {
+      pdj: null,
+      cats: [
+        { icon: "🫒", nom: "Tapas froids", plats: [
+          { emoji: "🫒", nom: "Olives marinees", desc: "Herbes du maquis, citron confit", prix: "5", tags: ["local", "vegetarien"] },
+          { emoji: "🥓", nom: "Coppa et lonzo", desc: "Charcuterie corse, pain grille", prix: "9", tags: ["local"] },
+          { emoji: "🧀", nom: "Brocciu et miel", desc: "Fromage frais corse, miel de maquis, noix", prix: "7", tags: ["local", "vegetarien"] },
+          { emoji: "🐟", nom: "Anchois marines", desc: "Anchois de Corse, huile d olive, persil", prix: "8", tags: ["local"] }
+        ]},
+        { icon: "🔥", nom: "Tapas chauds", plats: [
+          { emoji: "🍤", nom: "Croquettes de brocciu", desc: "Panees, sauce menthe fraiche", prix: "8", tags: ["vegetarien"] },
+          { emoji: "🌰", nom: "Figatellu grille", desc: "Sur toast, moutarde a l ancienne", prix: "10", tags: ["local"] },
+          { emoji: "🦐", nom: "Gambas a la plancha", desc: "Ail, persil, beurre citron", prix: "12", tags: [] },
+          { emoji: "🧆", nom: "Accras de morue", desc: "Sauce tartare maison", prix: "9", tags: [] }
+        ]},
+        { icon: "🧀", nom: "Fromages", plats: [
+          { emoji: "🧀", nom: "Plateau corse", desc: "Brocciu, tome corse, calenzana — selection affinage", prix: "14", tags: ["local"] },
+          { emoji: "🧀", nom: "Plateau mixte", desc: "Selection corse et continentale, confitures", prix: "16", tags: [] }
+        ]}
+      ]
+    },
+    boissons: {
+      pdj: null,
+      cats: [
+        { icon: "🍺", nom: "Bieres corses", plats: [
+          { emoji: "🍺", nom: "Pietra — Biere a la chataigne", desc: "33cl / pression 25cl", prix: "4 / 5", tags: ["local"] },
+          { emoji: "🍺", nom: "Colomba — Biere blanche", desc: "Aux herbes du maquis · 33cl", prix: "4.50", tags: ["local"] },
+          { emoji: "🍺", nom: "Serena — Blonde artisanale", desc: "Brasserie corse · 33cl", prix: "5", tags: ["local"] }
+        ]},
+        { icon: "🥤", nom: "Sans alcool", plats: [
+          { emoji: "🍋", nom: "Limonade maison", desc: "Citron presse, menthe, eau gazeuse", prix: "4", tags: ["vegetarien"] },
+          { emoji: "🍊", nom: "Jus frais du jour", desc: "Orange, pomme ou carotte selon arrivage", prix: "5", tags: ["vegetarien"] },
+          { emoji: "🧃", nom: "Orezza — eau gazeuse corse", desc: "Eau minerale naturelle de Corse · 50cl", prix: "4", tags: ["local"] },
+          { emoji: "🥤", nom: "Sodas", desc: "Coca-Cola, Perrier, Schweppes, Orangina", prix: "3.50", tags: [] }
+        ]},
+        { icon: "☕", nom: "Boissons chaudes", plats: [
+          { emoji: "☕", nom: "Cafe expresso", desc: "Torrefaction artisanale corse", prix: "2.50", tags: ["local"] },
+          { emoji: "🍵", nom: "The et infusions", desc: "Thes bio, tisanes du maquis", prix: "3.50", tags: ["vegetarien"] },
+          { emoji: "☕", nom: "Cafe corse tradition", desc: "Cafe avec canistrelli maison", prix: "3.50", tags: ["local"] }
+        ]}
+      ]
+    }
   };
 
-  const data = sections[lang] || sections["fr"];
-  let html = "";
-  data.forEach(function(sec) {
-    html += "<div class=\"menu-section\"><div class=\"section-header\"><span class=\"section-icon\">" + sec.icon + "</span><span class=\"section-title-text\">" + sec.title + "</span><div class=\"section-line\"></div></div>";
-    sec.items.forEach(function(item) {
-      var tags = item.tags && item.tags.length > 0 ? item.tags.map(function(t) { return "<span style=\"display:inline-block;font-size:9px;letter-spacing:1px;text-transform:uppercase;padding:2px 6px;border:1px solid rgba(201,153,58,0.2);color:var(--or);border-radius:2px;margin-top:4px;margin-right:4px\">" + t + "</span>"; }).join("") : "";
-      html += "<div class=\"dish-item\"><div style=\"width:56px;height:56px;background:rgba(201,153,58,0.06);border:1px solid rgba(201,153,58,0.12);border-radius:3px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:26px\">" + item.emoji + "</div><div class=\"dish-info\"><div class=\"dish-name\">" + item.n + "</div><div class=\"dish-desc\">" + item.d + "</div>" + tags + "</div><div class=\"dish-price\">" + item.p + " €</div></div>";
+  // Barre des services
+  var bar = document.createElement('div');
+  bar.className = 'services-bar';
+  bar.id = 'demo-services-bar';
+
+  // Panels
+  servicesList.forEach(function(s, i) {
+    // Bouton service
+    var btn = document.createElement('button');
+    btn.className = 'service-tab demo-svc-btn' + (i === 0 ? ' active' : '');
+    btn.innerHTML = '<span class="service-tab-icon">' + s.icon + '</span> ' + (s.nom[lang] || s.nom.fr);
+    (function(sid, btnEl) {
+      btnEl.onclick = function() { switchDemoService(sid, btnEl); };
+    })(s.id, btn);
+    bar.appendChild(btn);
+
+    // Panel
+    var panel = document.createElement('div');
+    panel.id = 'demo-panel-' + s.id;
+    panel.className = 'service-panel' + (i === 0 ? ' active' : '');
+
+    var sData = menuData[s.id];
+    if (!sData) { wrap.appendChild(panel); return; }
+
+    // Catégories chips
+    var catsWrap = document.createElement('div');
+    catsWrap.className = 'cats-wrap';
+    sData.cats.forEach(function(cat) {
+      var chip = document.createElement('button');
+      chip.className = 'cat-chip';
+      chip.innerHTML = cat.icon + ' ' + cat.nom;
+      var targetId = 'demo-' + s.id + '-' + cat.nom.replace(/[^a-zA-Z]/g, '');
+      (function(tid, chipEl) {
+        chipEl.onclick = function() { goDemoTo(tid, chipEl); };
+      })(targetId, chip);
+      catsWrap.appendChild(chip);
     });
-    html += "</div>";
+    panel.appendChild(catsWrap);
+
+    // Corps du menu
+    var body = document.createElement('div');
+    body.className = 'menu-body';
+
+    // PDJ
+    if (sData.pdj) {
+      var pdjDiv = document.createElement('div');
+      pdjDiv.className = 'pdj-card';
+      var pdjLabel = lang === 'fr' ? 'Plat du jour' : lang === 'it' ? 'Piatto del giorno' : lang === 'en' ? 'Today special' : 'Tagesgericht';
+      pdjDiv.innerHTML = '<div class="pdj-badge"><div class="pdj-live-dot"></div>' + pdjLabel + '</div>' +
+        '<div class="pdj-inner"><div class="pdj-emoji">' + sData.pdj.emoji + '</div>' +
+        '<div class="pdj-info"><div class="pdj-name">' + sData.pdj.nom + '</div>' +
+        '<div class="pdj-desc">' + sData.pdj.desc + '</div>' +
+        '<div class="pdj-price">' + sData.pdj.prix + ' €</div></div></div>';
+      body.appendChild(pdjDiv);
+    }
+
+    // Catégories et plats
+    sData.cats.forEach(function(cat) {
+      var section = document.createElement('div');
+      section.className = 'menu-section';
+      section.id = 'demo-' + s.id + '-' + cat.nom.replace(/[^a-zA-Z]/g, '');
+
+      var header = document.createElement('div');
+      header.className = 'section-header';
+      header.innerHTML = '<span class="section-emoji">' + cat.icon + '</span>' +
+        '<span class="section-name">' + cat.nom + '</span>' +
+        '<span class="section-count">' + cat.plats.length + ' plats</span>';
+      section.appendChild(header);
+
+      cat.plats.forEach(function(plat) {
+        var dish = document.createElement('div');
+        dish.className = 'dish';
+
+        var thumb = document.createElement('div');
+        thumb.className = 'dish-thumb';
+        thumb.style.cssText = 'font-size:26px;display:flex;align-items:center;justify-content:center';
+        thumb.textContent = plat.emoji;
+
+        var info = document.createElement('div');
+        info.className = 'dish-body';
+
+        var name = document.createElement('div');
+        name.className = 'dish-name';
+        name.textContent = plat.nom;
+
+        var desc = document.createElement('div');
+        desc.className = 'dish-desc';
+        desc.textContent = plat.desc;
+
+        info.appendChild(name);
+        info.appendChild(desc);
+
+        if (plat.tags && plat.tags.length > 0) {
+          var tagsDiv = document.createElement('div');
+          tagsDiv.className = 'dish-tags';
+          tagsDiv.style.marginTop = '5px';
+          plat.tags.forEach(function(t) {
+            var tag = document.createElement('span');
+            tag.className = 'dish-tag ' + ((t==='vegetarien'||t==='vegetariano'||t==='vegetarian') ? 'tag-vege' : (t==='local'||t==='locale') ? 'tag-local' : 'tag-premium');
+            tag.textContent = t;
+            tagsDiv.appendChild(tag);
+          });
+          info.appendChild(tagsDiv);
+        }
+
+        var right = document.createElement('div');
+        right.className = 'dish-right';
+        var price = document.createElement('div');
+        price.className = 'dish-price';
+        price.textContent = plat.prix + ' €';
+        right.appendChild(price);
+
+        dish.appendChild(thumb);
+        dish.appendChild(info);
+        dish.appendChild(right);
+        section.appendChild(dish);
+      });
+
+      body.appendChild(section);
+    });
+
+    panel.appendChild(body);
+    wrap.appendChild(panel);
   });
-  
-  html += "<div style=\"height:60px\"></div>";
-  return html;
+
+  wrap.insertBefore(bar, wrap.firstChild);
+  return wrap.outerHTML;
 }
+
+
+function switchDemoService(id, btn) {
+  document.querySelectorAll('.service-panel').forEach(function(p) { p.classList.remove('active'); });
+  document.querySelectorAll('.demo-svc-btn').forEach(function(b) { b.classList.remove('active'); });
+  var panel = document.getElementById('demo-panel-' + id);
+  if (panel) panel.classList.add('active');
+  btn.classList.add('active');
+}
+
+function goDemoTo(id, btn) {
+  var panel = btn.closest('.service-panel');
+  if (panel) panel.querySelectorAll('.cat-chip').forEach(function(c) { c.classList.remove('active'); });
+  btn.classList.add('active');
+  var el = document.getElementById('demo-' + id);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+
 // ══ LOGIN RESTAURATEUR ══
 async function loginResto() {
   const identifiant = document.getElementById('resto-user').value.trim();
