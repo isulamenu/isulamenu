@@ -3704,11 +3704,18 @@ async function loginResto() {
 
     currentRestoId = data.restaurant_id;
     currentRestoSlug = data.restaurants?.slug;
-    document.getElementById('resto-welcome-name').textContent = 'Bonjour, ' + (data.restaurants?.nom || identifiant) + ' 👋';
-    document.getElementById('resto-menu-link').textContent = 'isulamenu.fr/' + (data.restaurants?.slug || identifiant);
+
+    // Mettre à jour la welcome card
+    var wName = document.getElementById('resto-welcome-name');
+    var wStatus = document.getElementById('resto-welcome-status');
+    var qrUrl = document.getElementById('resto-qr-url');
+    if (wName) wName.textContent = data.restaurants?.nom || identifiant;
+    if (wStatus) wStatus.textContent = 'Menu en ligne · ' + (data.restaurants?.ville || '');
+    if (qrUrl) qrUrl.textContent = 'isulamenu.fr/' + (data.restaurants?.slug || identifiant);
 
     await loadPdj(data.restaurant_id);
     await loadRestoInfos(data.restaurant_id);
+    if (currentRestoSlug) generateRestoQr();
     showView('view-resto');
   } catch(e) {
     err.style.display = 'block';
