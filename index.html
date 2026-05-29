@@ -548,7 +548,8 @@ body { background: var(--marine); color: var(--creme); font-family: 'Jost', sans
 .footer-logo span { color: rgba(201,153,58,0.4); }
 .footer-copy { font-size: 10px; color: rgba(248,242,228,0.15); letter-spacing: 1px; }
 .footer-links { display: flex; gap: 20px; }
-.footer-link { font-size: 9px; color: rgba(248,242,228,0.15); letter-spacing: 1px; text-transform: uppercase; cursor: pointer; }
+.footer-link { font-size: 9px; color: rgba(248,242,228,0.1); letter-spacing: 1px; text-transform: uppercase; cursor: pointer; }
+.footer-link:hover { color: rgba(248,242,228,0.2); }
 
 @media (max-width: 600px) {
   .header { padding: 14px 20px; }
@@ -2386,64 +2387,119 @@ window.addEventListener('load', function() {
 
 <!-- ══ ESPACE RESTAURATEUR ══ -->
 <div id="view-resto" class="view">
+
+  <!-- TOPBAR -->
   <div class="resto-topbar">
-    <div class="resto-topbar-logo">Isula<span>Menu</span></div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <div style="width:28px;height:28px;background:linear-gradient(135deg,#C9993A,#E2B55A);border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+        <svg viewBox="0 0 28 28" fill="none" width="16" height="16"><line x1="8" y1="4" x2="8" y2="14" stroke="#0A1628" stroke-width="1.5" stroke-linecap="round"/><line x1="6" y1="4" x2="6" y2="9" stroke="#0A1628" stroke-width="1.5" stroke-linecap="round"/><line x1="10" y1="4" x2="10" y2="9" stroke="#0A1628" stroke-width="1.5" stroke-linecap="round"/><path d="M6 9 Q8 11 10 9" stroke="#0A1628" stroke-width="1.5" fill="none" stroke-linecap="round"/><line x1="8" y1="14" x2="8" y2="24" stroke="#0A1628" stroke-width="1.5" stroke-linecap="round"/><path d="M18 4 C22 4 23 8 22 12 L20 14 L20 24" stroke="#0A1628" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <span style="font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:600;color:var(--creme)">Isula<span style="color:var(--or)">Menu</span></span>
+    </div>
     <button class="btn-logout" onclick="logoutResto()">Déconnexion</button>
   </div>
+
   <div class="resto-content">
-    <div class="resto-welcome">
-      <h2 id="resto-welcome-name">Bonjour 👋</h2>
-      <p>Gérez votre restaurant en quelques secondes.</p>
-    </div>
-    <div style="display:flex;gap:0;margin-bottom:24px;border:1px solid rgba(201,153,58,0.15);border-radius:4px;overflow:hidden">
-      <button class="resto-tab active" onclick="showRestoTab('pdj',this)">Plat du jour</button>
-      <button class="resto-tab" onclick="showRestoTab('infos',this)">Restaurant</button>
-      <button class="resto-tab" onclick="showRestoTab('qr',this)">QR & Lien</button>
+
+    <!-- WELCOME CARD -->
+    <div id="resto-welcome-card" style="background:linear-gradient(135deg,var(--marine-2),var(--marine-3));border-bottom:1px solid rgba(201,153,58,0.1);padding:20px;position:relative;overflow:hidden;margin-bottom:0">
+      <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(to right,var(--or),var(--or-2),transparent)"></div>
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px">
+        <div id="resto-welcome-logo" style="width:52px;height:52px;border-radius:10px;background:rgba(201,153,58,0.08);border:1px solid rgba(201,153,58,0.2);display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;overflow:hidden">🍽️</div>
+        <div style="flex:1">
+          <div id="resto-welcome-name" style="font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:600;color:var(--creme);line-height:1;margin-bottom:5px">Mon restaurant</div>
+          <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--vert)">
+            <div style="width:6px;height:6px;background:var(--vert);border-radius:50%;animation:livepulse 2s infinite"></div>
+            <span id="resto-welcome-status">Menu en ligne</span>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;gap:0;background:rgba(201,153,58,0.04);border:1px solid rgba(201,153,58,0.08);border-radius:4px;overflow:hidden">
+        <div style="flex:1;padding:10px 14px;text-align:center;border-right:1px solid rgba(201,153,58,0.08)">
+          <div style="font-size:11px;color:var(--or-2);font-weight:400;letter-spacing:1px">FR IT EN DE</div>
+          <div style="font-size:8px;letter-spacing:1px;text-transform:uppercase;color:var(--gris);margin-top:2px">Langues</div>
+        </div>
+        <div id="resto-welcome-formule" style="flex:1;padding:10px 14px;text-align:center">
+          <div style="font-size:11px;color:var(--or-2);font-weight:400">—</div>
+          <div style="font-size:8px;letter-spacing:1px;text-transform:uppercase;color:var(--gris);margin-top:2px">Formule</div>
+        </div>
+      </div>
     </div>
 
-    <div id="tab-pdj" class="resto-tab-content">
-      <div class="pdj-editor">
-        <div class="pdj-editor-title">Plat du jour actuel</div>
-        <div class="pdj-current">
-          <div class="pdj-current-label">Affiché en ce moment</div>
-          <div class="pdj-current-name" id="pdj-display-name">Chargement...</div>
-          <div class="pdj-current-price" id="pdj-display-price"></div>
+    <!-- ONGLETS -->
+    <div style="display:flex;background:var(--marine-2);border-bottom:1px solid rgba(201,153,58,0.1);padding:0 8px;gap:4px">
+      <button class="resto-tab active" onclick="showRestoTab('pdj',this)" style="flex:1;padding:13px 8px 11px;text-align:center;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--gris);background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:5px;font-family:Jost,sans-serif;transition:all 0.2s">
+        <span style="font-size:18px">🍽️</span>Plat du jour
+      </button>
+      <button class="resto-tab" onclick="showRestoTab('infos',this)" style="flex:1;padding:13px 8px 11px;text-align:center;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--gris);background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:5px;font-family:Jost,sans-serif;transition:all 0.2s">
+        <span style="font-size:18px">🏪</span>Restaurant
+      </button>
+      <button class="resto-tab" onclick="showRestoTab('qr',this)" style="flex:1;padding:13px 8px 11px;text-align:center;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--gris);background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:5px;font-family:Jost,sans-serif;transition:all 0.2s">
+        <span style="font-size:18px">📱</span>QR & Lien
+      </button>
+    </div>
+
+    <!-- TAB PDJ -->
+    <div id="tab-pdj" class="resto-tab-content" style="padding:20px">
+
+      <!-- Plat actuel -->
+      <div style="background:linear-gradient(135deg,rgba(201,153,58,0.12),rgba(201,153,58,0.04));border:1px solid rgba(201,153,58,0.25);border-radius:8px;padding:16px 18px;margin-bottom:16px;position:relative;overflow:hidden">
+        <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(to right,var(--or),var(--or-2),transparent)"></div>
+        <div style="font-size:8px;letter-spacing:3px;text-transform:uppercase;color:var(--or);margin-bottom:10px;display:flex;align-items:center;gap:6px">
+          <div style="width:5px;height:5px;background:var(--vert);border-radius:50%;animation:livepulse 2s infinite"></div>
+          Plat du jour · En ligne
         </div>
-        <button class="btn-secondary" onclick="togglePdjForm()">✏️  Modifier le plat du jour</button>
-        <div class="pdj-form" id="pdj-form">
-          <div class="form-group" style="margin-top:16px">
+        <div class="pdj-current-name" id="pdj-display-name" style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;color:var(--creme);margin-bottom:4px">Chargement...</div>
+        <div class="pdj-current-price" id="pdj-display-price" style="font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--or-2)"></div>
+      </div>
+
+      <!-- Bouton modifier -->
+      <button class="btn-secondary" onclick="togglePdjForm()" style="width:100%;background:rgba(201,153,58,0.08);border:1px solid rgba(201,153,58,0.2);color:var(--or-2);font-family:Jost,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;padding:13px;border-radius:4px;cursor:pointer;margin-bottom:12px;display:flex;align-items:center;justify-content:center;gap:8px">
+        ✏️ Modifier le plat du jour
+      </button>
+
+      <!-- Formulaire -->
+      <div class="pdj-form" id="pdj-form" style="display:none">
+        <div style="background:var(--marine-2);border:1px solid rgba(201,153,58,0.1);border-radius:6px;padding:16px;margin-bottom:12px">
+          <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--or);margin-bottom:14px">Nouveau plat du jour</div>
+          <div class="form-group">
             <label class="form-label">Nom du plat</label>
-            <input class="form-input" type="text" id="pdj-input-name" placeholder="Ex: Dorade royale grillée">
+            <input class="form-input" type="text" id="pdj-input-name" placeholder="Ex: Dorade royale aux herbes">
           </div>
           <div class="form-group">
             <label class="form-label">Description (optionnel)</label>
             <input class="form-input" type="text" id="pdj-input-desc" placeholder="Ex: Accompagnée de légumes du marché">
           </div>
           <div class="form-group">
-            <label class="form-label">Prix</label>
+            <label class="form-label">Prix (€)</label>
             <input class="form-input" type="number" id="pdj-input-price" placeholder="Ex: 26">
           </div>
           <div class="form-group">
-            <label class="form-label">Photo du plat du jour (optionnel)</label>
-            <div id="pdj-photo-preview-wrap" style="display:none;position:relative;width:80px;margin-bottom:10px">
+            <label class="form-label">Photo (optionnel)</label>
+            <div id="pdj-photo-preview-wrap" style="display:none;position:relative;width:80px;margin-bottom:8px">
               <img id="pdj-photo-preview" style="width:80px;height:80px;object-fit:cover;border-radius:4px;border:1px solid rgba(201,153,58,0.2)">
-              <button onclick="removePdjPhoto()" style="position:absolute;top:-8px;right:-8px;width:20px;height:20px;background:#E05A5A;border:none;border-radius:50%;color:white;font-size:12px;cursor:pointer">✕</button>
+              <button onclick="removePdjPhoto()" style="position:absolute;top:-8px;right:-8px;width:20px;height:20px;border-radius:50%;background:var(--rouge);color:white;border:none;cursor:pointer;font-size:10px">✕</button>
             </div>
-            <label class="photo-upload-label" id="pdj-photo-upload-label" style="width:100%;justify-content:center">
-              📷  Ajouter une photo
-              <input class="photo-upload-input" type="file" accept="image/*" id="pdj-photo-file" onchange="previewPdjPhoto(this)">
+            <label class="photo-upload-label" id="pdj-photo-upload-label" style="width:100%;justify-content:center;cursor:pointer;display:flex;align-items:center;gap:8px;border:1px dashed rgba(201,153,58,0.2);border-radius:4px;padding:10px;color:var(--gris);font-size:12px">
+              📷 Ajouter une photo
+              <input class="photo-upload-input" type="file" accept="image/*" id="pdj-photo-file" onchange="previewPdjPhoto(this)" style="display:none">
             </label>
           </div>
-          <button class="btn-save" onclick="savePdj()">✓  Enregistrer et mettre en ligne</button>
-          <div class="success-toast" id="pdj-toast">✓  Plat du jour mis à jour !</div>
+          <button class="btn-save" onclick="savePdj()">✓ Mettre en ligne</button>
+          <div class="success-toast" id="pdj-toast">✓ Plat du jour mis à jour !</div>
         </div>
       </div>
-      <button class="btn-view-menu" onclick="viewRestoMenu()" style="margin-top:12px">Voir mon menu en direct →</button>
+
+      <button class="btn-view-menu" onclick="viewRestoMenu()" style="width:100%;background:transparent;border:1px solid rgba(201,153,58,0.12);color:var(--gris-2);font-family:Jost,sans-serif;font-size:11px;letter-spacing:1px;text-transform:uppercase;padding:11px;border-radius:4px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px">
+        👁 Voir mon menu en direct
+      </button>
     </div>
 
-    <div id="tab-infos" class="resto-tab-content" style="display:none">
-      <div class="pdj-editor">
-        <div class="pdj-editor-title">Informations</div>
+    <!-- TAB INFOS -->
+    <div id="tab-infos" class="resto-tab-content" style="display:none;padding:20px">
+
+      <div style="background:var(--marine-2);border:1px solid rgba(201,153,58,0.1);border-radius:6px;padding:16px;margin-bottom:12px">
+        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--or);margin-bottom:14px">Informations pratiques</div>
         <div class="form-group">
           <label class="form-label">Horaires</label>
           <input class="form-input" type="text" id="resto-horaires" placeholder="Ex: 12h-14h · 19h-22h">
@@ -2460,88 +2516,72 @@ window.addEventListener('load', function() {
           <label class="form-label">Description courte</label>
           <input class="form-input" type="text" id="resto-description" placeholder="Ex: Restaurant corse traditionnel">
         </div>
-        <div class="pdj-editor-title" style="margin-top:20px">Logo et couleurs</div>
+      </div>
+
+      <div style="background:var(--marine-2);border:1px solid rgba(201,153,58,0.1);border-radius:6px;padding:16px;margin-bottom:12px">
+        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--or);margin-bottom:14px">Logo et couleurs</div>
         <div class="form-group">
           <label class="form-label">Logo du restaurant</label>
-          <div id="logo-preview-wrap" style="display:none;position:relative;width:80px;margin-bottom:10px">
-            <img id="logo-preview" style="width:80px;height:80px;object-fit:contain;border-radius:4px;border:1px solid rgba(201,153,58,0.2)">
-            <button onclick="removeLogo()" style="position:absolute;top:-8px;right:-8px;width:20px;height:20px;background:#E05A5A;border:none;border-radius:50%;color:white;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1">✕</button>
+          <div id="logo-preview-wrap" style="display:none;position:relative;width:80px;margin-bottom:8px">
+            <img id="logo-preview" style="width:80px;height:80px;object-fit:cover;border-radius:8px;border:1px solid rgba(201,153,58,0.2)">
+            <button onclick="removeLogo()" style="position:absolute;top:-8px;right:-8px;width:20px;height:20px;border-radius:50%;background:var(--rouge);color:white;border:none;cursor:pointer;font-size:10px">✕</button>
           </div>
-          <label class="photo-upload-label" id="logo-upload-label" style="width:100%;justify-content:center">
-            📷  Uploader le logo
-            <input class="photo-upload-input" type="file" accept="image/*" id="logo-file-input" onchange="handleLogoUpload(this)">
+          <label class="photo-upload-label" id="logo-upload-label" style="cursor:pointer;display:flex;align-items:center;gap:8px;border:1px dashed rgba(201,153,58,0.2);border-radius:4px;padding:10px;color:var(--gris);font-size:12px;width:100%;justify-content:center">
+            🖼️ Uploader le logo
+            <input type="file" accept="image/*" id="logo-file-input" onchange="handleLogoUpload(this)" style="display:none">
           </label>
         </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
-          <div class="form-group">
-            <label class="form-label">Couleur principale</label>
-            <div style="display:flex;gap:8px;align-items:center">
-              <input type="color" id="couleur-principale" value="#C9993A" style="width:44px;height:36px;border:1px solid rgba(201,153,58,0.3);background:transparent;cursor:pointer;border-radius:2px;padding:2px" oninput="document.getElementById('couleur-principale-hex').value=this.value">
-              <input class="form-input" type="text" id="couleur-principale-hex" value="#C9993A" style="flex:1" oninput="document.getElementById('couleur-principale').value=this.value">
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Couleur accent</label>
-            <div style="display:flex;gap:8px;align-items:center">
-              <input type="color" id="couleur-accent" value="#E2B55A" style="width:44px;height:36px;border:1px solid rgba(201,153,58,0.3);background:transparent;cursor:pointer;border-radius:2px;padding:2px" oninput="document.getElementById('couleur-accent-hex').value=this.value">
-              <input class="form-input" type="text" id="couleur-accent-hex" value="#E2B55A" style="flex:1" oninput="document.getElementById('couleur-accent').value=this.value">
-            </div>
+        <div id="couleur-extraction-status" style="display:none;font-size:11px;color:var(--vert);margin-bottom:12px">✓ Couleurs extraites automatiquement</div>
+        <div class="form-group">
+          <label class="form-label">Couleur principale</label>
+          <div style="display:flex;gap:8px;align-items:center">
+            <input type="color" id="couleur-principale" value="#C9993A" onchange="document.getElementById('couleur-principale-hex').value=this.value" style="width:40px;height:36px;border:none;border-radius:3px;cursor:pointer;background:none">
+            <input class="form-input" type="text" id="couleur-principale-hex" value="#C9993A" placeholder="#C9993A" style="flex:1" onchange="document.getElementById('couleur-principale').value=this.value">
           </div>
         </div>
-        <div id="couleur-extraction-status" style="font-size:11px;color:var(--vert);margin-bottom:12px;display:none">✓ Couleurs extraites automatiquement depuis le logo</div>
-        <div class="pdj-editor-title" style="margin-top:20px">Moyens de paiement acceptés</div>
-        <div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:16px">
-          <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--creme);cursor:pointer">
-            <input type="checkbox" id="resto-pay-cb" style="accent-color:var(--or)"> 💳 CB Visa/Mastercard
-          </label>
-          <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--creme);cursor:pointer">
-            <input type="checkbox" id="resto-pay-especes" style="accent-color:var(--or)"> 💵 Espèces
-          </label>
-          <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--creme);cursor:pointer">
-            <input type="checkbox" id="resto-pay-tr" style="accent-color:var(--or)"> 🎫 Tickets restaurant
-          </label>
-          <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--creme);cursor:pointer">
-            <input type="checkbox" id="resto-pay-amex" style="accent-color:var(--or)"> 💎 American Express
-          </label>
-          <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--creme);cursor:pointer">
-            <input type="checkbox" id="resto-pay-cheque" style="accent-color:var(--or)"> 📝 Chèques
-          </label>
+        <div class="form-group">
+          <label class="form-label">Couleur accent</label>
+          <div style="display:flex;gap:8px;align-items:center">
+            <input type="color" id="couleur-accent" value="#E2B55A" onchange="document.getElementById('couleur-accent-hex').value=this.value" style="width:40px;height:36px;border:none;border-radius:3px;cursor:pointer;background:none">
+            <input class="form-input" type="text" id="couleur-accent-hex" value="#E2B55A" placeholder="#E2B55A" style="flex:1" onchange="document.getElementById('couleur-accent').value=this.value">
+          </div>
         </div>
-        <button class="btn-save" onclick="saveRestoInfos()">✓  Enregistrer les informations</button>
-        <div class="success-toast" id="infos-toast">✓  Informations mises à jour !</div>
+      </div>
+
+      <div style="background:var(--marine-2);border:1px solid rgba(201,153,58,0.1);border-radius:6px;padding:16px;margin-bottom:12px">
+        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--or);margin-bottom:14px">Moyens de paiement</div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px">
+          <label style="display:flex;align-items:center;gap:6px;background:var(--marine-3);border:1px solid rgba(201,153,58,0.1);border-radius:3px;padding:7px 12px;cursor:pointer;font-size:12px;color:var(--gris-2)"><input type="checkbox" id="resto-pay-cb" style="accent-color:var(--or)"> CB</label>
+          <label style="display:flex;align-items:center;gap:6px;background:var(--marine-3);border:1px solid rgba(201,153,58,0.1);border-radius:3px;padding:7px 12px;cursor:pointer;font-size:12px;color:var(--gris-2)"><input type="checkbox" id="resto-pay-especes" style="accent-color:var(--or)"> Espèces</label>
+          <label style="display:flex;align-items:center;gap:6px;background:var(--marine-3);border:1px solid rgba(201,153,58,0.1);border-radius:3px;padding:7px 12px;cursor:pointer;font-size:12px;color:var(--gris-2)"><input type="checkbox" id="resto-pay-tr" style="accent-color:var(--or)"> Tickets</label>
+          <label style="display:flex;align-items:center;gap:6px;background:var(--marine-3);border:1px solid rgba(201,153,58,0.1);border-radius:3px;padding:7px 12px;cursor:pointer;font-size:12px;color:var(--gris-2)"><input type="checkbox" id="resto-pay-amex" style="accent-color:var(--or)"> Amex</label>
+          <label style="display:flex;align-items:center;gap:6px;background:var(--marine-3);border:1px solid rgba(201,153,58,0.1);border-radius:3px;padding:7px 12px;cursor:pointer;font-size:12px;color:var(--gris-2)"><input type="checkbox" id="resto-pay-cheque" style="accent-color:var(--or)"> Chèques</label>
+        </div>
+      </div>
+
+      <button class="btn-save" onclick="saveRestoInfos()">✓ Enregistrer les modifications</button>
+      <div class="success-toast" id="infos-toast">✓ Informations mises à jour !</div>
+    </div>
+
+    <!-- TAB QR -->
+    <div id="tab-qr" class="resto-tab-content" style="display:none;padding:20px">
+      <div style="background:var(--marine-2);border:1px solid rgba(201,153,58,0.1);border-radius:6px;padding:24px;text-align:center;margin-bottom:12px">
+        <div id="resto-qr-container" style="display:flex;justify-content:center;margin-bottom:16px"></div>
+        <div id="resto-qr-url" style="font-size:11px;color:var(--gris-2);letter-spacing:1px;margin-bottom:16px">isulamenu.fr/...</div>
+        <div style="display:flex;gap:8px">
+          <button onclick="downloadRestoQr()" style="flex:1;background:rgba(201,153,58,0.08);border:1px solid rgba(201,153,58,0.2);color:var(--or-2);font-family:Jost,sans-serif;font-size:10px;letter-spacing:1px;text-transform:uppercase;padding:10px;border-radius:3px;cursor:pointer">⬇ Télécharger</button>
+          <button onclick="copyRestoLink()" style="flex:1;background:rgba(201,153,58,0.08);border:1px solid rgba(201,153,58,0.2);color:var(--or-2);font-family:Jost,sans-serif;font-size:10px;letter-spacing:1px;text-transform:uppercase;padding:10px;border-radius:3px;cursor:pointer">📋 Copier</button>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button onclick="shareWhatsApp()" style="flex:1;background:var(--marine-2);border:1px solid rgba(201,153,58,0.1);color:var(--gris-2);font-family:Jost,sans-serif;font-size:10px;letter-spacing:1px;text-transform:uppercase;padding:11px;border-radius:3px;cursor:pointer">💬 WhatsApp</button>
+        <button onclick="shareInstagram()" style="flex:1;background:var(--marine-2);border:1px solid rgba(201,153,58,0.1);color:var(--gris-2);font-family:Jost,sans-serif;font-size:10px;letter-spacing:1px;text-transform:uppercase;padding:11px;border-radius:3px;cursor:pointer">📸 Instagram</button>
       </div>
     </div>
 
-    <div id="tab-qr" class="resto-tab-content" style="display:none">
-      <div class="pdj-editor">
-        <div class="pdj-editor-title">Mon QR code</div>
-        <div style="text-align:center;margin-bottom:20px">
-          <div id="resto-qr-container" style="display:inline-block;border-radius:8px;overflow:hidden;margin-bottom:12px;background:white;padding:8px"></div>
-          <div style="font-size:11px;color:var(--gris);margin-bottom:16px">Scannez pour accéder à votre menu</div>
-          <button class="btn-save" onclick="downloadRestoQr()" style="max-width:280px;margin:0 auto">Télécharger le QR code PNG</button>
-        </div>
-        <div class="pdj-editor-title">Mon lien menu</div>
-        <div class="menu-link-box" style="margin-bottom:16px">
-          <div class="menu-link-label">Votre URL</div>
-          <div class="menu-link-url" id="resto-menu-link">isulamenu.fr/...</div>
-          <div style="display:flex;gap:8px;margin-top:12px">
-            <button class="btn-secondary" style="flex:1" onclick="copyRestoLink()">Copier le lien</button>
-            <button class="btn-view-menu" style="flex:1" onclick="viewRestoMenu()">Voir le menu →</button>
-          </div>
-        </div>
-        <div class="pdj-editor-title">Partager</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-          <button onclick="shareWhatsApp()" style="background:rgba(37,211,102,0.1);border:1px solid rgba(37,211,102,0.3);color:#25D366;font-family:Jost,sans-serif;font-size:12px;font-weight:500;padding:12px;cursor:pointer;border-radius:4px">WhatsApp</button>
-          <button onclick="shareInstagram()" style="background:rgba(225,48,108,0.1);border:1px solid rgba(225,48,108,0.3);color:#E1306C;font-family:Jost,sans-serif;font-size:12px;font-weight:500;padding:12px;cursor:pointer;border-radius:4px">Instagram</button>
-        </div>
-      </div>
-    </div>
   </div>
 </div>
-      <button class="back-btn" onclick="showHome()" style="padding:16px 0 0;margin-top:8px">← Retour</button>
-    </div>
-  </div>
-</div>
+
 
 <!-- ══ BACK-OFFICE ══ -->
 <div id="view-admin" class="view">
@@ -4640,6 +4680,20 @@ async function loadRestoInfos(restoId) {
   try {
     const { data } = await db.from('restaurants').select('*').eq('id', restoId).single();
     if (data) {
+      // Mettre à jour la welcome card
+      var wName = document.getElementById('resto-welcome-name');
+      var wStatus = document.getElementById('resto-welcome-status');
+      var wFormule = document.getElementById('resto-welcome-formule');
+      var wLogo = document.getElementById('resto-welcome-logo');
+      if (wName) wName.textContent = data.nom || 'Mon restaurant';
+      if (wStatus) wStatus.textContent = 'Menu en ligne · ' + (data.ville || '');
+      if (wFormule) wFormule.innerHTML = '<div style="font-size:11px;color:var(--or-2);font-weight:400">' + (data.formule || '—') + '</div><div style="font-size:8px;letter-spacing:1px;text-transform:uppercase;color:var(--gris);margin-top:2px">Formule</div>';
+      if (wLogo && data.logo_url) {
+        wLogo.innerHTML = '<img src="' + data.logo_url + '" style="width:100%;height:100%;object-fit:cover;border-radius:10px">';
+      }
+      // Mettre à jour le QR URL
+      var qrUrl = document.getElementById('resto-qr-url');
+      if (qrUrl) qrUrl.textContent = 'isulamenu.fr/' + (data.slug || '');
       if (data.horaires) document.getElementById('resto-horaires').value = data.horaires;
       if (data.telephone) document.getElementById('resto-telephone').value = data.telephone;
       if (data.adresse && document.getElementById('resto-adresse')) document.getElementById('resto-adresse').value = data.adresse;
