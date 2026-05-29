@@ -248,10 +248,14 @@ body { background: var(--marine); color: var(--creme); font-family: 'Jost', sans
 /* Problèmes */
 .problems-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(2, 1fr);
   gap: 1px;
   background: rgba(201,153,58,0.08);
   margin-bottom: 60px;
+}
+
+@media (max-width: 600px) {
+  .problems-grid { grid-template-columns: 1fr; }
 }
 
 .problem-card {
