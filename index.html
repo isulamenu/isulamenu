@@ -3805,6 +3805,21 @@ async function buildTree(restoId) {
         '<span style="font-size:13px;color:var(--creme);flex:1">' + service.nom + '</span>' +
         '<span style="font-size:10px;color:var(--gris)">' + serviceCats.length + ' cat.</span>' +
         '<span style="font-size:10px;color:var(--gris);margin-left:6px;transition:transform 0.2s" class="tree-arrow">›</span>';
+      
+      // Bouton supprimer service
+      var delServiceBtn = document.createElement('button');
+      delServiceBtn.textContent = '✕';
+      delServiceBtn.title = 'Supprimer ce service';
+      delServiceBtn.style.cssText = 'background:transparent;border:none;color:rgba(224,90,90,0.5);cursor:pointer;font-size:11px;padding:2px 6px;margin-left:4px;border-radius:2px';
+      delServiceBtn.onmouseenter = function() { this.style.color = 'var(--rouge)'; };
+      delServiceBtn.onmouseleave = function() { this.style.color = 'rgba(224,90,90,0.5)'; };
+      (function(sid) {
+        delServiceBtn.onclick = function(e) {
+          e.stopPropagation();
+          deleteService(sid);
+        };
+      })(service.id);
+      header.appendChild(delServiceBtn);
 
       const catList = document.createElement('div');
       catList.style.display = 'none';
@@ -3829,6 +3844,21 @@ async function buildTree(restoId) {
           catEl.classList.add('active');
           selectCategory(cat, service);
         };
+
+        // Bouton supprimer catégorie
+        var delCatBtn = document.createElement('button');
+        delCatBtn.textContent = '✕';
+        delCatBtn.title = 'Supprimer cette catégorie';
+        delCatBtn.style.cssText = 'background:transparent;border:none;color:rgba(224,90,90,0.4);cursor:pointer;font-size:10px;padding:2px 4px;flex-shrink:0';
+        delCatBtn.onmouseenter = function() { this.style.color = 'var(--rouge)'; };
+        delCatBtn.onmouseleave = function() { this.style.color = 'rgba(224,90,90,0.4)'; };
+        (function(cid) {
+          delCatBtn.onclick = function(e) {
+            e.stopPropagation();
+            deleteCategorie(cid);
+          };
+        })(cat.id);
+        catEl.appendChild(delCatBtn);
         catList.appendChild(catEl);
       });
 
